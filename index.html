@@ -2,12 +2,12 @@
 <html>
 <head>
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
-<style> input{ cursor: pointer } </style>
+<style> input{ cursor: pointer } .advanced_view{ display:none; }</style>
 </head>
 <body>
 
 <h1>Fritzbox Contact convert</h1>
-<br>Very primitiv: just the name+number (other data are lost); works offline<br>
+<br>Very primitiv: just the name+number (other data are lost); works offline. 
 Just select your .xml/.csv file; you directly det the convered file, as download<br>
 <a href="https://github.com/soerenj/fb_convert_conects_xml_csv/new/master" style="float:right">fork me</a>
 <span style="clear:both"></span><br>
@@ -15,8 +15,8 @@ Just select your .xml/.csv file; you directly det the convered file, as download
 <br>
 Fritzbox XML File:<br>
 <input type="file" id="file-input_xml"  /><br>
-<span style="color:#999999">source:</span><br>
-<textarea id="adressbuch_xml"  style="width:80%;height:100pt;color:#999999">
+<span style="color:#999999" class="advanced_view">source:</span><br>
+<textarea id="adressbuch_xml"  style="width:80%;height:100pt;color:#999999" class="advanced_view">
 <?xml version="1.0" encoding="utf-8"?>
 <phonebooks>
 <phonebook owner="" name="phonebook1">
@@ -37,17 +37,19 @@ Fritzbox XML File:<br>
 </phonebook>
 </phonebooks>
 </textarea>
-<br><br>
+
+<p align="center" id="show_advanced_view_link_wrapper" >or, use <a href="#" onclick="show_advanced_view();return false">advanded mode</a></p>
+
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <br>
-<div>
+<div class="advanced_view">
 <input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbsp; <input type="button" value="⬆ Convert to xml" onClick="convert_to_xml()"/>   &nbsp;  <input type="button" value="✖ Reset to Test-Values" title="reset to default" onClick="reset_to_default()"/>
 </div>
 <br><br>
 CSV File:<br>
 <input type="file" id="file-input_csv"  /><br>
-<span style="color:#999999">source:</span><br>
-<textarea id="adressbuch_csv" style="width:80%;height:100pt;color:#999999">
+<span style="color:#999999" class="advanced_view">source:</span><br>
+<textarea id="adressbuch_csv" style="width:80%;height:100pt;color:#999999" class="advanced_view">
 "Person C", "080333333"
 "Person D", "080444444"
 </textarea>
@@ -285,5 +287,13 @@ document.getElementById('adressbuch_csv')
 
 document.getElementById('file-input_xml').value='';
 document.getElementById('file-input_csv').value='';
+
+function show_advanced_view(){
+ var e = document.getElementsByClassName('advanced_view');
+ for(i=0;i<e.length;i++){
+  e[i].style.display='inline-block';
+ }
+ document.getElementById("show_advanced_view_link_wrapper").style.display='none';
+}
 //-->
 </script>
