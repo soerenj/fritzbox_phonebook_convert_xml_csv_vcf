@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta http-equiv=content-type content="text/html; charset=utf-8" />
+</head>
+<body>
+<h1>Fritzbox Contact convert</h1>
+<br>Very primitiv: just the name+number (other Data are deleted)<br>
+<a href="https://github.com/soerenj/fb_convert_conects_xml_csv/new/master">fork me on Github</a><br>
+<hr>
+Fritzbox XML<br>
+<textarea id="adressbuch"  style="width:80%;height:100pt;">
+<?xml version="1.0" encoding="utf-8"?>
+<phonebooks>
+<phonebook owner="1" name="TelefonbuchSoeren">
+<contact>
+<category>0</category>
+<person><realName>Person A</realName></person>
+<telephony nid="1"><number type="mobile" prio="1" id="0">017611111</number></telephony>
+<services /><setup />
+<features doorphone="0" /><mod_time>1535972380</mod_time><uniqueid>227</uniqueid>
+</contact>
+<contact>
+<category>0</category>
+<person><realName>Person B</realName></person>
+<telephony nid="1"><number type="mobile" prio="1" id="0">0176222222</number></telephony>
+<services /><setup />
+<features doorphone="0" /><mod_time>1535972450</mod_time><uniqueid>229</uniqueid>
+</contact>
+</phonebook>
+</phonebooks>
+</textarea>
+<br><br>
+<!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
+<input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbps; <input type="button" value="⬆ Convert to xml" onClick="convert_to_xml()"/>
+<br>
+<br>
+CSV<br>
+<textarea id="adressbuch_csv" style="width:80%;height:100pt;">
+"Person C", "080333333"
+"Person D", "080444444"
+
+</textarea>
+</div>
+
+<script language="JavaScript">
+<!--
+function convert_to_csv(){
+ var text = document.getElementById('adressbuch').value;
+ parser = new DOMParser();
+ xmlDoc = parser.parseFromString(text, "text/xml");
+
+ var out, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone;
+ out = '';
+ var contacts = xmlDoc.getElementsByTagName("contact");
+ for(i=0;i<contacts.length;i++)
+ {
+  contact = contacts[i];
+  person = contact.getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue;
+  telephony = contact.getElementsByTagName("telephony")[0].getElementsByTagName("number");
+  //telefone_numbers = Array(); telefone_numbers_type = Array(); telefone_numbers_prio = Array();
+  out += '"'+person.replace('"','\\"')+'"';
+  for(j=0;j<telephony.length;j++){
+   //telefone_numbers.push (  telephony[i].firstChild.nodeValue );
+   //telefone_numbers_type.push (  telephony[i].getAttribute('type') );
+   //telefone_numbers_prio.push (  telephony[i].getAttribute('prio') );
+   phone = telephony[j].firstChild.nodeValue;
+   out += ", "+ '"'+phone.replace('"','\\"')+'"';;
+  }
+  out += "\n";
+ }
+ console.log(out);
+ document.getElementById('adressbuch_csv').value = out;
+
+}
+
+function convert_to_xml(){
+ var text = document.getElementById('adressbuch_csv').value;
+ var out = '';
+ out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="1" name="convertedFromXml">\n';
+ var contacts = text.split("\n");
+ for(i=0;i<contacts.length;i++)
+ {
+  if(contacts[i]=='')continue;
+  out += '<contact>\n<category>0</category>\n';
+  var prepare_contact = contacts[i].replace('" , "','","').replace('", "','","').replace('" ,"','","');
+  var elements = prepare_contact.split('","')
+  out += '<person><realName>'+elements[0].substring(1)+'</realName></person>\n';
+  out += '<telephony nid="'+i+'">\n';
+  for(j=1;j<elements.length;j++){
+   var phone = elements[j];
+   if(j==elements.length-1)phone = phone.substring(0,phone.length-1);
+   out += '<number>'+phone+'</number>\n';
+  }
+  out += '</telephony>\n<services /><setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
+ }
+ out += '</phonebook>\n</phonebooks>';
+ document.getElementById('adressbuch').value = out;
+
+}
+
+//-->
+</script>
