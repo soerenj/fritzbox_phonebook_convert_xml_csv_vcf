@@ -4,13 +4,16 @@
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
 </head>
 <body>
-<h1>Fritzbox Web-Contact convert</h1>
+<h1>Fritzbox Contact convert</h1>
 <br>Very primitiv: just the name+number (other data are lost); works offline
 <a href="https://github.com/soerenj/fb_convert_conects_xml_csv/new/master" style="float:right">fork me</a>
 <span style="clear:both"></span><br>
 <hr>
-Fritzbox XML<br>
-<textarea id="adressbuch"  style="width:80%;height:100pt;">
+<br>
+Fritzbox XML File:<br>
+<input type="file" id="file-input_xml"  /><br>
+Fritzbox XML Content:<br>
+<textarea id="adressbuch_xml"  style="width:80%;height:100pt;color:#999999">
 <?xml version="1.0" encoding="utf-8"?>
 <phonebooks>
 <phonebook owner="" name="phonebook1">
@@ -31,13 +34,17 @@ Fritzbox XML<br>
 </phonebook>
 </phonebooks>
 </textarea>
+
+
 <br><br>
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbsp; <input type="button" value="⬆ Convert to xml" onClick="convert_to_xml()"/>   &nbsp;  <input type="button" value="✖ Reset" title="reset to default" onClick="reset_to_default()"/>
 
 <br>
 <br>
-CSV<br>
+Fritzbox XML File:<br>
+<input type="file" id="file-input_csv"  /><br>
+CSV:<br>
 <textarea id="adressbuch_csv" style="width:80%;height:100pt;">
 "Person C", "080333333"
 "Person D", "080444444"
@@ -47,11 +54,11 @@ CSV<br>
 <script language="JavaScript">
 <!--
 function reset_to_default(){
- document.getElementById('adressbuch').value = document.getElementById('adressbuch').defaultValue;
+ document.getElementById('adressbuch_xml').value = document.getElementById('adressbuch_xml').defaultValue;
  document.getElementById('adressbuch_csv').value = document.getElementById('adressbuch_csv').defaultValue;
 }
 function convert_to_csv(){
- var text = document.getElementById('adressbuch').value;
+ var text = document.getElementById('adressbuch_xml').value;
  parser = new DOMParser();
  xmlDoc = parser.parseFromString(text, "text/xml");
 
@@ -100,9 +107,38 @@ function convert_to_xml(){
   out += '</telephony>\n<services /><setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
  }
  out += '</phonebook>\n</phonebooks>';
- document.getElementById('adressbuch').value = out;
+ document.getElementById('adressbuch_xml').value = out;
 
 }
+
+
+
+function readSingleFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  if(e.target.id=='file-input_xml'){
+    reader.onload = function(e) {
+      var contents = e.target.result;
+      document.getElementById('adressbuch_xml').value = contents;
+    };
+  }
+  if(e.target.id=='file-input_csv'){
+    reader.onload = function(e) {
+      var contents = e.target.result;
+      document.getElementById('adressbuch_csv').value = contents;
+    };
+  }
+  reader.readAsText(file);
+}
+
+
+document.getElementById('file-input_xml')
+  .addEventListener('change', readSingleFile, false);
+document.getElementById('file-input_csv')
+  .addEventListener('change', readSingleFile, false);
 
 //-->
 </script>
