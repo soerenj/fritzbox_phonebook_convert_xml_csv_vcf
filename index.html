@@ -81,7 +81,6 @@ function convert_to_csv(){
   }
   out += "\n";
  }
- console.log(out);
  document.getElementById('adressbuch_csv').value = out;
 
 }
@@ -90,13 +89,12 @@ function convert_to_xml(){
  var text = document.getElementById('adressbuch_csv').value;
  var out = '';
  out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="convertedFromXml">\n';
- var contacts = text.split("\n");
+ var contacts = CSVToArray_primtiv(text);
  for(i=0;i<contacts.length;i++)
  {
   if(contacts[i]=='')continue;
   out += '<contact>\n<category>0</category>\n';
-  var prepare_contact = contacts[i].replace('" , "','","').replace('", "','","').replace('" ,"','","');
-  var elements = prepare_contact.split('","')
+  var elements = contacts[i];
   out += '<person><realName>'+elements[0].substring(1)+'</realName></person>\n';
   out += '<telephony nid="'+i+'">\n';
   for(j=1;j<elements.length;j++){
@@ -111,6 +109,25 @@ function convert_to_xml(){
 
 }
 
+function CSVToArray_primtiv(strData){
+ var out = Array();
+ var contacts = strData.split(/\r\n|\n/);
+ for(i=0;i<contacts.length;i++)
+ {
+  var line = Array();
+  if(contacts[i]=='')continue;
+  var prepare_contact = contacts[i].replace('" , "','","').replace('", "','","').replace('" ,"','","');
+  var elements = prepare_contact.split('","')
+  line.push ( elements[0].substring(1) );
+  for(j=1;j<elements.length;j++){
+   var phone = elements[j];
+   if(j==elements.length-1)phone = phone.substring(0,phone.length-1);
+   line.push ( phone );
+  }
+  out.push( line );
+ }
+ return out
+}
 
 
 
