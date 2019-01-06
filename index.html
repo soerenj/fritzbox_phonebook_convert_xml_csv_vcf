@@ -12,7 +12,7 @@
 <br>
 Fritzbox XML File:<br>
 <input type="file" id="file-input_xml"  /><br>
-Fritzbox XML Content:<br>
+<span style="color:#999999">source:</span><br>
 <textarea id="adressbuch_xml"  style="width:80%;height:100pt;color:#999999">
 <?xml version="1.0" encoding="utf-8"?>
 <phonebooks>
@@ -42,10 +42,10 @@ Fritzbox XML Content:<br>
 
 <br>
 <br>
-Fritzbox XML File:<br>
+CSV File:<br>
 <input type="file" id="file-input_csv"  /><br>
-CSV:<br>
-<textarea id="adressbuch_csv" style="width:80%;height:100pt;">
+<span style="color:#999999">source:</span><br>
+<textarea id="adressbuch_csv" style="width:80%;height:100pt;color:#999999">
 "Person C", "080333333"
 "Person D", "080444444"
 </textarea>
@@ -110,6 +110,7 @@ function convert_to_xml(){
  document.getElementById('adressbuch_xml').value = out;
 
 }
+
 
 
 
