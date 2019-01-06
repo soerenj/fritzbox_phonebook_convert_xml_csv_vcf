@@ -98,15 +98,7 @@ function convert_to_csv(){
  }
  document.getElementById('adressbuch_csv').value = out;
  
- var filename = 'adressbuch_from_fritzbox.csv';
- if(uploaded_xml_filename!=''){ console.log(uploaded_xml_filename);
-  var lin = uploaded_xml_filename.split('\\');
-  var win = uploaded_xml_filename.split('/');
-  if(lin.length>win.length) filename = lin[lin.length-1];
-  else filename = win[lin.length-1];
-  filename += "_converted_primitv.csv";
- }
- download(filename,out);
+ download('csv',out);
 }
 
 
@@ -134,21 +126,33 @@ function convert_to_xml(){
  out += '</phonebook>\n</phonebooks>';
  document.getElementById('adressbuch_xml').value = out;
 
- var filename = 'adressbuch_for_fritzbox_xml.xml';
- if(uploaded_csv_filename!=''){
-  var lin = uploaded_csv_filename.split('\\');
-  var win = uploaded_csv_filename.split('/');
-console.log(lin);
-console.log(win);
-  if(lin.length>win.length) filename = lin[lin.length-1];
-  else filename = win[lin.length-1];
-  filename += "_converted_primitv.xml";
- }
- download(filename,out);
+ download('xml',out);
 }
 
 
 function download(filename, text) {
+
+  if(filename=='xml'){
+   var filename = 'adressbuch_for_fritzbox_xml.xml';
+   if(uploaded_csv_filename!=''){
+    var lin = uploaded_csv_filename.split('\\');
+    var win = uploaded_csv_filename.split('/');
+    if(lin.length>win.length) filename = lin[lin.length-1];
+    else filename = win[lin.length-1];
+    filename += "_converted_primitv.xml";
+   }
+  }
+  if(filename=='csv'){
+   var filename = 'adressbuch_from_fritzbox.csv';
+   if(uploaded_xml_filename!=''){ console.log(uploaded_xml_filename);
+    var lin = uploaded_xml_filename.split('\\');
+    var win = uploaded_xml_filename.split('/');
+    if(lin.length>win.length) filename = lin[lin.length-1];
+    else filename = win[lin.length-1];
+    filename += "_converted_primitv.csv";
+   }
+  }
+
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
   element.setAttribute('download', filename);
