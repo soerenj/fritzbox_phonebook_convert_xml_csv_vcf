@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
+<style> input{ cursor: pointer } </style>
 </head>
 <body>
+
 <h1>Fritzbox Contact convert</h1>
-<br>Very primitiv: just the name+number (other data are lost); works offline
+<br>Very primitiv: just the name+number (other data are lost); works offline<br>
+Just select your .xml/.csv file; you directly det the convered file, as download<br>
 <a href="https://github.com/soerenj/fb_convert_conects_xml_csv/new/master" style="float:right">fork me</a>
 <span style="clear:both"></span><br>
 <hr>
@@ -34,14 +37,13 @@ Fritzbox XML File:<br>
 </phonebook>
 </phonebooks>
 </textarea>
-
-
 <br><br>
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
-<input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbsp; <input type="button" value="⬆ Convert to xml" onClick="convert_to_xml()"/>   &nbsp;  <input type="button" value="✖ Reset" title="reset to default" onClick="reset_to_default()"/>
-
 <br>
-<br>
+<div>
+<input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbsp; <input type="button" value="⬆ Convert to xml" onClick="convert_to_xml()"/>   &nbsp;  <input type="button" value="✖ Reset to Test-Values" title="reset to default" onClick="reset_to_default()"/>
+</div>
+<br><br>
 CSV File:<br>
 <input type="file" id="file-input_csv"  /><br>
 <span style="color:#999999">source:</span><br>
@@ -53,10 +55,15 @@ CSV File:<br>
 
 <script language="JavaScript">
 <!--
+var uploaded_xml_filename = '';
+var uploaded_csv_filename = '';
+
 function reset_to_default(){
  document.getElementById('adressbuch_xml').value = document.getElementById('adressbuch_xml').defaultValue;
  document.getElementById('adressbuch_csv').value = document.getElementById('adressbuch_csv').defaultValue;
 }
+
+
 function convert_to_csv(){
  var text = document.getElementById('adressbuch_xml').value;
  parser = new DOMParser();
@@ -82,8 +89,18 @@ function convert_to_csv(){
   out += "\n";
  }
  document.getElementById('adressbuch_csv').value = out;
-
+ 
+ var filename = 'adressbuch_from_fritzbox.csv';
+ if(uploaded_xml_filename!=''){ console.log(uploaded_xml_filename);
+  var lin = uploaded_xml_filename.split('\\');
+  var win = uploaded_xml_filename.split('/');
+  if(lin.length>win.length) filename = lin[lin.length-1];
+  else filename = win[lin.length-1];
+  filename += "_converted_primitv.csv";
+ }
+ download(filename,out);
 }
+
 
 function convert_to_xml(){
  var text = document.getElementById('adressbuch_csv').value;
@@ -109,95 +126,119 @@ function convert_to_xml(){
  out += '</phonebook>\n</phonebooks>';
  document.getElementById('adressbuch_xml').value = out;
 
+ var filename = 'adressbuch_for_fritzbox_xml.xml';
+ if(uploaded_csv_filename!=''){
+  var lin = uploaded_csv_filename.split('\\');
+  var win = uploaded_csv_filename.split('/');
+console.log(lin);
+console.log(win);
+  if(lin.length>win.length) filename = lin[lin.length-1];
+  else filename = win[lin.length-1];
+  filename += "_converted_primitv.xml";
+ }
+ download(filename,out);
 }
 
 
-    // ref: http://stackoverflow.com/a/1293163/2343
-    // This will parse a delimited string into an array of
-    // arrays. The default delimiter is the comma, but this
-    // can be overriden in the second argument.
-    function CSVToArray( strData, strDelimiter ){
-        // Check to see if the delimiter is defined. If not,
-        // then default to comma.
-        strDelimiter = (strDelimiter || ",");
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
 
-        // Create a regular expression to parse the CSV values.
-        var objPattern = new RegExp(
-            (
-                // Delimiters.
-                "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+  element.style.display = 'none';
+  document.body.appendChild(element);
 
-                // Quoted fields.
-                "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+  element.click();
 
-                // Standard fields.
-                "([^\\" + strDelimiter + "\\r\\n]*))"
-            ),
-            "gi"
-            );
+  document.body.removeChild(element);
+}
 
+// ref: http://stackoverflow.com/a/1293163/2343
+// This will parse a delimited string into an array of
+// arrays. The default delimiter is the comma, but this
+// can be overriden in the second argument.
+function CSVToArray( strData, strDelimiter ){
+    // Check to see if the delimiter is defined. If not,
+    // then default to comma.
+    strDelimiter = (strDelimiter || ",");
 
-        // Create an array to hold our data. Give the array
-        // a default empty first row.
-        var arrData = [[]];
+    // Create a regular expression to parse the CSV values.
+    var objPattern = new RegExp(
+        (
+            // Delimiters.
+            "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
 
-        // Create an array to hold our individual pattern
-        // matching groups.
-        var arrMatches = null;
+            // Quoted fields.
+            "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
 
-
-        // Keep looping over the regular expression matches
-        // until we can no longer find a match.
-        while (arrMatches = objPattern.exec( strData )){
-
-            // Get the delimiter that was found.
-            var strMatchedDelimiter = arrMatches[ 1 ];
-
-            // Check to see if the given delimiter has a length
-            // (is not the start of string) and if it matches
-            // field delimiter. If id does not, then we know
-            // that this delimiter is a row delimiter.
-            if (
-                strMatchedDelimiter.length &&
-                strMatchedDelimiter !== strDelimiter
-                ){
-
-                // Since we have reached a new row of data,
-                // add an empty row to our data array.
-                arrData.push( [] );
-
-            }
-
-            var strMatchedValue;
-
-            // Now that we have our delimiter out of the way,
-            // let's check to see which kind of value we
-            // captured (quoted or unquoted).
-            if (arrMatches[ 2 ]){
-
-                // We found a quoted value. When we capture
-                // this value, unescape any double quotes.
-                strMatchedValue = arrMatches[ 2 ].replace(
-                    new RegExp( "\"\"", "g" ),
-                    "\""
-                    );
-
-            } else {
-
-                // We found a non-quoted value.
-                strMatchedValue = arrMatches[ 3 ];
-
-            }
+            // Standard fields.
+            "([^\\" + strDelimiter + "\\r\\n]*))"
+        ),
+        "gi"
+        );
 
 
-            // Now that we have our value string, let's add
-            // it to the data array.
-            arrData[ arrData.length - 1 ].push( strMatchedValue );
+    // Create an array to hold our data. Give the array
+    // a default empty first row.
+    var arrData = [[]];
+
+    // Create an array to hold our individual pattern
+    // matching groups.
+    var arrMatches = null;
+
+
+    // Keep looping over the regular expression matches
+    // until we can no longer find a match.
+    while (arrMatches = objPattern.exec( strData )){
+
+        // Get the delimiter that was found.
+        var strMatchedDelimiter = arrMatches[ 1 ];
+
+        // Check to see if the given delimiter has a length
+        // (is not the start of string) and if it matches
+        // field delimiter. If id does not, then we know
+        // that this delimiter is a row delimiter.
+        if (
+            strMatchedDelimiter.length &&
+            strMatchedDelimiter !== strDelimiter
+            ){
+
+            // Since we have reached a new row of data,
+            // add an empty row to our data array.
+            arrData.push( [] );
+
         }
 
-        // Return the parsed data.
-        return( arrData );
+        var strMatchedValue;
+
+        // Now that we have our delimiter out of the way,
+        // let's check to see which kind of value we
+        // captured (quoted or unquoted).
+        if (arrMatches[ 2 ]){
+
+            // We found a quoted value. When we capture
+            // this value, unescape any double quotes.
+            strMatchedValue = arrMatches[ 2 ].replace(
+                new RegExp( "\"\"", "g" ),
+                "\""
+                );
+
+        } else {
+
+            // We found a non-quoted value.
+            strMatchedValue = arrMatches[ 3 ];
+
+        }
+
+
+        // Now that we have our value string, let's add
+        // it to the data array.
+        arrData[ arrData.length - 1 ].push( strMatchedValue );
     }
+
+    // Return the parsed data.
+    return( arrData );
+}
 
 
 
@@ -208,15 +249,21 @@ function readSingleFile(e) {
   }
   var reader = new FileReader();
   if(e.target.id=='file-input_xml'){
+    uploaded_xml_filename = document.getElementById(e.target.id).value;
     reader.onload = function(e) {
       var contents = e.target.result;
       document.getElementById('adressbuch_xml').value = contents;
+      //alert('here your csv file');
+      convert_to_csv();
     };
   }
   if(e.target.id=='file-input_csv'){
+    uploaded_csv_filename = document.getElementById(e.target.id).value;
     reader.onload = function(e) {
       var contents = e.target.result;
       document.getElementById('adressbuch_csv').value = contents;
+      //alert('here your xml file');
+      convert_to_xml();
     };
   }
   reader.readAsText(file);
@@ -228,5 +275,15 @@ document.getElementById('file-input_xml')
 document.getElementById('file-input_csv')
   .addEventListener('change', readSingleFile, false);
 
+
+
+//if source manuell changed, remove filename
+document.getElementById('adressbuch_xml')
+  .addEventListener('change', function reset_filename_xml(){ uploaded_xml_filename = ''; }, false);
+document.getElementById('adressbuch_csv')
+  .addEventListener('change', function reset_filename_csv(){ uploaded_csv_filename = ''; }, false);
+
+document.getElementById('file-input_xml').value='';
+document.getElementById('file-input_csv').value='';
 //-->
 </script>
