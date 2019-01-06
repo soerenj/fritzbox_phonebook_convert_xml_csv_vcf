@@ -4,15 +4,16 @@
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
 </head>
 <body>
-<h1>Fritzbox Contact convert</h1>
-<br>Very primitiv: just the name+number (other Data are deleted)<br>
-<a href="https://github.com/soerenj/fb_convert_conects_xml_csv/new/master">fork me on Github</a><br>
+<h1>Fritzbox Web-Contact convert</h1>
+<br>Very primitiv: just the name+number (other data are lost); works offline
+<a href="https://github.com/soerenj/fb_convert_conects_xml_csv/new/master" style="float:right">fork me</a>
+<span style="clear:both"></span><br>
 <hr>
 Fritzbox XML<br>
 <textarea id="adressbuch"  style="width:80%;height:100pt;">
 <?xml version="1.0" encoding="utf-8"?>
 <phonebooks>
-<phonebook owner="1" name="TelefonbuchSoeren">
+<phonebook owner="" name="phonebook1">
 <contact>
 <category>0</category>
 <person><realName>Person A</realName></person>
@@ -32,19 +33,23 @@ Fritzbox XML<br>
 </textarea>
 <br><br>
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
-<input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbps; <input type="button" value="⬆ Convert to xml" onClick="convert_to_xml()"/>
+<input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbsp; <input type="button" value="⬆ Convert to xml" onClick="convert_to_xml()"/>   &nbsp;  <input type="button" value="✖ Reset" title="reset to default" onClick="reset_to_default()"/>
+
 <br>
 <br>
 CSV<br>
 <textarea id="adressbuch_csv" style="width:80%;height:100pt;">
 "Person C", "080333333"
 "Person D", "080444444"
-
 </textarea>
 </div>
 
 <script language="JavaScript">
 <!--
+function reset_to_default(){
+ document.getElementById('adressbuch').value = document.getElementById('adressbuch').defaultValue;
+ document.getElementById('adressbuch_csv').value = document.getElementById('adressbuch_csv').defaultValue;
+}
 function convert_to_csv(){
  var text = document.getElementById('adressbuch').value;
  parser = new DOMParser();
@@ -77,7 +82,7 @@ function convert_to_csv(){
 function convert_to_xml(){
  var text = document.getElementById('adressbuch_csv').value;
  var out = '';
- out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="1" name="convertedFromXml">\n';
+ out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="convertedFromXml">\n';
  var contacts = text.split("\n");
  for(i=0;i<contacts.length;i++)
  {
