@@ -39,13 +39,7 @@ Fritzbox XML File:<br>
 </phonebooks>
 </textarea>
 
-<p align="center" id="show_advanced_view_link_wrapper" >
-<span lang="en" class="en">or, use</span>
-<span lang="de" class="de" style="display:none">oder, </span>
-<a href="#" onclick="show_advanced_view();return false">
-<span lang="en" class="en">advanded mode</span><span lang="de" class="de" style="display:none;text-decoration:underline;">erweiterten Modus</span></a>
-<span lang="de" class="de" style="display:none"> benutzen </span>
-</p>
+
 
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <br>
@@ -89,6 +83,17 @@ END:VCARD
 
 </textarea>
 </div>
+
+<p align="right" id="show_advanced_view_link_wrapper" >
+<span lang="en" class="en"></span>
+<span lang="de" class="de" style="display:none"></span>
+<a href="#" onclick="show_advanced_view('show');return false">
+<span lang="en" class="en">show source Windows</span><span lang="de" class="de" style="display:none;text-decoration:underline;">Text-Fenster zeigen</span></a>
+<span lang="de" class="de" style="display:none"> </span>
+</p>
+<p id="show_advanced_view_link_link_close"  align="right" style="display:none" >
+<a href="#" onclick="show_advanced_view('hide');return false">Text-Fenster X (close)</a>
+</p>
 
 <script language="JavaScript">
 <!--
@@ -473,12 +478,20 @@ document.getElementById('adressbuch_vcf')
 //document.getElementById('file-input_vcf').value='';
 //reset_to_default();
 
-function show_advanced_view(){
+function show_advanced_view(state){
  var e = document.getElementsByClassName('advanced_view');
  for(i=0;i<e.length;i++){
-  e[i].style.display='inline-block';
+  if(state=='show')e[i].style.display='inline-block';
+  if(state=='hide')e[i].style.display='';
  }
- document.getElementById("show_advanced_view_link_wrapper").style.display='none';
+ if(state=='show'){
+   document.getElementById("show_advanced_view_link_wrapper").style.display='none';
+   document.getElementById("show_advanced_view_link_link_close").style.display='block';
+ }
+ if(state=='hide'){
+   document.getElementById("show_advanced_view_link_wrapper").style.display='';
+   document.getElementById("show_advanced_view_link_link_close").style.display='none';
+ }
 }
 
 //-->
