@@ -298,7 +298,7 @@ function convert_vcf_to_xml(){
    if(elements[j].substr(0,5)=='NOTE:' && elements[j].indexOf('importantContact(fritzbox)')>0)prio=true;
    if(elements[j].substr(0,5)=='EMAIL'){
        var startEmail = elements[j].substr(4).indexOf(':');
-       if(endType>0)EmailOut+='<email>'+elements[j].substr(startEmail)+'</email>';
+       if(startEmail>=0 && elements[j].length>9)EmailOut+='<email>'+elements[j].substr(startEmail+1)+'</email>';
    }
   }
   var catNumber=0;  if(prio) catNumber = 1;
