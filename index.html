@@ -219,6 +219,35 @@ function convert_vcf_to_xml(){
   var typeOut = '';
   var v = '';
   var prio=false;
+  
+  for(j=0;j<elements.length;j++){ //handle utf8 hex code
+    if(elements[j].search(/CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:/)>=0){
+        var match = elements[j].match("(.*);(CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE):(.*)");
+        var splited = match[3].split("=");
+        for(var k=0;k<splited.length;k++)
+        {
+          splited[k] = splited[k].replace(/;/g,""); //;;; is (mostly?) only on end of line
+        }
+    
+        var str = '';
+        for(var k=0;k<splited.length;k++){
+        if(splited[k].length==0)continue;
+        if(splited[k].toUpperCase()=='C2' || splited[k].toUpperCase()=='C3')
+        {
+            var hex=splited[k]+splited[k+1];
+            try{
+                str+= decodeURIComponent(hex.replace(/(..)/g,'%$1'))
+            }catch(e){console.log('invalid hex input: ' + hex)}
+            k++;
+            continue;
+        }
+        str+=String.fromCharCode('0x'+splited[k]);
+        }
+   
+        elements[j] = match[1]+':'+str;
+        
+     }
+  }
   for(j=0;j<elements.length;j++){
    if(elements[j].substr(0,3)=='FN:' && vcf_use_which_name=='FN'){
      var  str=elements[j].substr(3);
