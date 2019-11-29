@@ -92,6 +92,9 @@ END:VCARD
 <span lang="en" class="en">show source Window</span><span lang="de" class="de" style="display:none;text-decoration:underline;">Text-Fenster zeigen</span></a>
 <span lang="de" class="de" style="display:none"> </span>
 </p>
+
+<input type="button" id="file-input_reset" style="display:none;margin-top:22pt" value="reset uploads" onClick="document.getElementById('file-input_xml').value='';document.getElementById('file-input_csv').value='';document.getElementById('file-input_vcf').value=''" />
+
 <p id="show_advanced_view_link_link_close"  align="right" style="display:none" >
 <a href="#" onclick="show_advanced_view('hide');return false">Text-Fenster X (close)</a>
 </p>
@@ -434,6 +437,7 @@ function CSVToArray( strData, strDelimiter ){
 
 
 function readSingleFile(e) {
+  document.getElementById('file-input_reset').style.display='block';
   var file = e.target.files[0];
   if (!file) {
     return;
