@@ -217,7 +217,12 @@ function convert_vcf_to_xml(){
   var v = '';
   var prio=false;
   for(j=0;j<elements.length;j++){
-   if(elements[j].substr(0,2)=='N:') personOut = '<person><realName>'+elements[j].substr(2)+'</realName></person>\n';
+   if(elements[j].substr(0,2)=='N:' && use_which_name=='N'){
+     var  str=elements[j].substr(2);
+     while( str.substr(0,1)==";" ) str = str.substr(1); //remove beginning/starting ;;;
+     while( str.substr(-1)==";") str = str.substr(0,str.length-1); //remove ending ;;;
+     personOut = '<person><realName>'+str+'</realName></person>\n';
+   }
    if(elements[j].substr(0,3)=='TEL'){
      var type=''; var typeRow='';
      if(elements[j].substr(0,9)=='TEL;TYPE='){
