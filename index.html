@@ -200,6 +200,9 @@ function convert_to_vcf(v=2.1){ //=vcard (v=Version)
 }
 
 function convert_vcf_to_xml(){
+  //config
+ var vcf_use_which_name = 'FN'; // F or FN 
+
  var text = document.getElementById('adressbuch_vcf').value;
  var person, email, v;
  var out = '';
@@ -217,12 +220,19 @@ function convert_vcf_to_xml(){
   var v = '';
   var prio=false;
   for(j=0;j<elements.length;j++){
-   if(elements[j].substr(0,2)=='N:' && use_which_name=='N'){
+   if(elements[j].substr(0,3)=='FN:' && vcf_use_which_name=='FN'){
+     var  str=elements[j].substr(3);
+     while( str.substr(0,1)==";" ) str = str.substr(1); //remove beginning/starting ;;;
+     while( str.substr(-1)==";") str = str.substr(0,str.length-1); //remove ending ;;;
+     personOut = '<person><realName>'+str+'</realName></person>\n';
+   }
+   if(elements[j].substr(0,2)=='N:' && vcf_use_which_name=='N'){
      var  str=elements[j].substr(2);
      while( str.substr(0,1)==";" ) str = str.substr(1); //remove beginning/starting ;;;
      while( str.substr(-1)==";") str = str.substr(0,str.length-1); //remove ending ;;;
      personOut = '<person><realName>'+str+'</realName></person>\n';
    }
+   
    if(elements[j].substr(0,3)=='TEL'){
      var type=''; var typeRow='';
      if(elements[j].substr(0,9)=='TEL;TYPE='){
