@@ -256,58 +256,61 @@ function convert_vcf_to_xml(){
         
      }
   }
+  
   for(j=0;j<elements.length;j++){
-   if(elements[j].substr(0,3)=='FN:' && vcf_use_which_name=='FN'){
-     var  str=elements[j].substr(3);
-     while( str.substr(0,1)==";" ) str = str.substr(1); //remove beginning/starting ;;;
-     while( str.substr(-1)==";") str = str.substr(0,str.length-1); //remove ending ;;;
-     personOut = '<person><realName>'+str+'</realName></person>\n';
-   }
-   if(elements[j].substr(0,2)=='N:' && vcf_use_which_name=='N'){
-     var  str=elements[j].substr(2);
-     while( str.substr(0,1)==";" ) str = str.substr(1); //remove beginning/starting ;;;
-     while( str.substr(-1)==";") str = str.substr(0,str.length-1); //remove ending ;;;
-     personOut = '<person><realName>'+str+'</realName></person>\n';
-   }
-   
-   if(elements[j].substr(0,3)=='TEL'){
-     var type=''; var typeRow='';
-     if(elements[j].substr(0,9)=='TEL;TYPE='){
-       //var next_sim=elements[j].substr(0,9)
-       var nextDoppelpunkt = elements[j].substr(10).indexOf(':');
-       var nextSimokolon = elements[j].substr(10).indexOf(';');
-       var end_c = nextDoppelpunkt;
-       if(nextSimokolon>0 && nextSimokolon<nextDoppelpunkt)end_c = nextSimokolon;
-       if(end_c>0){
-         typeRow = elements[j].substr(9,end_c+1);
-         if(typeRow.indexOf(',')>0){
-          var zElements = typeRow.split(',');
-          for(k=0;k<zElements.length;k++){
-           if(zElements[k]=='WORK')type='WORK';
-           if(zElements[k]=='HOME')type='HOME';
-           if(zElements[k]=='MOBILE')type='MOBILE';
-           if(zElements[k]=='FAX_WORK')type='FAX_WORK';
-          }
-         } else type=typeRow;
-         typeOut='type="'+type.toLowerCase()+'"';
-       }
-     }
-     /*else if(elements[j].substr(0,4)=='TEL;'){
-       //var next_sim=elements[j].substr(0,9)
-       var endType = elements[j].substr(5).indexOf(':');
-       var simokolon = elements[j].substr(5).indexOf(';');
-       if(endType>3 && simokolon==0)type=' TYPE="'+elements[j].substr(9,endType-1)+'"';
-     }*/
-     var start = elements[j].indexOf(':');
-     phoneOut += '<number '+typeOut+' id="'+j+'">'+elements[j].substr(start+1)+'</number>\n';
-   }
-   if(elements[j].substr(0,8)=='VERSION:')v=elements[j].substr(8);
-   if(elements[j].substr(0,5)=='NOTE:' && elements[j].indexOf('importantContact(fritzbox)')>0)prio=true;
-   if(elements[j].substr(0,5)=='EMAIL'){
-       var startEmail = elements[j].substr(4).indexOf(':');
-       if(startEmail>=0 && elements[j].length>9)EmailOut+='<email>'+elements[j].substr(startEmail+1)+'</email>';
-   }
+    var str = elements[j];
+    if(str.substr(0,3)=='FN:' && vcf_use_which_name=='FN'){
+        strOut=str.substr(3);
+        while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
+        while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
+        personOut = '<person><realName>'+strOut+'</realName></person>\n';
+    }
+    if(str.substr(0,2)=='N:' && vcf_use_which_name=='N'){
+        strOut=str.substr(2);
+        while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
+        while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
+        personOut = '<person><realName>'+strOut+'</realName></person>\n';
+    }
+    
+    if(str.substr(0,3)=='TEL'){
+        var type=''; var typeRow='';
+        if(str.substr(0,9)=='TEL;TYPE='){
+        //var next_sim=str.substr(0,9)
+        var nextDoppelpunkt = str.substr(10).indexOf(':');
+        var nextSimokolon   = str.substr(10).indexOf(';');
+        var end_c = nextDoppelpunkt;
+        if(nextSimokolon>0 && nextSimokolon<nextDoppelpunkt)end_c = nextSimokolon;
+        if(end_c>0){
+            typeRow = str.substr(9,end_c+1);
+            if(typeRow.indexOf(',')>0){
+                var sub = typeRow.split(',');
+                for(k=0;k<sub.length;k++){
+                    if(sub[k]=='WORK')     type='WORK';
+                    if(sub[k]=='HOME')     type='HOME';
+                    if(sub[k]=='MOBILE')   type='MOBILE';
+                    if(sub[k]=='FAX_WORK') type='FAX_WORK';
+                }
+            } else type=typeRow;
+            typeOut='type="'+type.toLowerCase()+'"';
+        }
+        }
+        /*else if(str.substr(0,4)=='TEL;'){
+        //var next_sim=str.substr(0,9)
+        var endType = str.substr(5).indexOf(':');
+        var simokolon = str.substr(5).indexOf(';');
+        if(endType>3 && simokolon==0)type=' TYPE="'+str.substr(9,endType-1)+'"';
+        }*/
+        var start = str.indexOf(':');
+        phoneOut += '<number '+typeOut+' id="'+j+'">'+str.substr(start+1)+'</number>\n';
+    }
+    if(str.substr(0,8)=='VERSION:')v=str.substr(8);
+    if(str.substr(0,5)=='NOTE:' && str.indexOf('importantContact(fritzbox)')>0)prio=true;
+    if(str.substr(0,5)=='EMAIL'){
+        var startEmail = str.substr(4).indexOf(':');
+        //if(startEmail>=0 && str.length>9)EmailOut+='<email>'+str.substr(startEmail+1)+'</email>';
+    }
   }
+  
   var catNumber=0;  if(prio) catNumber = 1;
   out += '<contact>\n<category>'+catNumber+'</category>\n';
   if(prio)phoneOut=phoneOut.replace(/(<number[^>]*)(>)/,'$1 prio="1">');
