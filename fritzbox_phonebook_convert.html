@@ -3,14 +3,14 @@
 <head>
 <title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
-<style> input{ cursor: pointer } .advanced_view{ display:none; }</style>
+<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ width:80%;height:100pt;color:#999999 } </style>
 </head>
 <body>
 <!--
  /*
  * Licence 
  *
- * Licence Exception for function "CSVToArray()": unknown licence
+ * Licence Exception for function "CSVToArray()": "is provided as is and can be used at your own discretion"
  *
  * All other parts:
  * This program is free software; you can redistribute it and/or modify
@@ -25,12 +25,13 @@
 <p lang="en" class="en">Converts Fritzbox-XML-Files to/from .CSV or .VCF(vcard)-File with Phone Numbers.</p>
 <p lang="de" class="de" style="display:none">Konvertiert Fritzbox-XML-Dateien zu/von .CSV oder .VCF(vcard)-Dateien mit Telefonnummer</p>
 <span style="clear:both"></span><br>
+<noscript style="color:red">You need JavaScript, to use this service.</noscript>
 <hr>
 <br>
-Fritzbox XML File:<br>
+Fritzbox .XML File:<br>
 <input type="file" id="file-input_xml"  /><br>
 <span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="adressbuch_xml"  style="width:80%;height:100pt;color:#999999" class="advanced_view">
+<textarea id="adressbuch_xml" class="advanced_view">
 <?xml version="1.0" encoding="utf-8"?>
 <phonebooks>
 <phonebook owner="" name="phonebook1">
@@ -52,33 +53,36 @@ Fritzbox XML File:<br>
 </phonebooks>
 </textarea>
 
-
+<div id="ready" style="display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
+ <span lang="en" class="en">Ready. Check now your download folder</span>
+ <span lang="de" class="de">Fertig. Überprüfen Sie Ihren Download-Ordner</span>
+</div>
 
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <br>
 <div class="advanced_view">
-<input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbsp;
-<input type="button" value="⬇ Convert to vcf (vcard v2.1)" onClick="convert_to_vcf(2.1)"/>  &nbsp;
-<input type="button" value="⬇ Convert to vcf (vcard v4.0)" onClick="convert_to_vcf(4.0)"/>  &nbsp;
-<input type="button" value="⇧ Convert csv to xml" onClick="convert_csv_to_xml()"/>   &nbsp;  
-<input type="button" value="⇧ Convert vcf to xml" onClick="convert_vcf_to_xml()"/>   &nbsp;  
-<input type="button" value="✖ Reset to Test-Values" title="reset to default" onClick="reset_to_default()"/>
+ <input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbsp;
+ <input type="button" value="⬇ Convert to vcf (vcard v2.1)" onClick="convert_to_vcf(2.1)"/>  &nbsp;
+ <input type="button" value="⬇ Convert to vcf (vcard v4.0)" onClick="convert_to_vcf(4.0)"/>  &nbsp;
+ <input type="button" value="⇧ Convert csv to xml" onClick="convert_csv_to_xml()"/>   &nbsp;  
+ <input type="button" value="⇧ Convert vcf to xml" onClick="convert_vcf_to_xml()"/>   &nbsp;  
+ <input type="button" value="✖ Reset to Test-Values" title="reset to default" onClick="reset_to_default()"/>   &nbsp;  
 </div>
 <br><br>
-CSV File:<br>
+.CSV File:<br>
 <input type="file" id="file-input_csv"  /><br>
 <span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="adressbuch_csv" style="width:80%;height:100pt;color:#999999" class="advanced_view">
+<textarea id="adressbuch_csv" class="advanced_view">
 "Person C", "080333333"
 "Person D", "080444444"
 </textarea>
 </div>
 
 <br><br>
-VCF File:<br>
+.VCF File:<br>
 <input type="file" id="file-input_vcf"  /><br>
 <span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="adressbuch_vcf" style="width:80%;height:100pt;color:#999999" class="advanced_view">
+<textarea id="adressbuch_vcf" class="advanced_view">
 BEGIN:VCARD
 VERSION:4.0
 N:Person E
@@ -97,12 +101,14 @@ END:VCARD
 </textarea>
 </div>
 
+<textarea id="error_logs" style="display:none" class="advanced_view"></textarea>
+
 <p align="right" id="show_advanced_view_link_wrapper" >
-<span lang="en" class="en"></span>
-<span lang="de" class="de" style="display:none"></span>
-<a href="#" onclick="show_advanced_view('show');return false">
-<span lang="en" class="en">show source Window</span><span lang="de" class="de" style="display:none;text-decoration:underline;">Text-Fenster zeigen</span></a>
-<span lang="de" class="de" style="display:none"> </span>
+  <span lang="en" class="en"></span>
+  <span lang="de" class="de" style="display:none"></span>
+  <a href="#" onclick="show_advanced_view('show');return false">
+  <span lang="en" class="en">show source Window</span><span lang="de" class="de" style="display:none;text-decoration:underline;">Text-Fenster zeigen</span></a>
+  <span lang="de" class="de" style="display:none"> </span>
 </p>
 
 <input type="button" id="file-input_reset" style="display:none;margin-top:22pt" value="reset" onClick="reset_to_default()" />
@@ -116,15 +122,17 @@ END:VCARD
 	"@type": "WebApplication",
 	"applicationCategory": "UtilitiesApplication",
 	"applicationSubCategory": "convert",
-	"screenshot": "https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/convert_formats.png",
+	"image": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/convert_formats.png",
 	"isAccessibleForFree": "true",
 	"license": "AGPL",
-	"description": "router fritzbox phonebook converter",
-	"name": "convert phonebook fritzbox",
-	"mainEntityOfPage":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
-	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
-	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf"
-	"programmingLanguage": "javascript"
+	"name": "convert phonebook Fritzbox",
+	"description": "convert phonebook files from router Fritzbox .xml to .csv or to .vcf (vcard)"
+	"mainEntityOfPage":"https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
+	"url":"https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
+	"SoftwareSourceCode": "https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/"
+	"programmingLanguage": "javascript",
+	"dateModified": "2022-11-21",
+	"softwareVersion": "0.2"
 }
 </script>
 
@@ -148,67 +156,107 @@ function convert_to_csv(){
  xmlDoc = parser.parseFromString(text, "text/xml");
 
  var out, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone;
- out = '';
+ out = 'name, phone\n'; logError=[];
  var contacts = xmlDoc.getElementsByTagName("contact");
  for(i=0;i<contacts.length;i++)
  {
-  contact = contacts[i];
-  person = contact.getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue;
-  telephony = contact.getElementsByTagName("telephony")[0].getElementsByTagName("number");
+  //check values
+  if(undefined==contacts[i]){ logError.push(''); continue; }
+  if(
+    (undefined==contacts[i].getElementsByTagName("person")[0]) ||
+    (undefined==contacts[i].getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue) ||
+    (undefined==contacts[i].getElementsByTagName("telephony")[0].getElementsByTagName("number")[0].firstChild.nodeValue)
+  ){ logError.push(contacts[i].innerHTML); continue; }
+  
+  person    = contacts[i].getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue;
+  telephony = contacts[i].getElementsByTagName("telephony")[0].getElementsByTagName("number");
   //telefone_numbers = Array(); telefone_numbers_type = Array(); telefone_numbers_prio = Array();
   out += '"'+person.replace('"','\\"')+'"';
   for(j=0;j<telephony.length;j++){
    //telefone_numbers.push (  telephony[i].firstChild.nodeValue );
    //telefone_numbers_type.push (  telephony[i].getAttribute('type') );
    //telefone_numbers_prio.push (  telephony[i].getAttribute('prio') );
+   if(undefined==telephony[j].firstChild.nodeValue) { logError.push(telephony[j]); continue; }
    phone = telephony[j].firstChild.nodeValue;
    out += ", "+ '"'+phone.replace('"','\\"')+'"';;
   }
   out += "\n";
  }
  document.getElementById('adressbuch_csv').value = out;
- 
+ show_errors(logError);
  download('csv',out);
+  
 }
 
-function convert_to_vcf(v=2.1){ //=vcard (v=Version)
+function show_errors(logError){
+ //show convert errors
+ if(logError.length>0){
+  if(language.substring(0,2)=='de') alert("Datei konvertiert. Es gab "+logError.length+" Fehler (möglicherweise auch unrelevant).");
+  else alert("File converted. There are "+logError.length+" errors (maybe not import).");
+  document.getElementById('error_logs').style.display='block';
+  document.getElementById('error_logs').value='errors in this lines:\n'+logError.join("\n");
+ } else {
+  document.getElementById('error_logs').style.display='none';
+  document.getElementById('error_logs').value='';
+ }
+
+}
+
+function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
  var text = document.getElementById('adressbuch_xml').value;
  parser = new DOMParser();
  xmlDoc = parser.parseFromString(text, "text/xml");
 
  var out, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone, tmp;
- out = '';
+ out = ''; logError=[];
  var contacts = xmlDoc.getElementsByTagName("contact");
  for(i=0;i<contacts.length;i++)
  {
+  //check values
+  if(undefined==contacts[i]){ logError.push(''); continue; }
+  if(
+    (undefined==contacts[i].getElementsByTagName("person")[0]) ||
+    (undefined==contacts[i].getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue) ||
+    (undefined==contacts[i].getElementsByTagName("telephony")[0].getElementsByTagName("number")[0].firstChild.nodeValue)
+  ){ logError.push(contacts[i].innerHTML); continue; }
+  
   out += 'BEGIN:VCARD\n';
   if(v==2.1)out += 'VERSION:2.1\n';
-  if(v>2.1)out += 'VERSION:4.0\n';
+  if(v>2.1) out += 'VERSION:4.0\n';
   contact = contacts[i];
-  person = contact.getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue;
+  person  = contact.getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue;
   telephony = contact.getElementsByTagName("telephony")[0].getElementsByTagName("number");
+  
+  //name
   tmp = person.replace('\n','');
   if(v==2.1)tmp = encodeURI(tmp).replace(/%/g,'=');
-  out += 'N:'+tmp+'\n';
+  out += 'N:' +tmp+'\n';
   out += 'FN:'+tmp+'\n';
+  
+  //phone
   for(j=0;j<telephony.length;j++){
+   if(undefined==telephony[j].firstChild.nodeValue) { logError.push(telephony[j]); continue; }
    out += "TEL;";
    if(v==2.1)if(telephony[j].getAttribute('type')!=undefined) out += ''+telephony[j].getAttribute('type').toUpperCase()+';';
-   if(v>2.1)if(telephony[j].getAttribute('type')!=undefined) out += 'TYPE='+telephony[j].getAttribute('type').toUpperCase()+';';
+   if(v>2.1) if(telephony[j].getAttribute('type')!=undefined) out += 'TYPE='+telephony[j].getAttribute('type').toUpperCase()+';';
    out += "VOICE:"+telephony[j].firstChild.nodeValue+'\n';
   }
   if(telephony.length>0 && telephony[0].getAttribute('prio')!='')out += "NOTE:importantContact(fritzbox)\n";
+  
+  //email
   services = Array();
+  if(undefined==contact.getElementsByTagName("services")) { logError.push(services[j]); continue; }
   if(contact.getElementsByTagName("services").length>0)services = contact.getElementsByTagName("services")[0].getElementsByTagName("email");
   for(j=0;j<services.length;j++){
+   if(undefined==services[j].firstChild.nodeValue) { logError.push(services[j]); continue; }
    tmp = services[j].firstChild.nodeValue;
    if(v==2.1)tmp = encodeURI(tmp).replace(/%/g,'=');
    out += "EMAIL:"+tmp+'\n';
   }
+  
   out += "END:VCARD\n";
  }
  document.getElementById('adressbuch_vcf').value = out;
- 
  download('vcf',out);
 }
 
@@ -405,10 +453,14 @@ function download(filename, text) {
   element.click();
 
   document.body.removeChild(element);
+  
+  document.getElementById('ready').style.display="block";
+  //window.setTimeout("document.getElementById('ready').style.display='none';",10000);
 }
 
 // reference: https://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
 // (( ref: http://stackoverflow.com/a/1293163/2343 ))
+// "All code here is provided as is and can be used at your own discretion." ref: https://www.bennadel.com/blog/license.htm
 // This will parse a delimited string into an array of
 // arrays. The default delimiter is the comma, but this
 // can be overriden in the second argument.
@@ -511,7 +563,7 @@ function readSingleFile(e) {
       document.getElementById('adressbuch_xml').value = contents;
       //alert('here your csv file');
       if( confirm("as .csv?") )convert_to_csv();
-      else if( confirm("as .vcf?") ){
+      else if( confirm("as .vcf? (vcard)") ){
         if( confirm("as .vcf? (version 2.1?)") )convert_to_vcf(2.1);
 		else if( confirm("as .vcf? (version 4.0?)") )convert_to_vcf(4.0);
       }
@@ -582,14 +634,14 @@ function show_advanced_view(state){
 <br><br><br>
 <footer>
 <span style="display:block;bottom:2pt;padding:2pt;font-size:10pt;">
-<a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/" style="padding-right:4pt;float:right">fork me</a>
+<a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/" style="padding-right:4pt;float:right">git</a>
 <!--<em style="color:#ababab;float:right;padding-right:10pt; ">file process only name & phone number</em>-->
-<details lang="en" class="en"><summary onClick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info" style="cursor:pointer;color:#999999">Full Privacy</summary><div style="color:#999999">You Privacy are keept: works just offline (pure javascript). But anyway, bedder check the code or <a href="commits/master" title="commit/version-history on github">History</a>, in case this account are was hacked.<br>You are still unsure, using this? Open the Browser in Privacy/Incognito-Mode, open this page, go offline and do you file-convertation. And after it close all Privacy/Incognito-Mode-Windows.</div></details>
-<details lang="de" class="de" style="display:none"><summary onClick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info" style="cursor:pointer;color:#999999">voller Datenschutz</summary><div style="color:#999999">Datenschutz ist gewahrt: arbeitet als offline-Programm (reines javascript). Aber natürlich trotzdem, besser den Programmcode oder <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde.<br>Immernoch unsicher das hier zu nutzen? Den Browser im Privaten/Incognito-Modus öffnen, diese Seite öffnen, offline gehen und die Daten konvertieren. Und dannach alle Privacy/Incognito-Modus-Fenster schließen.</div></details>
+<details lang="en" class="en"><summary onClick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info" style="cursor:pointer;color:#999999">Full Privacy</summary><div style="color:#999999">You Privacy are keept: works just offline (pure javascript). But anyway, bedder check the code or <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" title="commit/version-history on git">History</a>, in case this account are was hacked.<br>You are still unsure, using this? Open the Browser in Privacy/Incognito-Mode, open this page, go offline and do you file-convert. imported: And after close ALL Privacy/Incognito-Mode-Windows.</div></details>
+<details lang="de" class="de" style="display:none"><summary onClick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info" style="cursor:pointer;color:#999999">voller Datenschutz</summary><div style="color:#999999">arbeitet als offline-Programm (reines javascript). Datenschutz ist saher gewahrt. Aber natürlich trotzdem, besser den Programmcode oder <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde.<br>Immernoch unsicher das hier zu nutzen? Den Browser im Privaten/Incognito-Modus öffnen, diese Seite öffnen, offline gehen und die Daten konvertieren. wichtig: Und dannach ALLE Privacy/Incognito-Modus-Fenster schließen.</div></details>
 </footer>
 </span>
 <script language="JavaScript">
-//replace with german content
+//replace text with german translation
 var language = window.navigator.userLanguage || window.navigator.language;
 if(language.substring(0,2)=='de'){
  var e = document.getElementsByClassName('de');
