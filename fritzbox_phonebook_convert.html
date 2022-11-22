@@ -202,7 +202,7 @@ function show_errors(logError){
    if(language.substring(0,2)=='de') alert("Datei konvertiert. Es gab "+logError.length+" Fehler (möglicherweise auch unrelevant).");
    else alert("File converted. There are "+logError.length+" errors (maybe not import).");
    document.getElementById('error_logs').style.display='block';
-   document.getElementById('error_logs').value='errors in this lines:\n'+logError.join("\n");
+   document.getElementById('error_logs').value='Errors in these lines:\n'+logError.join("\n");
  } else {
    document.getElementById('error_logs').style.display='none';
    document.getElementById('error_logs').value='';
