@@ -35,7 +35,7 @@
 Fritzbox .XML File:<br>
 <input type="file" id="file-input_xml"  /><br>
 <span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="adressbuch_xml" class="advanced_view">
+<textarea id="phonebook_xml" class="advanced_view">
 <?xml version="1.0" encoding="utf-8"?>
 <phonebooks>
 <phonebook owner="" name="phonebook1">
@@ -76,9 +76,10 @@ Fritzbox .XML File:<br>
 .CSV File:<br>
 <input type="file" id="file-input_csv"  /><br>
 <span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="adressbuch_csv" class="advanced_view">
+<textarea id="phonebook_csv" class="advanced_view">
+name,phone
 "Person C", "080123456789"
-"Person D", "+4980987654321"
+"Person D", "+49176987654321", "+498091239856789"
 </textarea>
 </div>
 
@@ -86,7 +87,7 @@ Fritzbox .XML File:<br>
 .VCF File:<br>
 <input type="file" id="file-input_vcf"  /><br>
 <span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="adressbuch_vcf" class="advanced_view">
+<textarea id="phonebook_vcf" class="advanced_view">
 BEGIN:VCARD
 VERSION:4.0
 N:Person E
@@ -136,6 +137,7 @@ END:VCARD
 	"programmingLanguage": "javascript",
 	"dateModified": "2022-11-21",
 	"softwareVersion": "0.2",
+	"inLanguage": "en , de",
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
 </script>
@@ -147,15 +149,15 @@ var uploaded_csv_filename = '';
 var uploaded_vcf_filename = '';
 
 function reset_to_default(){
- document.getElementById('adressbuch_xml').value = document.getElementById('adressbuch_xml').defaultValue;
- document.getElementById('adressbuch_csv').value = document.getElementById('adressbuch_csv').defaultValue;
- document.getElementById('adressbuch_vcf').value = document.getElementById('adressbuch_vcf').defaultValue;
+ document.getElementById('phonebook_xml').value = document.getElementById('phonebook_xml').defaultValue;
+ document.getElementById('phonebook_csv').value = document.getElementById('phonebook_csv').defaultValue;
+ document.getElementById('phonebook_vcf').value = document.getElementById('phonebook_vcf').defaultValue;
  document.getElementById('file-input_xml').value='';document.getElementById('file-input_csv').value='';document.getElementById('file-input_vcf').value=''
 }
 
 
 function convert_to_csv(){
- var text = document.getElementById('adressbuch_xml').value;
+ var text = document.getElementById('phonebook_xml').value;
  parser = new DOMParser();
  xmlDoc = parser.parseFromString(text, "text/xml");
 
@@ -188,7 +190,7 @@ function convert_to_csv(){
   }
   out += "\n";
  }
- document.getElementById('adressbuch_csv').value = out;
+ document.getElementById('phonebook_csv').value = out;
  show_errors(logError);
  download('csv',out);
   
@@ -209,7 +211,7 @@ function show_errors(logError){
 }
 
 function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
- var text = document.getElementById('adressbuch_xml').value;
+ var text = document.getElementById('phonebook_xml').value;
  parser = new DOMParser();
  xmlDoc = parser.parseFromString(text, "text/xml");
 
@@ -262,7 +264,7 @@ function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
   
   out += "END:VCARD\n";
  }
- document.getElementById('adressbuch_vcf').value = out;
+ document.getElementById('phonebook_vcf').value = out;
  download('vcf',out);
 }
 
@@ -270,7 +272,7 @@ function convert_vcf_to_xml(){
   //config
  var vcf_use_which_name = 'FN'; // F or FN 
 
- var text = document.getElementById('adressbuch_vcf').value;
+ var text = document.getElementById('phonebook_vcf').value;
  var person, email, v;
  var out = '';
  out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="convertedFromVcf">\n';
@@ -380,7 +382,7 @@ function convert_vcf_to_xml(){
   out += '</telephony>\n'+EmailOut+'<setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
  }
  out += '</phonebook>\n</phonebooks>';
- document.getElementById('adressbuch_xml').value = out;
+ document.getElementById('phonebook_xml').value = out;
 
  download('xml',out);
 }
@@ -388,7 +390,7 @@ function convert_vcf_to_xml(){
 
 
 function convert_csv_to_xml(){
- var text = document.getElementById('adressbuch_csv').value;
+ var text = document.getElementById('phonebook_csv').value;
  var out = ''; var person; logError=[];
  out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="convertedFromCsv">\n';
  var contacts = CSVToArray(text);
@@ -407,7 +409,7 @@ function convert_csv_to_xml(){
   out += '<telephony nid="'+i+'">\n';
   for(j=1;j<elements.length;j++){ //accept multiple numbers
    phone = elements[j];
-   if(phone.search(/[0-9][0-9]/)==-1){logError.push(elements.join(','));continue;} //maybe not a phone number?
+   if(phone.search(/[0-9]/)==-1){logError.push(elements.join(','));} //maybe not a phone number?; Anyway: continue
    phone = phone.replace(/^\s+|\s+$/gm,''); //trim spaces
    phone = phone.replace(/^"+|"+$/gm,'');   //trim "
    phone = phone.replace(/^'+|'+$/gm,"");   //trim '
@@ -422,7 +424,7 @@ function convert_csv_to_xml(){
   out += '</telephony>\n<services /><setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
  }
  out += '</phonebook>\n</phonebooks>';
- document.getElementById('adressbuch_xml').value = out;
+ document.getElementById('phonebook_xml').value = out;
  show_errors(logError);
  download('xml',out);
 }
@@ -431,7 +433,7 @@ function convert_csv_to_xml(){
 function download(filename, text) {
 
   if(filename=='xml'){
-   filename = 'adressbuch_for_fritzbox_xml.xml';
+   filename = 'phonebook_for_fritzbox_xml.xml';
    if(uploaded_csv_filename!=''){
     var lin = uploaded_csv_filename.split('\\');
     var win = uploaded_csv_filename.split('/');
@@ -449,7 +451,7 @@ function download(filename, text) {
   }
   if(filename=='csv' || filename=='vcf'){
    var filename_ending = filename;
-   filename = 'adressbuch_from_fritzbox.'+filename_ending;
+   filename = 'phonebook_from_fritzbox.'+filename_ending;
    if(uploaded_xml_filename!=''){ console.log(uploaded_xml_filename);
     var lin = uploaded_xml_filename.split('\\');
     var win = uploaded_xml_filename.split('/');
@@ -576,7 +578,7 @@ function readSingleFile(e) {
     uploaded_xml_filename = document.getElementById(e.target.id).value;
     reader.onload = function(e) {
       var contents = e.target.result;
-      document.getElementById('adressbuch_xml').value = contents;
+      document.getElementById('phonebook_xml').value = contents;
       //alert('here your csv file');
       if( confirm("as .csv?") )convert_to_csv();
       else if( confirm("as .vcf? (vcard)") ){
@@ -589,7 +591,7 @@ function readSingleFile(e) {
     uploaded_csv_filename = document.getElementById(e.target.id).value;
     reader.onload = function(e) {
       var contents = e.target.result;
-      document.getElementById('adressbuch_csv').value = contents;
+      document.getElementById('phonebook_csv').value = contents;
       //alert('here your xml file');
       convert_csv_to_xml();
     };
@@ -598,7 +600,7 @@ function readSingleFile(e) {
     uploaded_csv_filename = document.getElementById(e.target.id).value;
     reader.onload = function(e) {
       var contents = e.target.result;
-      document.getElementById('adressbuch_vcf').value = contents;
+      document.getElementById('phonebook_vcf').value = contents;
       //alert('here your xml file');
       convert_vcf_to_xml();
     };
@@ -617,11 +619,11 @@ document.getElementById('file-input_vcf')
 
 
 //if source manuell changed, remove filename
-document.getElementById('adressbuch_xml')
+document.getElementById('phonebook_xml')
   .addEventListener('change', function reset_filename_xml(){ uploaded_xml_filename = ''; }, false);
-document.getElementById('adressbuch_csv')
+document.getElementById('phonebook_csv')
   .addEventListener('change', function reset_filename_csv(){ uploaded_csv_filename = ''; }, false);
-document.getElementById('adressbuch_vcf')
+document.getElementById('phonebook_vcf')
   .addEventListener('change', function reset_filename_vcf(){ uploaded_vcf_filename = ''; }, false);
 
 //document.getElementById('file-input_xml').value='';
