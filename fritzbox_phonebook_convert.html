@@ -463,6 +463,16 @@ function download(filename, text) {
     filename += "_converted_."+filename_ending;
    }
   }
+  if(filename=='html'){
+   var filename_ending = filename;
+   var filename_add = '';
+   if (typeof document.querySelector !== "undefined") { 
+       var jsonld = JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText);
+       if (typeof jsonld !== "undefined" && jsonld.softwareVersion !== "undefined" && jsonld.dateModified !== "undefined" ) filename_add = " v"+jsonld.softwareVersion+" "+jsonld.dateModified;
+   }
+   filename = 'converter phonebook fritzboxxml csv vcf vcard '+filename_add+'.'+filename_ending;
+   text="<!DOCTYPE html>"+text;
+  }
 
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -478,6 +488,8 @@ function download(filename, text) {
   document.getElementById('ready').style.display="block";
   //window.setTimeout("document.getElementById('ready').style.display='none';",10000);
 }
+
+function download_sourcecode(){   download('html',document.getElementsByTagName('html')[0].outerHTML);  }
 
 // reference: https://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
 // (( ref: http://stackoverflow.com/a/1293163/2343 ))
@@ -660,8 +672,8 @@ function show_advanced_view(state){
 </details>
 </span>
 <!--<em style="color:#ababab;float:right;padding-right:10pt; ">file process only name & phone number</em>-->
-<details lang="en" class="en"><summary onClick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Privacy</summary><div>You Privacy are keept: works just offline (pure javascript). But anyway, bedder check the code or <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master" title="commit/version-history on github">History</a>, in case this account are was hacked.<br>You are still unsure, using this? Open the Browser in Privacy/Incognito-Mode, open this page, go offline and do you file-convert. imported: And after close ALL Privacy/Incognito-Mode-Windows.</div></details>
-<details lang="de" class="de" style="display:none"><summary onClick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">voller Datenschutz</summary><div>arbeitet als offline-Programm (reines javascript). Datenschutz ist saher gewahrt. Aber natürlich trotzdem, besser den Programmcode oder <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde.<br>Immernoch unsicher das hier zu nutzen? Den Browser im Privaten/Incognito-Modus öffnen, diese Seite öffnen, offline gehen und die Daten konvertieren. wichtig: Und dannach ALLE Privacy/Incognito-Modus-Fenster schließen.</div></details>
+<details lang="en" class="en"><summary onClick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Privacy</summary><div>You Privacy are keept: works just offline (pure javascript).  <a href="#" onClick="download_sourcecode()">Download sourcecode</a>. But anyway, bedder check the code or <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master" title="commit/version-history on github">History</a>, in case this account are was hacked.<br>You are still unsure, using this? Open the Browser in Privacy/Incognito-Mode, open this page, go offline and do you file-convert. imported: And after close ALL Privacy/Incognito-Mode-Windows.</div></details>
+<details lang="de" class="de" style="display:none"><summary onClick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">voller Datenschutz</summary><div>arbeitet als offline-Programm (reines javascript).  <a href="#" onClick="download_sourcecode()">Download sourcecode</a>. Datenschutz ist saher gewahrt. Aber natürlich trotzdem, besser den Programmcode oder <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde.<br>Immernoch unsicher das hier zu nutzen? Den Browser im Privaten/Incognito-Modus öffnen, diese Seite öffnen, offline gehen und die Daten konvertieren. wichtig: Und dannach ALLE Privacy/Incognito-Modus-Fenster schließen.</div></details>
 <details lang="en" class="en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="open .csv file in libreOffice / OpenOffice">Help: open .csv in LibreOffice</summary><div>How to open the .csv file in LibreOffice / OpenOffice:<ul><li>Please select <i>comma</i> as seperator. </li><li>Under <i>other options</i>: Please select <i>Format quoted fields as text</i> (otherwise the phone-Number may miss the beginning 0 <-- at least in  LibreOffice (version 7.4.7.2)-->)</li></ul></div></details>
 <details lang="de" class="de" style="display: none;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="öffnen der .csv Datei in libreOffice / OpenOffice">Hilfe: öffne .csv in LibreOffice</summary><div>So öffnet man die .csv Datei in LibreOffice / OpenOffice:<ul><li>Bitte als Trenner <i>Komma</i> auswählen. </li><li>Unter <i>weitere Optionen</i>: Bitte anklicken von <i>Felder in Hochkommata als Text formatieren</i> (ansonsten könnte bei der Telefon-nummer die 0 am Anfang fehlen <!-- zumindest in LibreOffice (version 7.4.7.2)-->)</li></ul></div></details>
 </footer>
