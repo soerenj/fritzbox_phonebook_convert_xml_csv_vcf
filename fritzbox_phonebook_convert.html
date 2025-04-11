@@ -455,7 +455,7 @@ function download(filename, text) {
   if(filename=='csv' || filename=='vcf'){
    var filename_ending = filename;
    filename = 'phonebook_from_fritzbox.'+filename_ending;
-   if(uploaded_xml_filename!=''){ console.log(uploaded_xml_filename);
+   if(uploaded_xml_filename!=''){
     var lin = uploaded_xml_filename.split('\\');
     var win = uploaded_xml_filename.split('/');
     if(lin.length>win.length) filename = lin[lin.length-1];
