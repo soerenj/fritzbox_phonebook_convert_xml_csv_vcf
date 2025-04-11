@@ -9,8 +9,8 @@
 <body>
 <!--
  /*
- * version: 0.2
- * date: 2022-11-21
+ * version: 0.21
+ * date: 2025-04-11
  *
  * Licence 
  *
@@ -135,8 +135,8 @@ END:VCARD
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf"
 	"programmingLanguage": "javascript",
-	"dateModified": "2022-11-21",
-	"softwareVersion": "0.2",
+	"dateModified": "2025-04-11",
+	"softwareVersion": "0.21",
 	"inLanguage": "en , de",
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
@@ -324,12 +324,14 @@ function convert_vcf_to_xml(){
         strOut=str.substr(3);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
+	strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     if(str.substr(0,2)=='N:' && vcf_use_which_name=='N'){
         strOut=str.substr(2);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
+	strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     
@@ -402,6 +404,7 @@ function convert_csv_to_xml(){
   var phone  = elements[1].substring(0);
   if(i==0 && phone.search(/[0-9][0-9]/)==-1)continue; //ignore headline
   person = person.replace(/^\s+|\s+$/gm,''); //trim spaces
+  person = person.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
   person = person.replace(/^"+|"+$/gm,'');   //trim "
   person = person.replace(/^'+|'+$/gm,"");   //trim '
   out += '<contact>\n<category>0</category>\n';
