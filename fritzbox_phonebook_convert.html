@@ -583,9 +583,11 @@ function CSVToArray( strData, strDelimiter ){
 
 
 function check_filetype_ext(filename, ext_target){
-  var filetype_by_ext = filename.split('.')[filename.split('.').length-1];
-  if (typeof filetype_by_ext.toLowerCase() === "undefined" ) return true;
-  if( ext_target!='' && filetype_by_ext.toLowerCase()==ext_target ) return true;
+  if( typeof filetype_by_ext.toLowerCase() === "undefined" ) return true;
+  var t = filename.split('.');
+  var filetype_by_ext = '';
+  if (t.length>0) filetype_by_ext = t[t.length-1];
+  if( filetype_by_ext.toLowerCase()==ext_target ) return true;
   return confirm("This filename does not end with ."+ext_target+". Continue anyway?");
 }
 
@@ -602,7 +604,7 @@ function readSingleFile(e) {
       var contents = e.target.result;
       document.getElementById('phonebook_xml').value = contents;
       //alert('here your csv file');
-      if( check_filetype_ext(uploaded_xml_filename,'xml') ){
+      if( check_filetype_ext(document.getElementById('file-input_xml').value,'xml') ){
         if( confirm("as .csv?") )convert_to_csv();
         else if( confirm("as .vcf? (vcard)") ){
           if( confirm("as .vcf? (version 2.1?)") )convert_to_vcf(2.1);
@@ -617,7 +619,7 @@ function readSingleFile(e) {
       var contents = e.target.result;
       document.getElementById('phonebook_csv').value = contents;
       //alert('here your xml file');
-      if( check_filetype_ext(uploaded_xml_filename,'csv') )  convert_csv_to_xml();
+      if( check_filetype_ext(document.getElementById('file-input_csv').value,'csv') )  convert_csv_to_xml();
     };
   }
   if(e.target.id=='file-input_vcf'){
@@ -626,7 +628,7 @@ function readSingleFile(e) {
       var contents = e.target.result;
       document.getElementById('phonebook_vcf').value = contents;
       //alert('here your xml file');
-      if( check_filetype_ext(uploaded_xml_filename,'vcf') )  convert_vcf_to_xml();
+      if( check_filetype_ext(document.getElementById('file-input_vcf').value,'vcf') )  convert_vcf_to_xml();
     };
   }
   reader.readAsText(file);
