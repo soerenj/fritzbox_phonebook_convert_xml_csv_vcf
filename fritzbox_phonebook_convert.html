@@ -582,7 +582,7 @@ function CSVToArray( strData, strDelimiter ){
 }
 
 
-function check_filetype_ext(filename, ext_target1){
+function check_filetype_ext(filename, ext_target){
   var filetype_by_ext = filename.split('.')[filename.split('.').length-1];
   if (typeof filetype_by_ext.toLowerCase() === "undefined" ) return true;
   if( ext_target!='' && filetype_by_ext.toLowerCase()==ext_target ) return true;
