@@ -412,6 +412,7 @@ function convert_csv_to_xml(){
   out += '<telephony nid="'+i+'">\n';
   for(j=1;j<elements.length;j++){ //accept multiple numbers
    phone = elements[j];
+   if(phone.length==0)continue;
    if(phone.search(/[0-9]/)==-1){logError.push(elements.join(','));} //maybe not a phone number?; Anyway: continue
    phone = phone.replace(/^\s+|\s+$/gm,''); //trim spaces
    phone = phone.replace(/^"+|"+$/gm,'');   //trim "
