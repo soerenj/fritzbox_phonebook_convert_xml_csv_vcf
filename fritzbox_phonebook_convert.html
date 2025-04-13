@@ -583,9 +583,9 @@ function CSVToArray( strData, strDelimiter ){
 
 
 function check_filetype_ext(filename, ext_target){
-  if( typeof filetype_by_ext.toLowerCase() === "undefined" ) return true;
   var t = filename.split('.');
   var filetype_by_ext = '';
+  if( typeof filetype_by_ext.toLowerCase() === "undefined" ) return true;
   if (t.length>0) filetype_by_ext = t[t.length-1];
   if( filetype_by_ext.toLowerCase()==ext_target ) return true;
   return confirm("This filename does not end with ."+ext_target+". Continue anyway?");
