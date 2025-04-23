@@ -75,7 +75,21 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
  <input type="button" value="⬇ Convert to vcf (vcard v4.0)" onclick="convert_to_vcf(4.0)" />  &nbsp;
  <input type="button" value="⇧ Convert csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  
  <input type="button" value="⇧ Convert vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  
- <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;   
+ <input type="button" value="Download" title="Download one file" onclick="download_one_file_ask()" />   &nbsp; 
+ <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;  
+ <details>
+  <summary style="color:black">
+   <span lang="en" class="en" >Settings</span>
+   <span lang="de" class="de" style="display: none;">Einstellungen</span>
+  </summary>
+  <div>
+    Uploaded file: only ~ supported files (.xml / .csv / .vcf) are selectable in file-browser: <a href="#" onClick="document.getElementById('file-input_auto-detect').accept='';this.text='any file-type is now selectable';return false;" id="upload_file__filetype_accept__toggle_link">yes</a><br />
+    Uploaded file: automatic detection of file-type: <a href="#" onClick="if(upload_file__filetype_auto_detect){upload_file__filetype_auto_detect=false;this.text='no';}else{ upload_file__filetype_auto_detect=true;this.text='yes';} return false;" id="upload_file__filetype_auto_detect__toggle_link">yes/no</a> <i style="color:#999">(detected by file-extension .xml / .csv / .vcf.)</i>
+  <br />
+  For new Fritzbox .xml file: Name of new Phonebook: <input type="text" value="phonebook_name" title="" id="new_phonebook_name" onchange="new_phonebook_name=this.value" autocomplete="off" /> <i style="color:#999">When importing in Fritzbox, not the filename.</i>  
+  </div>
+ </details>
+ 
 </div>
 <br><br>
 <div id="select_file_xml_csv" class="advanced_view">
@@ -110,8 +124,8 @@ END:VCARD
 
 <p align="right" id="show_advanced_view_link_wrapper">
   <a href="#" onclick="show_advanced_view('show');return false">
-    <span lang="en" class="en" style="text-decoration:underline;">⚙ Settings / show text source window</span>
-    <span lang="de" class="de" style="display:none;text-decoration:underline;">⚙ Einstellung / Text-Fenster zeigen </span>
+    <span lang="en" class="en" style="text-decoration: underline;">⚙ Settings / show text source window</span>
+    <span lang="de" class="de" style="display: none; text-decoration: underline;">⚙ Einstellung / Text-Fenster zeigen </span>
   </a>
 </p>
 
@@ -149,8 +163,12 @@ var uploaded_convert_to = '';
 var upload_file__filetype_auto_detect = true;
 var counter_convert = 0;
 var show_advanced_view__state = false;
+var new_phonebook_name = 'convertedPhonebook';
 
 if(document.getElementById('file-input_auto-detect').value!='')document.getElementById('file-input_reset').style.display='block';
+if(upload_file__filetype_auto_detect) document.getElementById('upload_file__filetype_auto_detect__toggle_link').text='yes';
+else document.getElementById('upload_file__filetype_auto_detect__toggle_link').text='no';
+document.getElementById('new_phonebook_name').value=new_phonebook_name;
 
 function reset_to_default(){
  document.getElementById('phonebook_xml').value = document.getElementById('phonebook_xml').defaultValue;
@@ -281,7 +299,7 @@ function convert_vcf_to_xml(){
  var text = document.getElementById('phonebook_vcf').value;
  var person, email, v;
  var out = '';
- out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="convertedFromVcf">\n';
+ out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="'+new_phonebook_name+'">\n';
  var contacts = text.split('BEGIN:VCARD');
  for(i=0;i<contacts.length;i++)
  {
@@ -400,7 +418,7 @@ function convert_vcf_to_xml(){
 function convert_csv_to_xml(){
  var text = document.getElementById('phonebook_csv').value;
  var out = ''; var person; logError=[];
- out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="convertedFromCsv">\n';
+ out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="'+new_phonebook_name+'">\n';
  var contacts = CSVToArray(text);
  for(i=0;i<contacts.length;i++)
  {
@@ -448,6 +466,11 @@ function get_filename(filename_with_path) {
     return filename;
 }
 
+function download_one_file_ask(){
+  if (confirm('Download text in .xml window?')) { uploaded_file_convert_to='xml'; prepare_and_download(document.getElementById('phonebook_xml').value); return; }
+  if (confirm('Download text in .csv window?')) { uploaded_file_convert_to='csv'; prepare_and_download(document.getElementById('phonebook_csv').value); return; }
+  if (confirm('Download text in .vcf window?')) { uploaded_file_convert_to='vcf'; prepare_and_download(document.getElementById('phonebook_vcf').value); return; }
+}
 function prepare_and_download(text) {
   var filename = '';
   filename = 'phonebook_for_fritzbox';
@@ -621,7 +644,6 @@ function readSingleFile(e) {
       var filename = document.getElementById('file-input_auto-detect').value;
       var filetype_by_ext = get_filetype_by_ext(filename);
       if( typeof filetype_by_ext.toLowerCase() === "undefined" ) filetype_by_ext ='';
-      if( confirm("Automatic detect file type? (.xml/.csv/.vcf)") )upload_file__filetype_auto_detect=true;
       if (upload_file__filetype_auto_detect && filetype_by_ext!='' ){
           if( filetype_by_ext.toLowerCase()=='xml' ) {
              uploaded_file_convert_from='xml';
