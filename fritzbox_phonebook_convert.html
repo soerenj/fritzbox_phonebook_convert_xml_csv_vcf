@@ -2,14 +2,14 @@
 <html>
 <head>
 <title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
-<meta http-equiv=content-type content="text/html; charset=utf-8" />
-<link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html">
-<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ width:80%;height:100pt;color:#999999 } details summary { color:#999999;} details summary:hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; } </style>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
+<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ width:80%;height:100pt;color:#999999 } details summary { color:#999999;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; } </style>
 </head>
 <body>
 <!--
  /*
- * version: 0.221
+ * version: 0.24
  * date: 2025-04-23
  *
  * Licence 
@@ -23,19 +23,21 @@
  * (at your option) any later version.
  */
   -->
-<img src="img/icon_convert_formats.png" style="float:right;padding:6pt;"/>
+<img src="img/icon_convert_formats.png" style="float:right;padding:6pt;" />
 <h1 lang="en" class="en">Phonebook Contact convert for Fritzbox</h1>
-<h1 lang="de" class="de" style="display:none">Telefonbuch Kontakte konvertieren für Fritzbox</h1>
+<h1 lang="de" class="de" style="display:none;">Telefonbuch Kontakte konvertieren für Fritzbox</h1>
 <p lang="en" class="en">Converts Fritzbox-XML-Files to/from .CSV or .VCF(vcard)-File with Phone Numbers.</p>
-<p lang="de" class="de" style="display:none">Konvertiert Fritzbox-XML-Dateien zu/von .CSV oder .VCF(vcard)-Dateien mit Telefonnummer</p>
+<p lang="de" class="de" style="display:none;">Konvertiert Fritzbox-XML-Dateien zu/von .CSV oder .VCF(vcard)-Dateien mit Telefonnummer</p>
 <span style="clear:both"></span><br>
 <noscript style="color:red">You need JavaScript, to use this service.</noscript>
 <hr>
-<br>
-Fritzbox .XML File:<br>
-<input type="file" id="file-input_xml"  /><br>
-<span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="phonebook_xml" class="advanced_view">
+<div id="select_file_auto-detect_div">
+Select a File: <span style="color:#999999"><i>Fritzbox .XML &nbsp; - or - &nbsp; .CSV &nbsp; - or - &nbsp; .VCF File</i></span><br>
+<input type="file" id="file-input_auto-detect" autocomplete="off" /><a href="#" id="file-input_auto-detect_close_button" style="display:none;background: white;  font-size: 2em;  text-align: right;  top: 10%;  position: absolute;  padding: 0.5em;  right: 10%; border-radius:20pt;">Close X</a><br>
+</div><br>
+<div id="select_file_xml_div" class="advanced_view">
+<label for="phonebook_xml">From Fritzbox .XML File:</label><br>
+<textarea id="phonebook_xml" autocomplete="off">
 <?xml version="1.0" encoding="utf-8"?>
 <phonebooks>
 <phonebook owner="" name="phonebook1">
@@ -56,39 +58,36 @@ Fritzbox .XML File:<br>
 </phonebook>
 </phonebooks>
 </textarea>
+</div>
 
 <div id="ready" style="display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
  <span lang="en" class="en">Ready. Check now your download folder</span>
- <span lang="de" class="de">Fertig. Überprüfen Sie Ihren Download-Ordner</span>
+ <span lang="de" class="de" style="display: none;">Fertig. Überprüfen Sie Ihren Download-Ordner</span>
 </div>
 
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <br>
 <div class="advanced_view">
- <input type="button" value="⬇ Convert to csv" onClick="convert_to_csv()"/>  &nbsp;
- <input type="button" value="⬇ Convert to vcf (vcard v2.1)" onClick="convert_to_vcf(2.1)"/>  &nbsp;
- <input type="button" value="⬇ Convert to vcf (vcard v4.0)" onClick="convert_to_vcf(4.0)"/>  &nbsp;
- <input type="button" value="⇧ Convert csv to xml" onClick="convert_csv_to_xml()"/>   &nbsp;  
- <input type="button" value="⇧ Convert vcf to xml" onClick="convert_vcf_to_xml()"/>   &nbsp;  
- <input type="button" value="✖ Reset to Test-Values" title="reset to default" onClick="reset_to_default()"/>   &nbsp;  
+ <input type="button" value="⬇ Convert to csv" onclick="convert_to_csv()" />  &nbsp;
+ <input type="button" value="⬇ Convert to vcf (vcard v2.1)" onclick="convert_to_vcf(2.1)" />  &nbsp;
+ <input type="button" value="⬇ Convert to vcf (vcard v4.0)" onclick="convert_to_vcf(4.0)" />  &nbsp;
+ <input type="button" value="⇧ Convert csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  
+ <input type="button" value="⇧ Convert vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  
+ <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;   
 </div>
 <br><br>
-.CSV File:<br>
-<input type="file" id="file-input_csv"  /><br>
-<span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="phonebook_csv" class="advanced_view">
-name,phone
+<div id="select_file_xml_csv" class="advanced_view">
+<label for="phonebook_csv">From .CSV File:</label><br>
+<textarea id="phonebook_csv" autocomplete="off">name,phone
 "Person C", "080123456789"
 "Person D", "+49176987654321", "+498091239856789"
 </textarea>
+<br>
 </div>
 
-<br><br>
-.VCF File:<br>
-<input type="file" id="file-input_vcf"  /><br>
-<span style="color:#999999" class="advanced_view">source:</span><br>
-<textarea id="phonebook_vcf" class="advanced_view">
-BEGIN:VCARD
+<div id="select_file_vcf_div" class="advanced_view">
+<label for="phonebook_vcf">From .VCF File:</label><br>
+<textarea id="phonebook_vcf" autocomplete="off">BEGIN:VCARD
 VERSION:4.0
 N:Person E
 FN:Person E
@@ -105,19 +104,18 @@ END:VCARD
 </textarea>
 </div>
 
-<textarea id="error_logs" style="display:none" class="advanced_view"></textarea>
+<textarea id="error_logs" style="display:none" class=""></textarea>
 
-<p align="right" id="show_advanced_view_link_wrapper" >
-  <span lang="en" class="en"></span>
-  <span lang="de" class="de" style="display:none"></span>
+<p align="right" id="show_advanced_view_link_wrapper">
   <a href="#" onclick="show_advanced_view('show');return false">
-  <span lang="en" class="en">show source Window</span><span lang="de" class="de" style="display:none;text-decoration:underline;">Text-Fenster zeigen</span></a>
-  <span lang="de" class="de" style="display:none"> </span>
+    <span lang="en" class="en" style="text-decoration:underline;">⚙ Settings / show text source window</span>
+    <span lang="de" class="de" style="display:none;text-decoration:underline;">⚙ Einstellung / Text-Fenster zeigen </span>
+  </a>
 </p>
 
-<input type="button" id="file-input_reset" style="display:none;margin-top:22pt" value="reset" onClick="reset_to_default()" />
+<input type="button" id="file-input_reset" style="display:none;margin-top:22pt" value="reset" onclick="reset_to_default()" />
 
-<p id="show_advanced_view_link_link_close"  align="right" style="display:none" >
+<p id="show_advanced_view_link_link_close" align="right" style="display:none">
 <a href="#" onclick="show_advanced_view('hide');return false">Text-Fenster X (close)</a>
 </p>
 <script type='application/ld+json'>
@@ -136,23 +134,28 @@ END:VCARD
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
 	"dateModified": "2025-04-23",
-	"softwareVersion": "0.2",
+	"softwareVersion": "0.24",
 	"inLanguage": ["en , de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
 </script>
-
 <script language="JavaScript">
 <!--
-var uploaded_xml_filename = '';
-var uploaded_csv_filename = '';
-var uploaded_vcf_filename = '';
+var uploaded_filename = '';
+var uploaded_convert_from = '';
+var uploaded_convert_to = '';
+var upload_file__filetype_auto_detect = true;
+var counter_convert = 0;
+var show_advanced_view__state = false;
+
+if(document.getElementById('file-input_auto-detect').value!='')document.getElementById('file-input_reset').style.display='block';
 
 function reset_to_default(){
  document.getElementById('phonebook_xml').value = document.getElementById('phonebook_xml').defaultValue;
  document.getElementById('phonebook_csv').value = document.getElementById('phonebook_csv').defaultValue;
  document.getElementById('phonebook_vcf').value = document.getElementById('phonebook_vcf').defaultValue;
- document.getElementById('file-input_xml').value='';document.getElementById('file-input_csv').value='';document.getElementById('file-input_vcf').value=''
+ document.getElementById('file-input_auto-detect').value='';
+ document.getElementById('ready').style.display="none";
 }
 
 
@@ -192,8 +195,8 @@ function convert_to_csv(){
  }
  document.getElementById('phonebook_csv').value = out;
  show_errors(logError);
- download('csv',out);
-  
+ return out;
+ //download('csv',out);
 }
 
 function show_errors(logError){
@@ -265,7 +268,8 @@ function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
   out += "END:VCARD\n";
  }
  document.getElementById('phonebook_vcf').value = out;
- download('vcf',out);
+ return out;
+ //download('vcf',out);
 }
 
 function convert_vcf_to_xml(){
@@ -324,14 +328,14 @@ function convert_vcf_to_xml(){
         strOut=str.substr(3);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
-	strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+        strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     if(str.substr(0,2)=='N:' && vcf_use_which_name=='N'){
         strOut=str.substr(2);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
-	strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+        strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     
@@ -385,8 +389,8 @@ function convert_vcf_to_xml(){
  }
  out += '</phonebook>\n</phonebooks>';
  document.getElementById('phonebook_xml').value = out;
-
- download('xml',out);
+ return out;
+ //download('xml',out);
 }
 
 
@@ -430,51 +434,48 @@ function convert_csv_to_xml(){
  out += '</phonebook>\n</phonebooks>';
  document.getElementById('phonebook_xml').value = out;
  show_errors(logError);
- download('xml',out);
+ return out;
+ //download('xml',out);
 }
 
+function get_filename(filename_with_path) {
+    var lin = filename_with_path.split('\\');
+    var win = filename_with_path.split('/');
+    if(lin.length>win.length) filename = lin[lin.length-1];
+    else filename = win[lin.length-1];
+    return filename;
+}
 
-function download(filename, text) {
-
-  if(filename=='xml'){
-   filename = 'phonebook_for_fritzbox_xml.xml';
-   if(uploaded_csv_filename!=''){
-    var lin = uploaded_csv_filename.split('\\');
-    var win = uploaded_csv_filename.split('/');
-    if(lin.length>win.length) filename = lin[lin.length-1];
-    else filename = win[lin.length-1];
-    filename += "_converted_.xml";
-   }
-   if(uploaded_vcf_filename!=''){
-    var lin = uploaded_vcf_filename.split('\\');
-    var win = uploaded_vcf_filename.split('/');
-    if(lin.length>win.length) filename = lin[lin.length-1];
-    else filename = win[lin.length-1];
-    filename += "_converted_.xml";
-   }
+function prepare_and_download(text) {
+  var filename = '';
+  filename = 'phonebook_for_fritzbox';
+  if(uploaded_file_convert_to=='xml'){
+   if(uploaded_filename!='')filename = uploaded_filename.replace(/(\.)(csv)$/i,'_$2');
+   if(uploaded_filename!='')filename = uploaded_filename.replace(/(\.)(vcf)$/i,'_$2');
+   filename += "_converted_.xml";
   }
-  if(filename=='csv' || filename=='vcf'){
-   var filename_ending = filename;
-   filename = 'phonebook_from_fritzbox.'+filename_ending;
-   if(uploaded_xml_filename!=''){
-    var lin = uploaded_xml_filename.split('\\');
-    var win = uploaded_xml_filename.split('/');
-    if(lin.length>win.length) filename = lin[lin.length-1];
-    else filename = win[lin.length-1];
-    filename += "_converted_."+filename_ending;
-   }
+  if(uploaded_file_convert_to=='csv' || uploaded_file_convert_to=='vcf'){
+   if(uploaded_filename!='')filename = uploaded_filename.replace(/(\.)(xml)$/i,'_$2');
+   filename += "_converted_."+uploaded_file_convert_to;
   }
-  if(filename=='html'){
-   var filename_ending = filename;
+  counter_convert++;
+  downloadAction(filename, text);
+}
+function download_sourcecode(){
+  var filename = '';
+  var text = document.getElementsByTagName('html')[0].outerHTML;
+  if(uploaded_file_convert_to=='html'){
    var filename_add = '';
    if (typeof document.querySelector !== "undefined") { 
        var jsonld = JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText);
-       if (typeof jsonld !== "undefined" && jsonld.softwareVersion !== "undefined" && jsonld.dateModified !== "undefined" ) filename_add = " v"+jsonld.softwareVersion+" "+jsonld.dateModified;
+       if (typeof jsonld !== "undefined" && jsonld.softwareVersion !== "undefined" && jsonld.dateModified !== "undefined" ) filename_add = " v"+jsonld.softwareVersion.replace(/\./,'-')+" "+jsonld.dateModified.replace(/\./,'-');
    }
-   filename = 'converter phonebook fritzboxxml csv vcf vcard '+filename_add+'.'+filename_ending;
+   filename = 'converter phonebook fritzboxxml csv vcf vcard '+filename_add+'.'+filename_ending_target;
    text="<!DOCTYPE html>"+text;
   }
-
+  downloadAction(filename,text);
+}
+function downloadAction(filename, text) {
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
   element.setAttribute('download', filename);
@@ -487,10 +488,10 @@ function download(filename, text) {
   document.body.removeChild(element);
   
   document.getElementById('ready').style.display="block";
+  if(counter_convert%2){ document.getElementById('ready').style.border="solid 1pt black"; document.getElementById('ready').style.background='#fff'; }
+  else { document.getElementById('ready').style.border=""; document.getElementById('ready').style.background='#aaa';}
   //window.setTimeout("document.getElementById('ready').style.display='none';",10000);
 }
-
-function download_sourcecode(){   download('html',document.getElementsByTagName('html')[0].outerHTML);  }
 
 // reference: https://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
 // (( ref: http://stackoverflow.com/a/1293163/2343 ))
@@ -581,7 +582,6 @@ function CSVToArray( strData, strDelimiter ){
     return( arrData );
 }
 
-
 function check_filetype_ext(filename, ext_target){
   var filetype_by_ext = get_filetype_by_ext(filename);
   if( typeof filetype_by_ext.toLowerCase() === "undefined" ) return true;
@@ -596,6 +596,14 @@ function get_filetype_by_ext(filename){
   return filetype_by_ext;
 }
 
+function ask__xml_convert_to(text) {
+  if( confirm("convert to .csv?") ) { uploaded_file_convert_to='csv'; return convert_to_csv(text); }
+  else if( confirm("convert to .vcf? (vcard)") ){
+    if( confirm("convert to .vcf? (version 2.1?)") ) { uploaded_file_convert_to='vcf'; return convert_to_vcf(text, 2.1); }
+    else if( confirm("convert to .vcf? (version 4.0?)") ) { uploaded_file_convert_to='cvf'; return convert_to_vcf(text, 4.0); }
+  }
+}
+
 function readSingleFile(e) {
   document.getElementById('file-input_reset').style.display='block';
   var file = e.target.files[0];
@@ -603,63 +611,61 @@ function readSingleFile(e) {
     return;
   }
   var reader = new FileReader();
-  if(e.target.id=='file-input_xml'){
-    uploaded_xml_filename = document.getElementById(e.target.id).value;
+  
+  if(e.target.id=='file-input_auto-detect'){
+    uploaded_filename = get_filename(document.getElementById(e.target.id).value);
     reader.onload = function(e) {
       var contents = e.target.result;
-      document.getElementById('phonebook_xml').value = contents;
-      //alert('here your csv file');
-      if( check_filetype_ext(document.getElementById('file-input_xml').value,'xml') ){
-        if( confirm("as .csv?") )convert_to_csv();
-        else if( confirm("as .vcf? (vcard)") ){
-          if( confirm("as .vcf? (version 2.1?)") )convert_to_vcf(2.1);
-	  else if( confirm("as .vcf? (version 4.0?)") )convert_to_vcf(4.0);
-        }
+      var filename = document.getElementById('file-input_auto-detect').value;
+      var filetype_by_ext = get_filetype_by_ext(filename);
+      if( typeof filetype_by_ext.toLowerCase() === "undefined" ) filetype_by_ext ='';
+      if (upload_file__filetype_auto_detect && filetype_by_ext!='' ){
+          if( filetype_by_ext.toLowerCase()=='xml' ) {
+             uploaded_file_convert_from='xml';
+             document.getElementById('phonebook_xml').value = contents;
+             prepare_and_download( ask__xml_convert_to() );
+             uploaded_filename=''; return; }
+          if( filetype_by_ext.toLowerCase()=='csv' ) {
+             uploaded_file_convert_from='csv';
+             uploaded_file_convert_to='xml';
+             document.getElementById('phonebook_csv').value = contents;
+             prepare_and_download( convert_csv_to_xml() );
+             uploaded_filename=''; return; }
+          if( filetype_by_ext.toLowerCase()=='vcf' ) {
+             uploaded_file_convert_from='vcf';
+             uploaded_file_convert_to='xml';
+             document.getElementById('phonebook_vcf').value = contents;
+             prepare_and_download( convert_vcf_to_xml() );
+             uploaded_filename=''; return;  }
       }
-    };
-  }
-  if(e.target.id=='file-input_csv'){
-    uploaded_csv_filename = document.getElementById(e.target.id).value;
-    reader.onload = function(e) {
-      var contents = e.target.result;
-      document.getElementById('phonebook_csv').value = contents;
-      //alert('here your xml file');
-      if( check_filetype_ext(document.getElementById('file-input_csv').value,'csv') )  convert_csv_to_xml();
-    };
-  }
-  if(e.target.id=='file-input_vcf'){
-    uploaded_csv_filename = document.getElementById(e.target.id).value;
-    reader.onload = function(e) {
-      var contents = e.target.result;
-      document.getElementById('phonebook_vcf').value = contents;
-      //alert('here your xml file');
-      if( check_filetype_ext(document.getElementById('file-input_vcf').value,'vcf') )  convert_vcf_to_xml();
+      if( confirm("Is this a .xml file?") ) {
+        document.getElementById('phonebook_xml').value = contents;
+        uploaded_file_convert_from='xml';
+        prepare_and_download( ask__xml_convert_to() );
+        uploaded_filename=''; return; }
+      if( confirm("Is this a .csv file?") ) {
+        document.getElementById('phonebook_csv').value = contents;
+        uploaded_file_convert_from='csv';
+        uploaded_file_convert_to='xml';
+        prepare_and_download( convert_csv_to_xml() );
+        uploaded_filename=''; return; }
+      if( confirm("Is this a .vcf (vcard) file?") ) {
+        document.getElementById('phonebook_vcf').value = contents;
+        uploaded_file_convert_from='vcf';
+        uploaded_file_convert_to='xml';
+        prepare_and_download( convert_vcf_to_xml() );
+        uploaded_filename=''; return; }
     };
   }
   reader.readAsText(file);
 }
 
 
-document.getElementById('file-input_xml')
-  .addEventListener('change', readSingleFile, false);
-document.getElementById('file-input_csv')
-  .addEventListener('change', readSingleFile, false);
-document.getElementById('file-input_vcf')
+document.getElementById('file-input_auto-detect')
   .addEventListener('change', readSingleFile, false);
 
 
-
-//if source manuell changed, remove filename
-document.getElementById('phonebook_xml')
-  .addEventListener('change', function reset_filename_xml(){ uploaded_xml_filename = ''; }, false);
-document.getElementById('phonebook_csv')
-  .addEventListener('change', function reset_filename_csv(){ uploaded_csv_filename = ''; }, false);
-document.getElementById('phonebook_vcf')
-  .addEventListener('change', function reset_filename_vcf(){ uploaded_vcf_filename = ''; }, false);
-
-//document.getElementById('file-input_xml').value='';
-//document.getElementById('file-input_csv').value='';
-//document.getElementById('file-input_vcf').value='';
+//document.getElementById('file-input_auto-detect').value='';
 //reset_to_default();
 
 function show_advanced_view(state){
@@ -669,10 +675,12 @@ function show_advanced_view(state){
   if(state=='hide')e[i].style.display='';
  }
  if(state=='show'){
+   show_advanced_view__state = true;
    document.getElementById("show_advanced_view_link_wrapper").style.display='none';
    document.getElementById("show_advanced_view_link_link_close").style.display='block';
  }
  if(state=='hide'){
+   show_advanced_view__state = false;
    document.getElementById("show_advanced_view_link_wrapper").style.display='';
    document.getElementById("show_advanced_view_link_link_close").style.display='none';
  }
@@ -683,19 +691,19 @@ function show_advanced_view(state){
 <br><br><br>
 <footer>
 <span style="display:block;bottom:2pt;padding:2pt;font-size:10pt;float:right;">
-<details style="padding-right:4pt;color:#999999"><summary>git</summary>
-<a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">git (codeberg)</a> or <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">github</a>
+<details style="padding-right:4pt;color:#999999"><summary>sourcecode (git)</summary>
+<a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">git (codeberg)</a> or <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">git (github)</a>
 </details>
 </span>
 <!--<em style="color:#ababab;float:right;padding-right:10pt; ">file process only name & phone number</em>-->
-<details lang="en" class="en" style="display: none;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Data-Privacy</summary><div>You Privacy are keept: This Page works just on your computer (or offline). No Cloud. It is just pure local JavaScript-Code. <br>But anyway, bedder check the program-code or <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master" title="commit/version-history on github">Change-History</a>, in case this account was hacked.<br><br>You are still unsure, using this? Then: I suggest one of this two ways.<br>
+<details lang="en" class="en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Data-Privacy</summary><div>You Privacy are keept: This Page works just on your computer (or offline). No Cloud. It is just pure local JavaScript-Code. <br>But anyway, bedder check the program-code or <a xhref="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" title="commit/version-history on git" href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Change-History</a>, in case this account was hacked.<br><br>You are still unsure, using this? Then: I suggest one of this two ways.<br>
 Option A:
  <ol>
    <li>Download this Page: 
      <ul>
-      <li><a href="#" onClick="download_sourcecode()">click here</a> or </li>
-      <li>alternative <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/raw/branch/pages/fritzbox_phonebook_convert.html">here</a></noscript> or </li>
-      <li><i>save page</i> in your Browser <i>(e.g.: Menue File -> Save Page - or - press hotkey <kbd>STRG</kbd>+<kbd>s</kbd>)</i></li>
+      <li><a href="#" onclick="download_sourcecode()">click here</a> or </li>
+      <li>alternative <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/raw/branch/pages/fritzbox_phonebook_convert.html">here</a> or </li>
+      <li><i>save page</i> in your Browser <i>(e.g.: Menue File -&gt; Save Page - or - press hotkey <kbd>STRG</kbd>+<kbd>s</kbd>)</i></li>
      </ul>
    </li>
    <li>go offline (= disconnect from Internet )</li>
@@ -711,16 +719,16 @@ Option B (alternativ) :
     <li>Important last Step: Close <u>ALL</u> Privacy/Incognito-Mode window afterwards, to finish up / clean up the whole session!</li>
   </ol>
 </div></details>
-<details lang="de" class="de" style="display: inline-block;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">voller Datenschutz</summary><div>
+<details lang="de" class="de" style="display: none;" ><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">voller Datenschutz</summary><div>
 
-Diese Seite arbeitet als offline-Programm (reines javascript). Anonymität, Datenschutz ist daher gewahrt. Keine Cloud. Es ist reines, lokal ausgeführtes JavaScript. Aber natürlich trotzdem, besser den Programmcode oder <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde.<br>Immernoch unsicher das hier zu nutzen? Dann schlage ich einen dieser zwei Nutzungswege vor:<br>
+Diese Seite arbeitet als offline-Programm (reines javascript). Anonymität, Datenschutz ist daher gewahrt. Keine Cloud. Es ist reines, lokal ausgeführtes JavaScript. Aber natürlich trotzdem, besser den Programmcode oder <a xhref="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde.<br>Immernoch unsicher das hier zu nutzen? Dann schlage ich einen dieser zwei Nutzungswege vor:<br>
 Option A:
  <ol>
    <li>Download dieser Internet-Seite: 
      <ul>
-      <li> <a href="#" onClick="download_sourcecode()">Hier klicken</a> oder </li>
-      <li>alternativ <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/raw/branch/pages/fritzbox_phonebook_convert.html">hier</a></noscript> oder </li>
-      <li><i>Seite speichern</i> in ihren Internet-Browser wählen <i>(z.B.: Menü Datei -> Seite speichern - oder - Tastenkombination <kbd>STRG</kbd>+<kbd>s</kbd>)</i></li>
+      <li> <a href="#" onclick="download_sourcecode()">Hier klicken</a> oder </li>
+      <li>alternativ <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/raw/branch/pages/fritzbox_phonebook_convert.html">hier</a> oder </li>
+      <li><i>Seite speichern</i> in ihren Internet-Browser wählen <i>(z.B.: Menü Datei -&gt; Seite speichern - oder - Tastenkombination <kbd>STRG</kbd>+<kbd>s</kbd>)</i></li>
      </ul>
    </li>
    <li>gehen Sie offline (= trennen Sie die Verbindung zum Internet) </li>
@@ -736,10 +744,10 @@ Option B (alternativ) :
     <li>Wichtiger letzter Schritt: Schließen Sie <u>ALLE</u> ihre Privat/Inkognito-Modus Fenster dannach. Nur so kann die ganze <i>Sitzung</i> aufgeräumnt und auch wirklich beendet werden.</li>
   </ol>
 </div></details>
-<details lang="en" class="en" style="display: none;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="open .csv file in libreoffice / openoffice">Help: open .csv in LibreOffice</summary><div>How to open the .csv file in LibreOffice / OpenOffice:<ul><li>Please select <i>comma</i> as seperator. </li><li>Under <i>other options</i>: Please select <i>Format quoted fields as text</i> (otherwise the phone-Number may miss the beginning 0 <-- at least in  LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__en_8bit.png" alt="screenshot: import .csv-files settings in LibreOffice" /></div></details>
-<details lang="de" class="de" style="display: inline-block;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="öffnen der .csv Datei in libreoffice / openoffice">Hilfe: öffne .csv in Libreoffice</summary><div>So öffnet man die .csv Datei in LibreOffice / OpenOffice:<ul><li>Bitte als Trenner <i>Komma</i> auswählen. </li><li>Unter <i>weitere Optionen</i>: Bitte anklicken von <i>Felder in Hochkommata als Text formatieren</i> (ansonsten könnte bei der Telefon-nummer die 0 am Anfang fehlen <!-- zumindest in LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__de_8bit.png" alt="Bildschirmfoto: import .csv-Datei Eintellungen in LibreOffice" /></div></details>
-	</footer>
-</span>
+<details lang="en" class="en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="open .csv file in libreoffice / openoffice">Help: open .csv in LibreOffice</summary><div>How to open the .csv file in LibreOffice / OpenOffice:<ul><li>Please select <i>comma</i> as seperator. </li><li>Under <i>other options</i>: Please select <i>Format quoted fields as text</i> (otherwise the phone-Number may miss the beginning 0 <-- at least in  LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__en_8bit.png" alt="screenshot: import .csv-files settings in LibreOffice" /></div></details>
+<details lang="de" class="de" style="display: none;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="öffnen der .csv Datei in libreoffice / openoffice">Hilfe: öffne .csv in Libreoffice</summary><div>So öffnet man die .csv Datei in LibreOffice / OpenOffice:<ul><li>Bitte als Trenner <i>Komma</i> auswählen. </li><li>Unter <i>weitere Optionen</i>: Bitte anklicken von <i>Felder in Hochkommata als Text formatieren</i> (ansonsten könnte bei der Telefon-nummer die 0 am Anfang fehlen <!-- zumindest in LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__de_8bit.png" alt="Bildschirmfoto: import .csv-Datei Eintellungen in LibreOffice" /></div></details>
+</footer>
+
 <script language="JavaScript">
 //replace text with german translation
 var language = window.navigator.userLanguage || window.navigator.language;
@@ -754,3 +762,4 @@ if(language.substring(0,2)=='de'){
  }
 }
 </script>
+</body></html>
