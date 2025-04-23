@@ -4,7 +4,8 @@
 <title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
-<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ width:80%;height:100pt;color:#999999 } details summary { color:#999999;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; } </style>
+<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ width:80%;height:100pt;color:#999999 } details summary { color:#999999;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
+.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} </style>
 </head>
 <body>
 <!--
@@ -32,8 +33,9 @@
 <noscript style="color:red">You need JavaScript, to use this service.</noscript>
 <hr>
 <div id="select_file_auto-detect_div">
-Select a File: <span style="color:#999999"><i>Fritzbox .XML &nbsp; - or - &nbsp; .CSV &nbsp; - or - &nbsp; .VCF File</i></span><br>
-<input type="file" id="file-input_auto-detect" autocomplete="off" /><a href="#" id="file-input_auto-detect_close_button" style="display:none;background: white;  font-size: 2em;  text-align: right;  top: 10%;  position: absolute;  padding: 0.5em;  right: 10%; border-radius:20pt;">Close X</a><br>
+Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fritzbox .XML &nbsp; - or - &nbsp; .CSV &nbsp; - or - &nbsp; .VCF File</i></span><br>
+<span id="file-input_auto-detect_text_drophere" style="display:none">Drop your file here</span>
+<input type="file" id="file-input_auto-detect" autocomplete="off" accept=".vcf,.xml,.vcard,.csv,text/csv,text/vcard,text/x-vcard,text/directory;profile=vCard,text/directory,application/xml,text/xml" /><a href="#" id="file-input_auto-detect_close_button" style="display:none;background: white;  font-size: 2em;  text-align: right;  top: 10%;  position: absolute;  padding: 0.5em;  right: 10%; border-radius:20pt;" onClick="unhighlight();return false;">Close X</a><br>
 </div><br>
 <div id="select_file_xml_div" class="advanced_view">
 <label for="phonebook_xml">From Fritzbox .XML File:</label><br>
@@ -619,6 +621,7 @@ function readSingleFile(e) {
       var filename = document.getElementById('file-input_auto-detect').value;
       var filetype_by_ext = get_filetype_by_ext(filename);
       if( typeof filetype_by_ext.toLowerCase() === "undefined" ) filetype_by_ext ='';
+      if( confirm("Automatic detect file type? (.xml/.csv/.vcf)") )upload_file__filetype_auto_detect=true;
       if (upload_file__filetype_auto_detect && filetype_by_ext!='' ){
           if( filetype_by_ext.toLowerCase()=='xml' ) {
              uploaded_file_convert_from='xml';
@@ -685,6 +688,39 @@ function show_advanced_view(state){
    document.getElementById("show_advanced_view_link_link_close").style.display='none';
  }
 }
+
+//drag and drop:
+let dropArea = document.getElementById('file-input_auto-detect');
+let dropArea_CloseButton = document.getElementById('file-input_auto-detect_close_button');
+let dropAreaText = document.getElementById('file-input_auto-detect_text_drophere');
+let dropAreaDetect = document.getElementsByTagName('body')[0];
+
+function preventDefaults (e) {
+  e.preventDefault()
+  e.stopPropagation()
+}
+
+function highlight(e) {
+  dropArea.classList.add('drop-area_highlight');
+  dropAreaText.classList.add('drop-area_text_highlight');
+  dropAreaText.style.display='block';
+  dropAreaText.style.marginTop='15%';
+  dropAreaText.style.background='none';
+  dropArea_CloseButton.style.display='block';
+}
+
+function unhighlight(e) {
+  dropArea.classList.remove('drop-area_highlight');
+  dropAreaText.classList.remove('drop-area_text_highlight');
+  dropAreaText.style.display='none';
+  dropArea_CloseButton.style.display='none';
+}
+
+dropAreaDetect.addEventListener('dragenter', highlight, false);
+dropAreaDetect.addEventListener('dragover', highlight, false);
+
+dropAreaDetect.addEventListener('dragleave', unhighlight, false);
+dropAreaDetect.addEventListener('drop', unhighlight, false);
 
 //-->
 </script>
