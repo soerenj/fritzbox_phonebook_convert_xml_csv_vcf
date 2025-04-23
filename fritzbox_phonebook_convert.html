@@ -4,14 +4,14 @@
 <title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
-<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;color:#999999 } details summary { color:LinkText;;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
+<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} details summary { color:LinkText;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
 .drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} </style>
 </head>
 <body>
 <!--
  /*
- * version: 0.24
- * date: 2025-04-23
+ * version: 0.25
+ * date: 2025-04-24
  *
  * Licence 
  *
@@ -69,29 +69,37 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
 
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <br>
-<div class="advanced_view">Convert: 
+<div class="advanced_view">Convert:
  <input type="button" value="⬇ xml to csv" onclick="convert_to_csv()" />  &nbsp;
  <input type="button" value="⬇ xml to vcf (vcard v2.1)" onclick="convert_to_vcf(2.1)" />  &nbsp;
  <input type="button" value="⬇ xml to vcf (vcard v4.0)" onclick="convert_to_vcf(4.0)" />  &nbsp;
  <input type="button" value="⇧ csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  
- <input type="button" value="⇧ vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  <br/>
+ <input type="button" value="⇧ vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  <br>
  <input type="button" value="Download" title="Download one file" onclick="download_one_file_ask()" />   &nbsp; 
  <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;  
  <details>
-  <summary style="color:black">
+  <summary>
    <span lang="en" class="en" >Settings</span>
    <span lang="de" class="de" style="display: none;">Einstellungen</span>
   </summary>
   <fieldset><legend>Settings</legend>
   <div>
-  <fieldset ><legend>Uploaded file</legend>
-    Show only supported files (.xml / .csv / .vcf / ~) are selectable in file upload dialog (in browser): <a href="#" onClick="document.getElementById('file-input_auto-detect').accept='';this.text='any file-type is now selectable';return false;" id="upload_file__filetype_accept__toggle_link">yes</a><br />
-    automatic detection of file-type: <a href="#" onClick="if(upload_file__filetype_auto_detect){upload_file__filetype_auto_detect=false;this.text='no (you will be asked)';}else{ upload_file__filetype_auto_detect=true;this.text='yes';} return false;" id="upload_file__filetype_auto_detect__toggle_link">yes/no</a> <i style="color:#999">(detected by file-extension .xml / .csv / .vcf.)</i>
-  </fieldset>
+    <fieldset ><legend>Uploaded file</legend>
+    Show only supported files (.xml / .csv / .vcf / ~) in file upload dialog (in browser): <a href="#" onClick="document.getElementById('file-input_auto-detect').accept='';this.text='any file-type is now selectable';return false;" id="upload_file__filetype_accept__toggle_link">yes</a><br />
+    automatic detection of file-type: <a href="#" onClick="if(upload_file__filetype_auto_detect){upload_file__filetype_auto_detect=false;this.text='no (you will be asked)';}else{ upload_file__filetype_auto_detect=true;this.text='yes';} return false;" id="upload_file__filetype_auto_detect__toggle_link">yes/no</a> <i style="color:#999">(automatic detected by file-extension .xml / .csv / .vcf.)</i>
+    </fieldset>
+  <br />
+  <fieldset ><legend>Convert xml to csv</legend> How to handle multiple phone numbers per each Person entry:
+    <p style="margin: 0pt;"><input type="radio" id="setting__xml2csv__just_one_phonenumer_each_text__single_row" name="setting__xml2csv__just_one_phonenumer_each_text" value="1" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__single_row">Each table-row can have multiple phone-numbers (= multiple columns) <br /><div style="margin-left:30pt;">Example:<br/>Person A, +4940-1234, +4940-567</div></label></p>
+    <p style="margin: 0pt;"><input type="radio" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows" name="setting__xml2csv__just_one_phonenumer_each_text" value="2" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows">Each table-row has only a single phone-number (per row ) <br /><div style="margin-left:30pt;">Example:<br/>Person A, +4940-1234 <br/ >Person A, +4940-567</div><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't merge the contacts to a single entry ( <i>=you will have too much entry in your phonebook</i>).</span></label></p>
+    <p style="margin: 0pt;"><input type="radio" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type" name="setting__xml2csv__just_one_phonenumer_each_text" value="3" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type">Each table-row has only a single phone-number (per row ) and phone type-categorie and priority <br /><div style="margin-left:30pt;">Example:<br/>Person A, +4940-1234, mobile, 1 <br/ >Person A, +4940-567, home</div>
+    <span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't restore the addational information ( <i>type (mobile/home) and Priority</i>).</span></label></p>
+  </fieldset> 
+
   <br />
   Name of new Phonebook-Name: <input type="text" value="phonebook_name" title="" id="new_phonebook_name" onchange="new_phonebook_name=this.value" autocomplete="off" /> <i style="color:#999">When importing the .xml file in Fritzbox (this is not the filename).</i>  
   </div>
-  </fieldset>
+ </fieldset>
  </details>
  
 </div>
@@ -153,9 +161,9 @@ END:VCARD
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-04-23",
-	"softwareVersion": "0.24",
-	"inLanguage": ["en , de"],
+	"dateModified": "2025-04-24",
+	"softwareVersion": "0.25",
+	"inLanguage": ["en" , "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
 </script>
@@ -168,11 +176,15 @@ var upload_file__filetype_auto_detect = true;
 var counter_convert = 0;
 var show_advanced_view__state = false;
 var new_phonebook_name = 'convertedPhonebook';
+var setting__xml2csv__just_one_phonenumer_each = 1;
 
 if(document.getElementById('file-input_auto-detect').value!='')document.getElementById('file-input_reset').style.display='block';
 if(upload_file__filetype_auto_detect) document.getElementById('upload_file__filetype_auto_detect__toggle_link').text='yes';
 else document.getElementById('upload_file__filetype_auto_detect__toggle_link').text='no (you will be asked)';
 document.getElementById('new_phonebook_name').value=new_phonebook_name;
+if(setting__xml2csv__just_one_phonenumer_each==1) document.getElementById('setting__xml2csv__just_one_phonenumer_each_text__single_row').checked=true;
+if(setting__xml2csv__just_one_phonenumer_each==2) document.getElementById('setting__xml2csv__just_one_phonenumer_each_text__multiple_rows').checked=true;
+if(setting__xml2csv__just_one_phonenumer_each==3) document.getElementById('setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type').checked=true;
 
 function reset_to_default(){
  document.getElementById('phonebook_xml').value = document.getElementById('phonebook_xml').defaultValue;
@@ -206,14 +218,24 @@ function convert_to_csv(){
   person    = contacts[i].getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue;
   telephony = contacts[i].getElementsByTagName("telephony")[0].getElementsByTagName("number");
   //telefone_numbers = Array(); telefone_numbers_type = Array(); telefone_numbers_prio = Array();
-  out += '"'+person.replace('"','\\"')+'"';
+  //out += '"'+person.replace('"','\\"')+'"';
+  var counter_num=0;
+  var type = '';
+  var prio = null;
   for(j=0;j<telephony.length;j++){
    //telefone_numbers.push (  telephony[i].firstChild.nodeValue );
    //telefone_numbers_type.push (  telephony[i].getAttribute('type') );
    //telefone_numbers_prio.push (  telephony[i].getAttribute('prio') );
    if(undefined==telephony[j].firstChild.nodeValue) { logError.push(telephony[j]); continue; }
    phone = telephony[j].firstChild.nodeValue;
+   if(counter_num>0  && setting__xml2csv__just_one_phonenumer_each>1) out += "\n";
+   if(counter_num==0 || setting__xml2csv__just_one_phonenumer_each>1) out += '"'+person.replace('"','\\"')+'"';
    out += ", "+ '"'+phone.replace('"','\\"')+'"';
+   if(setting__xml2csv__just_one_phonenumer_each==3){
+       if(telephony[j].getAttribute('type')!=undefined) out += ', "'+telephony[j].getAttribute('type')+'"';
+       if(telephony[0].getAttribute('prio')!=undefined) out += ', "'+telephony[0].getAttribute('prio')+'"';
+   }
+   counter_num++;
   }
   out += "\n";
  }
@@ -803,7 +825,7 @@ Option B (alternativ) :
 </div></details>
 <details lang="en" class="en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="open .csv file in libreoffice / openoffice">Help: open .csv in LibreOffice</summary><div>How to open the .csv file in LibreOffice / OpenOffice:<ul><li>Please select <i>comma</i> as seperator. </li><li>Under <i>other options</i>: Please select <i>Format quoted fields as text</i> (otherwise the phone-Number may miss the beginning 0 <-- at least in  LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__en_8bit.png" alt="screenshot: import .csv-files settings in LibreOffice" /></div></details>
 <details lang="de" class="de" style="display: none;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="öffnen der .csv Datei in libreoffice / openoffice">Hilfe: öffne .csv in Libreoffice</summary><div>So öffnet man die .csv Datei in LibreOffice / OpenOffice:<ul><li>Bitte als Trenner <i>Komma</i> auswählen. </li><li>Unter <i>weitere Optionen</i>: Bitte anklicken von <i>Felder in Hochkommata als Text formatieren</i> (ansonsten könnte bei der Telefon-nummer die 0 am Anfang fehlen <!-- zumindest in LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__de_8bit.png" alt="Bildschirmfoto: import .csv-Datei Eintellungen in LibreOffice" /></div></details>
-<span style="display:block;bottom:2pt;padding:2pt;font-size:10pt;float:right;">
+<span style="display:block;bottom:2pt;padding:2pt;font-size:10pt;">
 <details style="padding-right:4pt;color:#999999"><summary>sourcecode (git)</summary>
 <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">git (codeberg)</a> or <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">git (github)</a>
 </details>
@@ -817,7 +839,7 @@ if(language.substring(0,2)=='de'){
  var e = document.getElementsByClassName('de');
  for(i=0;i<e.length;i++){
   e[i].style.display='inline-block';
-  if(e[i].tagname=="h1") e[i].style.display='block';
+  if(e[i].style.tagName=="h1") e[i].style.display='block';
  }
  var e = document.getElementsByClassName('en');
  for(i=0;i<e.length;i++){
