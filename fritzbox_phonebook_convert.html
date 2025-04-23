@@ -24,7 +24,7 @@
  * (at your option) any later version.
  */
   -->
-<img src="img/icon_convert_formats.png" style="float:right;padding:6pt;" />
+<img src="img/icon_convert_formats.png" style="float:left;padding:6pt;" />
 <h1 lang="en" class="en">Phonebook Contact convert for Fritzbox</h1>
 <h1 lang="de" class="de" style="display:none;">Telefonbuch Kontakte konvertieren für Fritzbox</h1>
 <p lang="en" class="en">Converts Fritzbox-XML-Files to/from .CSV or .VCF(vcard)-File with Phone Numbers.</p>
@@ -813,6 +813,7 @@ if(language.substring(0,2)=='de'){
  var e = document.getElementsByClassName('de');
  for(i=0;i<e.length;i++){
   e[i].style.display='inline-block';
+  if(e[i].tagname="h1") e[i].style.display='block';
  }
  var e = document.getElementsByClassName('en');
  for(i=0;i<e.length;i++){
