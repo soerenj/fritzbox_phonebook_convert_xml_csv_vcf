@@ -10,8 +10,8 @@
 <body>
 <!--
  /*
- * version: 0.24
- * date: 2025-04-23
+ * version: 0.241
+ * date: 2025-04-24
  *
  * Licence 
  *
@@ -352,14 +352,14 @@ function convert_vcf_to_xml(){
         strOut=str.substr(3);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
-        strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+        strOut = sanitize_personname(strOut,false);
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     if(str.substr(0,2)=='N:' && vcf_use_which_name=='N'){
         strOut=str.substr(2);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
-        strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+        strOut = sanitize_personname(strOut,false);
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     
@@ -418,7 +418,25 @@ function convert_vcf_to_xml(){
 }
 
 
-
+function sanitize_personname(person,inkluding_quotes){
+  person = person.replace(/^\s+|\s+$/gm,'');        //trim spaces
+  //replace character & , otherwise import to fritzbox not possible
+  person = person.replace(/&(?!amp;)/gm,'&amp;');
+  //replace character " , otherwise import to fritzbox not possible //please dont change the order
+  person = person.replace(/""/gm,"&quot;");       //handle "" (from libre office export of single " possible )
+  person = person.replace(/\"/gm,"&quot;");       //handle "
+  person = person.replace(/"/gm,"&quot;");        //handle "
+  if(inkluding_quotes){
+      var tmp = '';
+      tmp= person.replace(/^"(.*)"$/gm,'$1'); //trim " (only once at beginn and end)
+      if(tmp.length>0) person = tmp;
+      tmp= person.replace(/^'?(.*)'?$/gm,'$1'); //trim ' (only once at beginn and end)
+      if(tmp.length>0) person = tmp;
+  }
+  person = person.replace(/^\s+|\s+$/gm,'');        //trim spaces (again)
+  return person;
+}
+		  
 function convert_csv_to_xml(){
  var text = document.getElementById('phonebook_csv').value;
  var out = ''; var person; logError=[];
@@ -431,10 +449,7 @@ function convert_csv_to_xml(){
   var person = elements[0].substring(0);
   var phone  = elements[1].substring(0);
   if(i==0 && phone.search(/[0-9][0-9]/)==-1)continue; //ignore headline
-  person = person.replace(/^\s+|\s+$/gm,''); //trim spaces
-  person = person.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
-  person = person.replace(/^"+|"+$/gm,'');   //trim "
-  person = person.replace(/^'+|'+$/gm,"");   //trim '
+  person = sanitize_personname(person,true);
   out += '<contact>\n<category>0</category>\n';
   out += '<person><realName>'+person+'</realName></person>\n';
   out += '<telephony nid="'+i+'">\n';
