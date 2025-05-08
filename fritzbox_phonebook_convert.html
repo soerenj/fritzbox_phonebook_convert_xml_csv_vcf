@@ -54,7 +54,7 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
 <category>0</category>
 <person><realName>Person B</realName></person>
 <telephony nid="1"><number type="mobile" prio="1" id="0">+49176987654321</number></telephony>
-<services /><setup />
+<services nid="1"><email classifier="private" id="0">test@example.com</email></services><setup />
 <features doorphone="0" /><mod_time>1535972450</mod_time><uniqueid>229</uniqueid>
 </contact>
 </phonebook>
@@ -200,7 +200,7 @@ function convert_to_csv(){
  parser = new DOMParser();
  xmlDoc = parser.parseFromString(text, "text/xml");
 
- var out, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone;
+ var out, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone, email;
  out = 'name, phone\n'; logError=[];
  var contacts = xmlDoc.getElementsByTagName("contact");
  for(i=0;i<contacts.length;i++)
@@ -217,6 +217,9 @@ function convert_to_csv(){
   
   person    = contacts[i].getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue;
   telephony = contacts[i].getElementsByTagName("telephony")[0].getElementsByTagName("number");
+  if( contacts[i].getElementsByTagName("services").length>0 &&
+      contacts[i].getElementsByTagName("services")[0].getElementsByTagName("email").length>0)
+      email = contacts[i].getElementsByTagName("services")[0].getElementsByTagName("email")[0].firstChild.nodeValue; else email = '';
   //telefone_numbers = Array(); telefone_numbers_type = Array(); telefone_numbers_prio = Array();
   //out += '"'+person.replace('"','\\"')+'"';
   var counter_num=0;
@@ -234,6 +237,7 @@ function convert_to_csv(){
    if(setting__xml2csv__just_one_phonenumer_each==3){
        if(telephony[j].getAttribute('type')!=undefined) out += ', "'+telephony[j].getAttribute('type')+'"';
        if(telephony[0].getAttribute('prio')!=undefined) out += ', "'+telephony[0].getAttribute('prio')+'"';
+       if(email!='') out += ', "'+email+'"';
    }
    counter_num++;
   }
