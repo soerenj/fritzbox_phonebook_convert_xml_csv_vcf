@@ -4,14 +4,14 @@
 <title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
-<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;color:#999999 } details summary { color:LinkText;;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
+<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt; } details summary { color:LinkText;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
 .drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} </style>
 </head>
 <body>
 <!--
  /*
- * version: 0.241
- * date: 2025-04-24
+ * version: 0.242
+ * date: 2025-05-08
  *
  * Licence 
  *
@@ -87,7 +87,7 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
     automatic detection of file-type: <a href="#" onClick="if(upload_file__filetype_auto_detect){upload_file__filetype_auto_detect=false;this.text='no (you will be asked)';}else{ upload_file__filetype_auto_detect=true;this.text='yes';} return false;" id="upload_file__filetype_auto_detect__toggle_link">yes/no</a> <i style="color:#999">(detected by file-extension .xml / .csv / .vcf.)</i>
   </fieldset>
   <br />
-  Name of new Phonebook-Name: <input type="text" value="phonebook_name" title="" id="new_phonebook_name" onchange="new_phonebook_name=this.value" autocomplete="off" /> <i style="color:#999">When importing the .xml file in Fritzbox (this is not the filename).</i>  
+  Name of new Phonebook-Name: <input type="text" value="phonebook_name" title="" id="new_phonebook_name" onchange="new_phonebook_name=this.value" autocomplete="off" /> <i style="color:#999">When importing the .xml file in Fritzbox (this is not the filename).</i>
   </div>
   </fieldset>
  </details>
@@ -151,9 +151,9 @@ END:VCARD
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-04-23",
-	"softwareVersion": "0.24",
-	"inLanguage": ["en , de"],
+	"dateModified": "2025-05-08",
+	"softwareVersion": "0.242",
+	"inLanguage": ["en" , "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
 </script>
@@ -178,6 +178,7 @@ function reset_to_default(){
  document.getElementById('phonebook_vcf').value = document.getElementById('phonebook_vcf').defaultValue;
  document.getElementById('file-input_auto-detect').value='';
  document.getElementById('ready').style.display="none";
+ document.getElementById('file-input_reset').style.display='none';
 }
 
 
@@ -425,16 +426,16 @@ function sanitize_personname(person,inkluding_quotes){
   person = person.replace(/\"/gm,"&quot;");       //handle "
   person = person.replace(/"/gm,"&quot;");        //handle "
   if(inkluding_quotes){
-      var tmp = '';
-      tmp= person.replace(/^"(.*)"$/gm,'$1'); //trim " (only once at beginn and end)
-      if(tmp.length>0) person = tmp;
-      tmp= person.replace(/^'?(.*)'?$/gm,'$1'); //trim ' (only once at beginn and end)
-      if(tmp.length>0) person = tmp;
+    var tmp = '';
+    tmp= person.replace(/^"(.*)"$/gm,'$1'); //trim " (only once at beginn and end)
+    if(tmp.length>0) person = tmp;
+    tmp= person.replace(/^'?(.*)'?$/gm,'$1'); //trim ' (only once at beginn and end)
+    if(tmp.length>0) person = tmp;
   }
   person = person.replace(/^\s+|\s+$/gm,'');        //trim spaces (again)
   return person;
 }
-		  
+
 function convert_csv_to_xml(){
  var text = document.getElementById('phonebook_csv').value;
  var out = ''; var person; logError=[];
@@ -720,11 +721,13 @@ function show_advanced_view(state){
    show_advanced_view__state = true;
    document.getElementById("show_advanced_view_link_wrapper").style.display='none';
    document.getElementById("show_advanced_view_link_link_close").style.display='block';
+   document.getElementById("file-input_reset").style.display='';
  }
  if(state=='hide'){
    show_advanced_view__state = false;
    document.getElementById("show_advanced_view_link_wrapper").style.display='';
    document.getElementById("show_advanced_view_link_link_close").style.display='none';
+   if(document.getElementById('file-input_auto-detect').value!='')document.getElementById('file-input_reset').style.display='block';
  }
 }
 
@@ -830,7 +833,7 @@ if(language.substring(0,2)=='de'){
  var e = document.getElementsByClassName('de');
  for(i=0;i<e.length;i++){
   e[i].style.display='inline-block';
-  if(e[i].tagname=="h1") e[i].style.display='block';
+  if(e[i].tagName=="H1") e[i].style.display='block';
  }
  var e = document.getElementsByClassName('en');
  for(i=0;i<e.length;i++){
