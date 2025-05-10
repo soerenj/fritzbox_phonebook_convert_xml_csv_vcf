@@ -4,8 +4,8 @@
 <title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
-<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} details summary { color:LinkText;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
-.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; }</style>
+<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
+.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } </style>
 </head>
 <body>
 <!--
@@ -77,10 +77,12 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
  <input type="button" value="⇧ vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  <br>
  <input type="button" value="Download" title="Download one file" onclick="download_one_file_ask()" />   &nbsp; 
  <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;  
+</div>
+<div>
  <details>
   <summary>
-   <span lang="en" class="en" >Settings</span>
-   <span lang="de" class="de" style="display: none;">Einstellungen</span>
+   <span lang="en" class="en" >⚙ Settings</span>
+   <span lang="de" class="de" style="display: none;">⚙ Einstellungen</span>
   </summary>
   <fieldset><legend>Settings</legend>
   <div>
@@ -164,8 +166,8 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
  </details>
  
 </div>
-<br><br>
 <div id="select_file_xml_csv" class="advanced_view">
+<br><br>
 <label for="phonebook_csv">From .CSV File:</label><br>
 <textarea id="phonebook_csv" autocomplete="off">name, phone
 "Person C", "080123456789"
@@ -202,15 +204,18 @@ END:VCARD
 
 <p id="show_advanced_view_link_wrapper">
   <a href="#" onclick="show_advanced_view('show');return false">
-    <span lang="en" class="en" style="text-decoration: underline;">⚙ Settings and show text source window</span>
-    <span lang="de" class="de" style="display: none; text-decoration: underline;">⚙ Einstellung und Text-Fenster zeigen </span>
+    <span lang="en" class="en">show text source window</span>
+    <span lang="de" class="de">Text-Fenster zeigen </span>
   </a>
 </p>
 
 <input type="button" id="file-input_reset" style="display:none;margin-top:22pt" value="reset" onclick="reset_to_default()" />
 
 <p id="show_advanced_view_link_link_close" style="display:none">
-<a href="#" onclick="show_advanced_view('hide');return false">Text-Fenster X (close)</a>
+<a href="#" onclick="show_advanced_view('hide');return false">
+    <span lang="en" class="en">close text source window</span>
+    <span lang="de" class="de">schließe Text-Fenster</span>
+</a>
 </p>
 <script type='application/ld+json'>
 {
