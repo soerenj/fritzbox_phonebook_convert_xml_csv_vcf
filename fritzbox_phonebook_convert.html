@@ -35,7 +35,7 @@
 <div id="select_file_auto-detect_div">
 Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fritzbox .XML &nbsp; - or - &nbsp; .CSV &nbsp; - or - &nbsp; .VCF File</i></span><br>
 <span id="file-input_auto-detect_text_drophere" style="display:none">Drop your file here</span>
-<input type="file" id="file-input_auto-detect" autocomplete="off" accept=".vcf,.xml,.vcard,.csv,text/csv,text/vcard,text/x-vcard,text/directory;profile=vCard,text/directory,application/xml,text/xml" /><a href="#" id="file-input_auto-detect_close_button" style="display:none;background: white;  font-size: 2em;  text-align: right;  top: 10%;  position: absolute;  padding: 0.5em;  right: 10%; border-radius:20pt;" onClick="unhighlight();return false;">Close X</a><br>
+<input type="file" multiple id="file-input_auto-detect" autocomplete="off" accept=".vcf,.xml,.vcard,.csv,text/csv,text/vcard,text/x-vcard,text/directory;profile=vCard,text/directory,application/xml,text/xml" /><a href="#" id="file-input_auto-detect_close_button" style="display:none;background: white;  font-size: 2em;  text-align: right;  top: 10%;  position: absolute;  padding: 0.5em;  right: 10%; border-radius:20pt;" onClick="unhighlight();return false;">Close X</a><br>
 </div><br>
 <div id="select_file_xml_div" class="advanced_view">
 <label for="phonebook_xml">From Fritzbox .XML File:</label><br>
@@ -338,14 +338,15 @@ function convert_to_csv(){
    //telefone_numbers.push (  telephony[i].firstChild.nodeValue );
    //telefone_numbers_type.push (  telephony[i].getAttribute('type') );
    //telefone_numbers_prio.push (  telephony[i].getAttribute('prio') );
-   if(undefined==telephony[j].firstChild.nodeValue) { logError.push(telephony[j]); continue; }
+   //if(telephony[j].length==undefined) continue; 
+   if(null==telephony[j].firstChild || undefined==telephony[j].firstChild.nodeValue || null==telephony[j].firstChild.nodeValue) { logError.push(person); if(telephony[j].firstChild==null)logError.push('empty number:'); logError.push(telephony[j]);  continue; }
    phone = telephony[j].firstChild.nodeValue;
    if(counter_num>0  && setting__xml2csv__just_one_phonenumer_each>1) out += "\n";
    if(counter_num==0 || setting__xml2csv__just_one_phonenumer_each>1) out += '"'+person.replace('"','\\"')+'"';
    out += ", "+ '"'+phone.replace('"','\\"')+'"';
    if(setting__xml2csv__just_one_phonenumer_each==3){
-       if(telephony[j].getAttribute('type')!=undefined) out += ', "'+telephony[j].getAttribute('type')+'"';
-       if(telephony[0].getAttribute('prio')!=undefined) out += ', "'+telephony[0].getAttribute('prio')+'"';
+       if(telephony[j].getAttribute('type')!=undefined && telephony[j].getAttribute('type')!=null) out += ', "'+telephony[j].getAttribute('type')+'"';
+       if(telephony[0].getAttribute('prio')!=undefined && telephony[0].getAttribute('prio')!=null) out += ', "'+telephony[0].getAttribute('prio')+'"';
        if(email!='') out += ', "'+email+'"';
    }
    counter_num++;
@@ -405,7 +406,7 @@ function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
   
   //phone
   for(j=0;j<telephony.length;j++){
-   if(undefined==telephony[j].firstChild.nodeValue) { logError.push(telephony[j]); continue; }
+   if(null==telephony[j].firstChild || undefined==telephony[j].firstChild.nodeValue || null==telephony[j].firstChild.nodeValue) { logError.push(person); if(telephony[j].firstChild==null)logError.push('empty number:'); logError.push(telephony[j]); continue; }
    out += "TEL;";
    if(v==2.1)if(telephony[j].getAttribute('type')!=undefined) out += ''+telephony[j].getAttribute('type').toUpperCase()+';';
    if(v>2.1) if(telephony[j].getAttribute('type')!=undefined) out += 'TYPE='+telephony[j].getAttribute('type').toUpperCase()+';';
@@ -669,6 +670,7 @@ function download_one_file_ask(){
   if (confirm('Download text in .vcf window?')) { uploaded_file_convert_to='vcf'; prepare_and_download(document.getElementById('phonebook_vcf').value); return; }
 }
 function prepare_and_download(text) {
+  if(text==undefined || test==null || text==false || text==""){ alert("Finish. End. No Output. Nothing to output."); return;}
   var filename = '';
   filename = 'phonebook_for_fritzbox';
   if(uploaded_file_convert_to=='xml'){
@@ -697,6 +699,7 @@ function download_sourcecode(){
   downloadAction(filename,text);
 }
 function downloadAction(filename, text) {
+  if(text==undefined || text=="undefined" || text==false || text==""){alert("Error");return;}
   var element = document.createElement('a');
   if     (uploaded_file_convert_to=='vcf') element.setAttribute('href', 'data:text/vcard;charset=utf-8,'      + encodeURIComponent(text));
   else if(uploaded_file_convert_to=='csv') element.setAttribute('href', 'data:text/csv;charset=utf-8,'        + encodeURIComponent(text));
@@ -851,65 +854,104 @@ function ask__xml_convert_to(text) {
   }
 }
 
-function readSingleFile(e) {
+function f_merge__appendfile(format,origin,add){
+  if(format=="xml"){
+     var start =add.search(/<contact/);
+     if(start<=0){ alert("no entry found in one file");return origin;} //=not found
+     if(origin.length==0) origin=add;
+     else {
+       var end=add.search(/[(\r\n)|(\n\r)|\r|\n]<\/phonebook>/);
+       if(end<=0){ alert("no entry found in one file");return origin;} //=not found
+       origin=origin.replace(/(<\/phonebook>)/,add.substring(start,end)+"</phonebook>");
+     }
+  }
+  if(format=="csv"){
+     if(origin.length==0) origin=add;
+     else {
+       add=add.replace(/^([^(\r\n)|(\n\r)|\n|\r])*/,''); //delete 1st Line = normaly = Headline 
+       origin+=add;
+     }
+  }
+  if(format=="vcf")   origin+=add;
+  return origin;
+}
+
+var f_merge = false;
+var readfiles__files_count = 0;
+var readfiles__files_counter = 0;
+var f_merge_xml = 0;
+var f_merge_csv = 0;
+var f_merge_vcf = 0;
+  
+function readMultipleFiles(e) {
+  f_merge_xml = 0;
+  f_merge_csv = 0;
+  f_merge_vcf = 0;
+  readfiles__files_counter = 0;
   document.getElementById('file-input_reset').style.display='block';
-  var file = e.target.files[0];
-  if (!file) {
+  var files = e.target.files;
+  if (!files || files.length==0) {
     return;
   }
-  var reader = new FileReader();
+
+  if(files.length>1 && confirm("Merge the multiple files to a single phonebook? (only with the same file-format possible)")) f_merge=true;
   
-  if(e.target.id=='file-input_auto-detect'){
-    uploaded_filename = get_filename(document.getElementById(e.target.id).value);
-    reader.onload = function(e) {
-      var contents = e.target.result;
-      var filename = document.getElementById('file-input_auto-detect').value;
-      var filetype_by_ext = get_filetype_by_ext(filename);
-      if( typeof filetype_by_ext.toLowerCase() === "undefined" ) filetype_by_ext ='';
-      if (upload_file__filetype_auto_detect && filetype_by_ext!='' ){
-          if( filetype_by_ext.toLowerCase()=='xml' ) {
-             uploaded_file_convert_from='xml';
-             document.getElementById('phonebook_xml').value = contents;
-             prepare_and_download( ask__xml_convert_to() );
-             uploaded_filename=''; return; }
-          if( filetype_by_ext.toLowerCase()=='csv' ) {
-             uploaded_file_convert_from='csv';
-             uploaded_file_convert_to='xml';
-             document.getElementById('phonebook_csv').value = contents;
-             prepare_and_download( convert_csv_to_xml() );
-             uploaded_filename=''; return; }
-          if( filetype_by_ext.toLowerCase()=='vcf' ) {
-             uploaded_file_convert_from='vcf';
-             uploaded_file_convert_to='xml';
-             document.getElementById('phonebook_vcf').value = contents;
-             prepare_and_download( convert_vcf_to_xml() );
-             uploaded_filename=''; return;  }
+  readfiles__files_count = files.length;
+  for(i=0;i<files.length;i++){
+      var file = files[i];
+      var reader = new FileReader();
+      if(e.target.id=='file-input_auto-detect'){
+        uploaded_filename = file['name'];//old get_filename(document.getElementById(e.target.id).value);
+        reader.onload = function(e) {
+          var done=false;
+          var contents = e.target.result;
+          var filename = document.getElementById('file-input_auto-detect').value;
+          var filetype_by_ext = get_filetype_by_ext(filename);
+          if( typeof filetype_by_ext.toLowerCase() === "undefined" ) filetype_by_ext ='';
+          if (upload_file__filetype_auto_detect && filetype_by_ext!='' ){
+              if( !done ) if( filetype_by_ext.toLowerCase()=='xml' || file['type']=='application/xml' || file['type']=='text/xml' ) {
+                 if(f_merge_xml==0)document.getElementById('phonebook_xml').value = '';
+                 document.getElementById('phonebook_xml').value = f_merge__appendfile('xml',document.getElementById('phonebook_xml').value,contents);
+                 f_merge_xml++; done=true;}
+              if( !done ) if( filetype_by_ext.toLowerCase()=='csv' || file['type']=='text/csv' ) {
+                 if(f_merge_csv==0)document.getElementById('phonebook_csv').value = '';
+                 document.getElementById('phonebook_csv').value = f_merge__appendfile('csv',document.getElementById('phonebook_csv').value,contents);
+                 f_merge_csv++; done=true;}
+              if( !done ) if( filetype_by_ext.toLowerCase()=='vcf' || file['type']=='text/vcard' || file['type']=='text/x-vcard' || file['type']=='text/directory;profile=vCard' || file['type']=='text/directory' ) {
+                 if(f_merge_vcf==0)document.getElementById('phonebook_vcf').value = '';
+                 document.getElementById('phonebook_vcf').value = f_merge__appendfile('vcf',document.getElementById('phonebook_vcf').value,contents);
+                 f_merge_vcf++; done=true;  }
+          }
+          if( !done ) if( confirm("Is this a .xml file?") ) {
+            if(f_merge_xml==0)document.getElementById('phonebook_xml').value = '';
+            document.getElementById('phonebook_xml').value = f_merge__appendfile('xml',document.getElementById('phonebook_xml').value,contents);
+            f_merge_xml++; done=true;}
+          if( !done ) if( confirm("Is this a .csv file?") ) {
+            if(f_merge_csv==0)document.getElementById('phonebook_csv').value = '';
+            document.getElementById('phonebook_csv').value = f_merge__appendfile('csv',document.getElementById('phonebook_csv').value,contents);
+            f_merge_csv++; done=true;}
+          if( !done ) if( confirm("Is this a .vcf (vcard) file?") ) {
+            if(f_merge_vcf==0)document.getElementById('phonebook_vcf').value = '';
+            document.getElementById('phonebook_vcf').value = f_merge__appendfile('vcf',document.getElementById('phonebook_vcf').value,contents);
+            f_merge_vcf++; done=true;}
+          readfiles__files_counter++;
+          if(readfiles__files_count==readfiles__files_counter)reader_finish();
+        };
       }
-      if( confirm("Is this a .xml file?") ) {
-        document.getElementById('phonebook_xml').value = contents;
-        uploaded_file_convert_from='xml';
-        prepare_and_download( ask__xml_convert_to() );
-        uploaded_filename=''; return; }
-      if( confirm("Is this a .csv file?") ) {
-        document.getElementById('phonebook_csv').value = contents;
-        uploaded_file_convert_from='csv';
-        uploaded_file_convert_to='xml';
-        prepare_and_download( convert_csv_to_xml() );
-        uploaded_filename=''; return; }
-      if( confirm("Is this a .vcf (vcard) file?") ) {
-        document.getElementById('phonebook_vcf').value = contents;
-        uploaded_file_convert_from='vcf';
-        uploaded_file_convert_to='xml';
-        prepare_and_download( convert_vcf_to_xml() );
-        uploaded_filename=''; return; }
-    };
+      reader.readAsText(file);
   }
-  reader.readAsText(file);
+}
+
+function reader_finish(){
+   if(f_merge_xml>0){ uploaded_file_convert_from='xml'; prepare_and_download( ask__xml_convert_to() );}
+   if(f_merge_csv>0){ uploaded_file_convert_from='csv'; uploaded_file_convert_to='xml'; prepare_and_download( convert_csv_to_xml() ); }
+   if(f_merge_vcf>0){ uploaded_file_convert_from='vcf'; uploaded_file_convert_to='xml'; prepare_and_download( convert_vcf_to_xml() ); }
+   uploaded_filename=''; 
 }
 
 
 document.getElementById('file-input_auto-detect')
-  .addEventListener('change', readSingleFile, false);
+  .addEventListener('change', readMultipleFiles, false);
 
 
 //document.getElementById('file-input_auto-detect').value='';
