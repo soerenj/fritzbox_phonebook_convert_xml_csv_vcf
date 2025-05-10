@@ -94,7 +94,7 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
     <span lang="de" class="de">Telefon-Nummer bearbeiten:</span>
     <p style="margin: 0pt;">
 
-    <input type="checkbox" id="setting__2xml__phonenumber_edit_detect_mobile__active" autocomplete="off"/>
+    <input type="checkbox" id="setting__2xml__phonenumber_edit_detect_mobile__active" autocomplete="off" checked/>
     <label for="setting__2xml__phonenumber_edit_detect_mobile__active">
      <span lang="en" class="en">Detect mobile phone-number (if already not set). <span style="color:#999">(to fit in the number categorie)</span></span>
      <span lang="de" class="de">Erkennen Mobilfunk-Nummer automatisch (wenn noch nicht festgelegt). <span style="color:#999">(damit die Nummern Kategorie passt)</span></span>
@@ -246,6 +246,38 @@ var setting__xml2csv__just_one_phonenumer_each = 1;
 var setting__csv2xml__merge_samename = 1;
 var maxPhoneNumbersPerEntry = 9; //maximal Numbers on Fritzbox 7390 per each contact
 var phonetypes = ["mobile","home","work","fax_work"];//on fritzbox 7390
+
+var pre_numbers__with_country_codes__and_mobile = [
+ ["de","de","+49","1[567]"],
+ ["fr","fr","+33","[67]"],
+ ["nl","nl","+31","6"],
+ ["gb","en-gb","+44","(7[12345])|(7624)|(7[789])"],
+ ["at","de-at","+43","(65[0123579])|(66[013456789])"],
+ ["ch","(de-ch)|(fr-ch)|(it-ch)","+41","7[456789]"],
+ ["be","(nl-be)|(fr-be)","+32","4[06789]"],
+ ["lu","(de-lu)|(fr-lu)","+352","(621)|(661)|(691)"]
+]; //for country language codes the order could be important (later on put the longer string)
+ // escape: \ must be escaped with \ before => \\
+
+var detected_default_langcode='';
+var detected_default_langcountrycode='';
+var e = document.getElementById("setting__2xml__phonenumber_edit_detect_mobile__your_countrycode");
+for(i=0;i<pre_numbers__with_country_codes__and_mobile.length;i++){
+ var a=pre_numbers__with_country_codes__and_mobile[i];
+ var pattern = "^"+a[1];
+ var option = document.createElement("option");
+ var language = window.navigator.userLanguage || window.navigator.language;
+ if(language.search(RegExp(pattern))>=0){
+  if(detected_default_langcode.length<a[0].length){ 
+    detected_default_langcode=a[0];
+    detected_default_langcountrycode=a[2];
+    }
+ }
+ option.text = a[0]+" "+a[1]+" "+a[2];
+ option.value = a[2];
+ e.add(option);
+}
+if(detected_default_langcountrycode!='')e.value=detected_default_langcountrycode;
 
 if(document.getElementById('file-input_auto-detect').value!='')document.getElementById('file-input_reset').style.display='block';
 if(upload_file__filetype_auto_detect) document.getElementById('upload_file__filetype_auto_detect__toggle_link').text='yes';
@@ -582,11 +614,7 @@ function convert_csv_to_xml(){
        if(phone.search(/[0-9]/)==-1) logError.push(elements.join(',')); //maybe not a phone number?; Anyway: continue
        phone = myTrimQuotes(phone);
        
-       if(language.substring(0,2)=='de' ){//only germany
-         if(phone.search(/^(0|(00|\+)49)1[567]/)!=-1)     type="mobile";
-         //if(phone.search(/^(0|(00|\+)49)[23456789]/)!=-1) type="home"; //or "work"
-         //if(phone.search(/^(0|(00|\+)49)(800|900)/)!=-1)  type='';
-       }
+       if( document.getElementById("setting__2xml__phonenumber_edit_detect_mobile__active").checked && is_this_a_mobile_phonenumber(phone))     type="mobile";
        
        if( document.getElementById('setting__csv2xml__max_per_entry_checkbox').checked && setting__csv2xml__max_per_entry!='' && numbersOutCounter==setting__csv2xml__max_per_entry) { forceSplitAndJumpOverEntrys=c; row=row-1;  break; } //create a new Entry (workaround)
        //input style: name, phone, prio, email   //=no multiple numbers
@@ -688,6 +716,20 @@ function myTrimQuotes(aa){
   aa = aa.replace(/^'+|'+$/g,"");   //trim '
   aa = aa.replace(/^\s+|\s+$/g,''); //trim spaces
   return aa;
+}
+
+function is_this_a_mobile_phonenumber(phone){
+  var your_default_country_code = document.getElementById("setting__2xml__phonenumber_edit_detect_mobile__your_countrycode").value;
+  if(phone.length<=5)return false;
+  for(i=0;i<pre_numbers__with_country_codes__and_mobile.length;i++){
+    var a= pre_numbers__with_country_codes__and_mobile[i];
+    var pattern = "(";
+    if(your_default_country_code==a[2]) pattern+="0|";
+    pattern+=a[2].replace(/\+/,"\\\\+")+"|"+a[2].replace(/\+/,"00")+")";
+    pattern ="^"+pattern+"("+a[3]+")";
+    if( phone.search(new RegExp(pattern))>=0)return true;
+  }
+  return false;
 }
 
 // reference: https://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
