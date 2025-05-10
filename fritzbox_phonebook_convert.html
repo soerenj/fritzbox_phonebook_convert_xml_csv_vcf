@@ -560,7 +560,9 @@ function convert_csv_to_xml(){
   out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="'+new_phonebook_name+'">\n';
   var contacts = CSVToArray(text);
    
-  if(contacts.length>0 && contacts[0].length>1 && contacts[0][1].search(/[0-9][0-9]/)==-1)contacts[0]=""; //ignore headline (the frist line, and without any phonenumber)
+  //old:if(contacts.length>0 && contacts[0].length>1 && contacts[0][1].search(/[0-9][0-9]/)==-1)contacts[0]=""; //ignore headline (the frist line, and without any phonenumber)
+  if(contacts.length>0 && contacts[0].length>1 && is_maybe_headline(contacts[0])) contacts[0]="";
+
   contacts.sort( function(a,b) { 
       if(a.length<=1)return false;   //empty lines
       if(a[0].substring(0)==b[0].substring(0)){
@@ -670,7 +672,7 @@ function download_one_file_ask(){
   if (confirm('Download text in .vcf window?')) { uploaded_file_convert_to='vcf'; prepare_and_download(document.getElementById('phonebook_vcf').value); return; }
 }
 function prepare_and_download(text) {
-  if(text==undefined || test==null || text==false || text==""){ alert("Finish. End. No Output. Nothing to output."); return;}
+  if(text==undefined || text==null || text==false || text==""){ alert("Finish. End. No Output. Nothing to output."); return;}
   var filename = '';
   filename = 'phonebook_for_fritzbox';
   if(uploaded_file_convert_to=='xml'){
@@ -867,13 +869,34 @@ function f_merge__appendfile(format,origin,add){
   }
   if(format=="csv"){
      if(origin.length==0) origin=add;
-     else {
-       add=add.replace(/^([^(\r\n)|(\n\r)|\n|\r])*/,''); //delete 1st Line = normaly = Headline 
+     else {       
+       if(is_maybe_headline(add))add=add.replace(/^([^(\r\n)|(\n\r)|\n|\r])*/,''); //delete 1st Line = normaly = Headline 
        origin+=add;
      }
   }
   if(format=="vcf")   origin+=add;
   return origin;
+}
+
+function is_maybe_headline(a){ //for .csv
+  if( typeof a=='object'){
+      if(myTrimQuotes( a[0] ).toLowerCase() =="name" )    return true;
+      if(myTrimQuotes( a[1] ).toLowerCase() =="phone" )   return true;
+      if(myTrimQuotes( a[1] ).search(/[0-9][0-9]/) ==-1 ) return true; //ignore headline (the frist line, and without any phonenumber)
+  }
+  if( typeof a=='string'){
+      var first_linebreak = a.search(/((\r\n)|(\n\r)|\n|\r])/);
+      var first_line = a.substring(0,first_linebreak);
+      if(first_line.length<5)return true;
+      var comma_1 = first_line.search(/,/);
+      var column1 = first_line.substring(0,comma_1);
+      if(myTrimQuotes( column1 ).toLowerCase() =="name" ) return true;
+      var comma_2 = first_line.search(/,/);
+      var column2 = first_line.substring(comma_1,comma_2);
+      if(myTrimQuotes( column2 ).toLowerCase() =="phone" ) return true;
+      if(myTrimQuotes( column2 ).search(/[0-9][0-9]/) ==-1 ) return true; //ignore headline (the frist line, and without any phonenumber)
+  }
+  return false;
 }
 
 var f_merge = false;
