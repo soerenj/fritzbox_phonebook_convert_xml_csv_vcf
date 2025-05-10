@@ -5,7 +5,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
 <style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} details summary { color:LinkText;} details summary:hover, details summary :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
-.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} </style>
+.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; }</style>
 </head>
 <body>
 <!--
@@ -89,7 +89,26 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
     automatic detection of file-type: <a href="#" onClick="if(upload_file__filetype_auto_detect){upload_file__filetype_auto_detect=false;this.text='no (you will be asked)';}else{ upload_file__filetype_auto_detect=true;this.text='yes';} return false;" id="upload_file__filetype_auto_detect__toggle_link">yes/no</a> <i style="color:#999">(automatic detected by file-extension .xml / .csv / .vcf.)</i>
     </fieldset>
   <br />
-  <fieldset ><legend>Convert xml to csv (=export to fritzbox)</legend>
+  <fieldset ><legend>Convert * to xml (=import to fritzbox)</legend>
+    <span lang="en" class="en">Phone-Number edits:</span>
+    <span lang="de" class="de">Telefon-Nummer bearbeiten:</span>
+    <p style="margin: 0pt;">
+
+    <input type="checkbox" id="setting__2xml__phonenumber_edit_detect_mobile__active" autocomplete="off"/>
+    <label for="setting__2xml__phonenumber_edit_detect_mobile__active">
+     <span lang="en" class="en">Detect mobile phone-number (if already not set). <span style="color:#999">(to fit in the number categorie)</span></span>
+     <span lang="de" class="de">Erkennen Mobilfunk-Nummer automatisch (wenn noch nicht festgelegt). <span style="color:#999">(damit die Nummern Kategorie passt)</span></span>
+    </label>
+    <label for="setting__2xml__phonenumber_edit_detect_mobile__your_countrycode">
+     <span lang="en" class="en">Therefore, set your own country:</span>
+     <span lang="de" class="de">Dafür ihr Land festlegen:</span>
+    </label>
+    <select name="setting__2xml__phonenumber_edit_detect_mobile__your_countrycode" id="setting__2xml__phonenumber_edit_detect_mobile__your_countrycode" autocomplete="off">
+      <option value="">-</value>
+    </select>
+    </p>
+  </fieldset>
+  <fieldset ><legend>Convert xml to csv (=export from fritzbox)</legend>
     <span lang="en" class="en">How to handle multiple phone numbers per each Person entry:</span>
     <span lang="de" class="de">Wie mit meheren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
     <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__single_row" name="setting__xml2csv__just_one_phonenumer_each_text" value="1" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__single_row">
@@ -101,11 +120,42 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
     <span lang="de" class="de">Jede Tabellen-Zeile darf nur eine einzelene Telefon-Nummer enthalten (je Zeile)</span>
     <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234 <br/ >Person A, +4940-567</div><!--<s><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't merge the contacts to a single entry ( <i>=you will have too much entry in your phonebook</i>).</span></s>--></label></p>
     <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type" name="setting__xml2csv__just_one_phonenumer_each_text" value="3" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type">
-    <span lang="en" class="en">Each table-row has only a single phone-number (per row ) and has addational: phone type-categorie (=mobile,privat,work,work_fax), priority (=imported Person) and email-adress</span>
+    <span lang="en" class="en">Each table-row has only a single phone-number (per row ) and has addational data: phone type-categorie (=mobile,privat,work,work_fax), priority (=imported person) and email-adress</span>
     <span lang="de" class="de">Jede Tabellen-Zeile darf nur eine einzelne Telefon-Nummer enthalten (je Zeile) und hat zusätzlich: Telefon Type-Kategorie (=mobile,privat,work,work_fax), Priorität (=wichtige Person) und Email-adresse </span>
     <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234, mobile, 1, mail@example.com <br/ >Person A, +4940-567, home</div>
     <!--<s><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't restore the addational information ( <i>type (mobile/home) and Priority(=important Person)</i>).</span></s>--></label></p>
   </fieldset>
+  <fieldset ><legend>Convert csv to xml (=import to fritzbox)</legend>
+    <span lang="en" class="en">How to handle multiple phone numbers per each Person entry:</span>
+    <span lang="de" class="de">Wie mit meheren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
+    <p style="margin: 0pt;"><input type="checkbox" autocomplete="off" id="setting__csv2xml__merge_samename_checkbox" name="setting__csv2xml__merge_samename" value="1" autocomplete="off" checked onChange="if(this.checked==true)setting__csv2xml__merge_samename=1;else setting__csv2xml__merge_samename=0;" />
+    <label for="setting__csv2xml__merge_samename_checkbox">
+      <span lang="en" class="en">Merge to a single entry</span>
+      <span lang="de" class="de">Einträge zusammenfassen</span>
+    </label>
+    <div style="margin-left:30pt;">
+     <span lang="en" class="en">Phone-numbers with the same name will be merged to a single Entry.</span>
+     <span lang="de" class="de">Telefon-Nummern mit den selben Namen werden zusammengefasst als ein Eintrag.</span>
+     <br>
+     <span style="color:#999">Example csv input:<br/>
+      <ul style="margin-top:0;margin-bottom:0;"><li>Person A, +4940-1234, +4940-567</li><li>Person A, +4940-1234 <br/ >Person A, +4940-567</li><li><span style="color:#999"><i> (Headline: name ; phone ; mobile/home/work/fax_work ; 1 (=for important contact) ; e-mail-adress )</i><br></span>Person A, +4940-1234, mobile, 1 , mail@example.com <br/ >Person A, +4940-567, home<br/></li></ul>
+      <span lang="en" class="en">Note about <em>important person</em> ("<em>prio</em>"): If a single number is <em>prio</em>, all entrys of this person name will be <em>prio</em>.</span>
+      <span lang="de" class="de">Anmerkung zu <em>wichtige Personen</em> ("Prio"): Wenn irgendeiner der Einträge einer Person als <em>wichtige Person</em> markiert ist, wird das auch für alle anderen Einträge diese Person übertragen.</span>
+     </span> </div></p>
+    <p style="margin: 0pt;"> <input type="checkbox" autocomplete="off" id="setting__csv2xml__max_per_entry_checkbox" name="setting__csv2xml__max_per_entry" value="" autocomplete="off" checked onChange="if(this.checked==true)document.getElementById('setting__csv2xml__max_per_entry_input').disabled=false;else document.getElementById('setting__csv2xml__max_per_entry_input').disabled=true;" /><label for="setting__csv2xml__max_per_entry_input">
+    <label for="setting__csv2xml__max_per_entry_checkbox">
+     <span lang="en" class="en">Split entrys:</span>
+     <span lang="de" class="de">Teile Einträge auf:</span>
+    </label> <div style="margin-left:30pt;">Maximal <input size="2" type="number" autocomplete="off" id="setting__csv2xml__max_per_entry_input" name="setting__csv2xml__max_per_entry" value="9" autocomplete="off" checked onChange="setting__csv2xml__max_per_entry=this.value" />
+    <label for="setting__csv2xml__max_per_entry_input">
+     <span lang="en" class="en"> phone numbers are allowed per each entry. Then create a 2nd,3th,... entry (with the same name).</span>
+     <span lang="de" class="de">Telefon-Nummern sind erlaubt für jeden Eintrag. Dannach wird eine zweiten,dritter,... Eintrag (mit den selben Namen) erstellt.</span>
+    </label><br/>
+    <span style="color:#999">
+     <span lang="en" class="en">Example: on device <em>Fritzbox 7390</em>: That device allow normally maximal 9 numbers per each entry. But it looks like, you can also import entry with more numbers. But, then you will get some problem or error: you can't delete the last phone numbers (>9), but they are still editable. ( Maybe other problems possible.) My advise: Bedder set split to 9 - or -  test yourself how many phone numbers you can add (in Web Interface in Browser fritz.box).</span>
+    <span lang="de" class="de">Beispiel: beim Gerät <em>Fritzbox 7390</em>: Bei diesen Gerät sind normalerweise maximal 9 Telefon-Nummer in jeden Eintrag möglich. Es ist scheinbar trotzdem möglich Telefonbücher mit mehr Telefon-Nummern je Eintrag, zu importieren. Es kommt dann aber zu Problemen oder Fehlern: Die letzten Telefon-Nummern (>9) sind dann nicht mehr löschbar, aber noch bearbeitet-bar. (Möglicherweise andere Probleme möglich.) Meine Empfehlung: Besser bei 9 Telefon-Nummern aufteilen - oder - selber testen wie viele Telefon-Nummern je Eintrag ihre Gerät erlaubt (im der Benutzeroberfläche ( Web-Interface auf fritz.box ) )</span>
+    </span></div></p>
+  </fieldset> 
 
   <br />
   Name of new Phonebook-Name: <input type="text" value="phonebook_name" title="" id="new_phonebook_name" onchange="new_phonebook_name=this.value" autocomplete="off" /> <i style="color:#999">When importing the .xml file in Fritzbox (this is not the filename).</i>  
@@ -117,9 +167,14 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
 <br><br>
 <div id="select_file_xml_csv" class="advanced_view">
 <label for="phonebook_csv">From .CSV File:</label><br>
-<textarea id="phonebook_csv" autocomplete="off">name,phone
+<textarea id="phonebook_csv" autocomplete="off">name, phone
 "Person C", "080123456789"
+"Person C", "0801234567890978768"
+"Person C", "01769999999"
 "Person D", "+49176987654321", "+498091239856789"
+"Person E", "004949176222222", "mobile", "", "test@example.com"
+"Person E", "+4911111", "work", "1", "test@example.com"
+"Person E", "00494933333", "home", "", "test@example.com"
 </textarea>
 <br>
 </div>
@@ -188,6 +243,9 @@ var counter_convert = 0;
 var show_advanced_view__state = false;
 var new_phonebook_name = 'convertedPhonebook';
 var setting__xml2csv__just_one_phonenumer_each = 1;
+var setting__csv2xml__merge_samename = 1;
+var maxPhoneNumbersPerEntry = 9; //maximal Numbers on Fritzbox 7390 per each contact
+var phonetypes = ["mobile","home","work","fax_work"];//on fritzbox 7390
 
 if(document.getElementById('file-input_auto-detect').value!='')document.getElementById('file-input_reset').style.display='block';
 if(upload_file__filetype_auto_detect) document.getElementById('upload_file__filetype_auto_detect__toggle_link').text='yes';
@@ -196,6 +254,9 @@ document.getElementById('new_phonebook_name').value=new_phonebook_name;
 if(setting__xml2csv__just_one_phonenumer_each==1) document.getElementById('setting__xml2csv__just_one_phonenumer_each_text__single_row').checked=true;
 if(setting__xml2csv__just_one_phonenumer_each==2) document.getElementById('setting__xml2csv__just_one_phonenumer_each_text__multiple_rows').checked=true;
 if(setting__xml2csv__just_one_phonenumer_each==3) document.getElementById('setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type').checked=true;
+if(setting__csv2xml__merge_samename==0) document.getElementById('setting__csv2xml__merge_samename_checkbox').checked=false;
+if(setting__csv2xml__merge_samename==1) document.getElementById('setting__csv2xml__merge_samename_checkbox').checked=true;
+
 
 function reset_to_default(){
  document.getElementById('phonebook_xml').value = document.getElementById('phonebook_xml').defaultValue;
@@ -455,48 +516,110 @@ function convert_vcf_to_xml(){
 }
 
 
-
 function convert_csv_to_xml(){
- var text = document.getElementById('phonebook_csv').value;
- var out = ''; var person; logError=[];
- out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="'+new_phonebook_name+'">\n';
- var contacts = CSVToArray(text);
- for(i=0;i<contacts.length;i++)
- {
-  if(contacts[i]=='')continue;
-  var elements = contacts[i];
-  var person = elements[0].substring(0);
-  var phone  = elements[1].substring(0);
-  if(i==0 && phone.search(/[0-9][0-9]/)==-1)continue; //ignore headline
-  person = person.replace(/^\s+|\s+$/gm,''); //trim spaces
-  person = person.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
-  person = person.replace(/^"+|"+$/gm,'');   //trim "
-  person = person.replace(/^'+|'+$/gm,"");   //trim '
-  out += '<contact>\n<category>0</category>\n';
-  out += '<person><realName>'+person+'</realName></person>\n';
-  out += '<telephony nid="'+i+'">\n';
-  for(j=1;j<elements.length;j++){ //accept multiple numbers
-   phone = elements[j];
-   if(phone.length==0)continue;
-   if(phone.search(/[0-9]/)==-1){logError.push(elements.join(','));} //maybe not a phone number?; Anyway: continue
-   phone = phone.replace(/^\s+|\s+$/gm,''); //trim spaces
-   phone = phone.replace(/^"+|"+$/gm,'');   //trim "
-   phone = phone.replace(/^'+|'+$/gm,"");   //trim '
-   var type='';   //is here default type="home" needed?
-   if(language.substring(0,2)=='de' ){//only germany
-     if(phone.search(/^(0|(00|\+)49)1[567]/)!=-1)     type=' type="mobile"';
-     if(phone.search(/^(0|(00|\+)49)[23456789]/)!=-1) type=' type="home"';
-     if(phone.search(/^(0|(00|\+)49)(800|900)/)!=-1)  type='';
-   }
-   out += '<number'+type+'>'+phone+'</number>\n';
+  var text = document.getElementById('phonebook_csv').value;
+  var out = ''; var person; logError=[];
+  out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="'+new_phonebook_name+'">\n';
+  var contacts = CSVToArray(text);
+   
+  if(contacts.length>0 && contacts[0].length>1 && contacts[0][1].search(/[0-9][0-9]/)==-1)contacts[0]=""; //ignore headline (the frist line, and without any phonenumber)
+  contacts.sort( function(a,b) { 
+      if(a.length<=1)return false;   //empty lines
+      if(a[0].substring(0)==b[0].substring(0)){
+        if(setting__csv2xml__merge_samename==1 && a.length>3 && b.length>3 && myTrimQuotes(b[3].substring(0))=='1' && a[2].search(/[0-9][0-9]/)==-1 && b[2].search(/[0-9][0-9]/)==-1 )return true; //first numbers with "prio" (otherwise the merge function later, will not take prio for all numbers)
+      }
+      if(a[0].substring(0)>b[0].substring(0)) return true;
+      return false;
+      }
+      ); //sort, in case of merge entrys later
+  var lastPersonName = '';
+  var lastPersonPrio = '';
+  var lastPersonEmail = '';
+  var numbersOut='';
+  var numbersOutCounter=0;
+  var setting__csv2xml__max_per_entry = '';//for testing 1 ; //Fritzbox 7390 does not allow more then 9 number per each entry
+  var forceSplitAndJumpOverEntrys=-1;
+  var countLoop_detectInfinitLoop=0;
+  for(row=0;row<=contacts.length;row++)
+  {
+    countLoop_detectInfinitLoop++; if(countLoop_detectInfinitLoop>10000){ alert("internal programm Error: Loop"); return; }
+    if(numbersOut!=''){
+      if( setting__csv2xml__merge_samename==0 || forceSplitAndJumpOverEntrys>0 || row==contacts.length || contacts[row].length<=1 || lastPersonName!=contacts[row][0].substring(0) ){  //write Entrys   //on: change of Name -or- last entry in list
+        out += '<contact>\n<category>0</category>\n';
+        out += '<person><realName>'+person+'</realName></person>\n';
+        out += '<telephony nid="'+(row-1)+'">\n';
+        
+        if(lastPersonPrio!='')numbersOut=numbersOut.replace(/<number/g,'<number'+lastPersonPrio);
+        out += numbersOut;
+        out += '</telephony>\n';
+        if(lastPersonEmail!='') out += '<services nid="'+row+'"><email classifier="private" id="0">'+lastPersonEmail+'</email></services>';
+        else out += '<services />';
+        out += '<setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
+        numbersOut='';lastPersonEmail='';lastPersonPrio=''; numbersOutCounter=0;
+      }
+    }
+    
+    if(row==contacts.length)break;
+    if(contacts[row]=='')continue;
+    var elements = contacts[row];
+    var person = elements[0].substring(0);
+    var phone  = elements[1].substring(0);
+    var prio = '';
+    var email = '';
+    var entrys = [];
+    //if(row==0 && phone.search(/[0-9][0-9]/)==-1)continue; //ignore headline  //obsolute: with sort the headline is on other position. and will be dealtet before
+    person = person.replace(/^\s+|\s+$/g,''); //trim spaces
+    person = person.replace(/&(?!amp;)/g,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+    person = myTrimQuotes(person);
+    var start = 1;
+    if(forceSplitAndJumpOverEntrys>=0){ start=forceSplitAndJumpOverEntrys; forceSplitAndJumpOverEntrys=-1;}
+    for(c=start;c<elements.length;c++){ //accept multiple numbers
+       
+       phone = elements[c];
+       var type='';   //is here default type="home" needed?
+       var breakAfter=false;  //incase the 3th column is type (=mobile|privat|work|...), that is a single phone-number Entry. Thats means: no more phone-numbers will follow afterwards
+       if(phone.length==0)continue;
+       if(phone.search(/[0-9]/)==-1) logError.push(elements.join(',')); //maybe not a phone number?; Anyway: continue
+       phone = myTrimQuotes(phone);
+       
+       if(language.substring(0,2)=='de' ){//only germany
+         if(phone.search(/^(0|(00|\+)49)1[567]/)!=-1)     type="mobile";
+         //if(phone.search(/^(0|(00|\+)49)[23456789]/)!=-1) type="home"; //or "work"
+         //if(phone.search(/^(0|(00|\+)49)(800|900)/)!=-1)  type='';
+       }
+       
+       if( document.getElementById('setting__csv2xml__max_per_entry_checkbox').checked && setting__csv2xml__max_per_entry!='' && numbersOutCounter==setting__csv2xml__max_per_entry) { forceSplitAndJumpOverEntrys=c; row=row-1;  break; } //create a new Entry (workaround)
+       //input style: name, phone, prio, email   //=no multiple numbers
+       if(elements[2]!=undefined && phonetypes.indexOf(myTrimQuotes(elements[2]))>=0 && elements[2]!='') {
+       //incase the 3th column is type (=mobile|privat|work|...), that is a single phone-number Entry. Thats means: no more phone-numbers will follow afterwards
+          type=myTrimQuotes(elements[2]);
+          breakAfter=true;
+          if(elements[3]!=undefined && (myTrimQuotes(elements[3])=='1' || elements[3]==1))  prio=1;
+          if(elements[4]!=undefined && elements[4].search(/@/)!=-1 && elements[4].length>=5) email=myTrimQuotes(elements[4]);
+       }
+      
+      if(prio!='') prio=' prio="1"';
+      if(type!='') type=' type="'+type+'"';
+      numbersOut += '<number'+type+'>'+phone+'</number>\n'; 
+      numbersOutCounter++;
+          //old:     //'+prio+' //moved to late (in case of merged entrys)
+      
+       if(breakAfter) break;
+      }
+      
+      if(lastPersonName!=person)lastPersonEmail=email;
+      else if(lastPersonEmail=='' && email!='')lastPersonEmail=email;
+      if(lastPersonName!=person)lastPersonPrio=prio;
+      else if(lastPersonPrio==''  && prio!='' )lastPersonPrio=prio;
+      if(lastPersonName!=person) lastPersonName=person;
+
   }
-  out += '</telephony>\n<services /><setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
- }
- out += '</phonebook>\n</phonebooks>';
- document.getElementById('phonebook_xml').value = out;
- show_errors(logError);
- return out;
- //download('xml',out);
+
+  out += '</phonebook>\n</phonebooks>';
+  document.getElementById('phonebook_xml').value = out;
+  show_errors(logError);
+  return out;
+  //download('xml',out);
 }
 
 function get_filename(filename_with_path) {
@@ -557,6 +680,14 @@ function downloadAction(filename, text) {
   if(counter_convert%2){ document.getElementById('ready').style.border="solid 1pt black"; document.getElementById('ready').style.background='#fff'; }
   else { document.getElementById('ready').style.border=""; document.getElementById('ready').style.background='#aaa';}
   //window.setTimeout("document.getElementById('ready').style.display='none';",10000);
+}
+
+function myTrimQuotes(aa){
+  aa = aa.replace(/^\s+|\s+$/g,''); //trim spaces
+  aa = aa.replace(/^"+|"+$/g,'');   //trim "
+  aa = aa.replace(/^'+|'+$/g,"");   //trim '
+  aa = aa.replace(/^\s+|\s+$/g,''); //trim spaces
+  return aa;
 }
 
 // reference: https://www.bennadel.com/blog/1504-ask-ben-parsing-csv-strings-with-javascript-exec-regular-expression-command.htm
