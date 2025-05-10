@@ -89,17 +89,28 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
     automatic detection of file-type: <a href="#" onClick="if(upload_file__filetype_auto_detect){upload_file__filetype_auto_detect=false;this.text='no (you will be asked)';}else{ upload_file__filetype_auto_detect=true;this.text='yes';} return false;" id="upload_file__filetype_auto_detect__toggle_link">yes/no</a> <i style="color:#999">(automatic detected by file-extension .xml / .csv / .vcf.)</i>
     </fieldset>
   <br />
-  <fieldset ><legend>Convert xml to csv</legend> How to handle multiple phone numbers per each Person entry:
-    <p style="margin: 0pt;"><input type="radio" id="setting__xml2csv__just_one_phonenumer_each_text__single_row" name="setting__xml2csv__just_one_phonenumer_each_text" value="1" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__single_row">Each table-row can have multiple phone-numbers (= multiple columns) <br /><div style="margin-left:30pt;">Example:<br/>Person A, +4940-1234, +4940-567</div></label></p>
-    <p style="margin: 0pt;"><input type="radio" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows" name="setting__xml2csv__just_one_phonenumer_each_text" value="2" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows">Each table-row has only a single phone-number (per row ) <br /><div style="margin-left:30pt;">Example:<br/>Person A, +4940-1234 <br/ >Person A, +4940-567</div><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't merge the contacts to a single entry ( <i>=you will have too much entry in your phonebook</i>).</span></label></p>
-    <p style="margin: 0pt;"><input type="radio" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type" name="setting__xml2csv__just_one_phonenumer_each_text" value="3" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type">Each table-row has only a single phone-number (per row ) and phone type-categorie and priority <br /><div style="margin-left:30pt;">Example:<br/>Person A, +4940-1234, mobile, 1 <br/ >Person A, +4940-567, home</div>
-    <span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't restore the addational information ( <i>type (mobile/home) and Priority</i>).</span></label></p>
-  </fieldset> 
+  <fieldset ><legend>Convert xml to csv (=export to fritzbox)</legend>
+    <span lang="en" class="en">How to handle multiple phone numbers per each Person entry:</span>
+    <span lang="de" class="de">Wie mit meheren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
+    <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__single_row" name="setting__xml2csv__just_one_phonenumer_each_text" value="1" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__single_row">
+    <span lang="en" class="en">Each table-row can have multiple phone-numbers (= multiple columns)</span>
+    <span lang="de" class="de">Jede Tabellen-Zeile kann mehere Telefon-Nummern enthalten (=mehere Spalten)</span>
+    <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234, +4940-567</div></label></p>
+    <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows" name="setting__xml2csv__just_one_phonenumer_each_text" value="2" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows">
+    <span lang="en" class="en">Each table-row has only a single phone-number (per row )</span>
+    <span lang="de" class="de">Jede Tabellen-Zeile darf nur eine einzelene Telefon-Nummer enthalten (je Zeile)</span>
+    <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234 <br/ >Person A, +4940-567</div><!--<s><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't merge the contacts to a single entry ( <i>=you will have too much entry in your phonebook</i>).</span></s>--></label></p>
+    <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type" name="setting__xml2csv__just_one_phonenumer_each_text" value="3" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type">
+    <span lang="en" class="en">Each table-row has only a single phone-number (per row ) and has addational: phone type-categorie (=mobile,privat,work,work_fax), priority (=imported Person) and email-adress</span>
+    <span lang="de" class="de">Jede Tabellen-Zeile darf nur eine einzelne Telefon-Nummer enthalten (je Zeile) und hat zusätzlich: Telefon Type-Kategorie (=mobile,privat,work,work_fax), Priorität (=wichtige Person) und Email-adresse </span>
+    <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234, mobile, 1, mail@example.com <br/ >Person A, +4940-567, home</div>
+    <!--<s><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't restore the addational information ( <i>type (mobile/home) and Priority(=important Person)</i>).</span></s>--></label></p>
+  </fieldset>
 
   <br />
   Name of new Phonebook-Name: <input type="text" value="phonebook_name" title="" id="new_phonebook_name" onchange="new_phonebook_name=this.value" autocomplete="off" /> <i style="color:#999">When importing the .xml file in Fritzbox (this is not the filename).</i>  
   </div>
- </fieldset>
+  </fieldset>
  </details>
  
 </div>
@@ -136,8 +147,8 @@ END:VCARD
 
 <p id="show_advanced_view_link_wrapper">
   <a href="#" onclick="show_advanced_view('show');return false">
-    <span lang="en" class="en" style="text-decoration: underline;">⚙ Settings / show text source window</span>
-    <span lang="de" class="de" style="display: none; text-decoration: underline;">⚙ Einstellung / Text-Fenster zeigen </span>
+    <span lang="en" class="en" style="text-decoration: underline;">⚙ Settings and show text source window</span>
+    <span lang="de" class="de" style="display: none; text-decoration: underline;">⚙ Einstellung und Text-Fenster zeigen </span>
   </a>
 </p>
 
@@ -378,14 +389,14 @@ function convert_vcf_to_xml(){
         strOut=str.substr(3);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
-        strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+        strOut = strOut.replace(/&(?!amp;)/g,'&amp;'); //replace this character, otherwise import in fritzbox not possible
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     if(str.substr(0,2)=='N:' && vcf_use_which_name=='N'){
         strOut=str.substr(2);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
-        strOut = strOut.replace(/&(?!amp;)/gm,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+        strOut = strOut.replace(/&(?!amp;)/g,'&amp;'); //replace this character, otherwise import in fritzbox not possible
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     
