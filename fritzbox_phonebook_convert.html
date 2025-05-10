@@ -241,8 +241,8 @@ END:VCARD
 <script language="JavaScript">
 <!--
 var uploaded_filename = '';
-var uploaded_convert_from = '';
-var uploaded_convert_to = '';
+var uploaded_file_convert_from = '';
+var uploaded_file_convert_to = '';
 var upload_file__filetype_auto_detect = true;
 var counter_convert = 0;
 var show_advanced_view__state = false;
@@ -686,20 +686,23 @@ function prepare_and_download(text) {
 function download_sourcecode(){
   var filename = '';
   var text = document.getElementsByTagName('html')[0].outerHTML;
-  if(uploaded_file_convert_to=='html'){
-   var filename_add = '';
-   if (typeof document.querySelector !== "undefined") { 
-       var jsonld = JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText);
-       if (typeof jsonld !== "undefined" && jsonld.softwareVersion !== "undefined" && jsonld.dateModified !== "undefined" ) filename_add = " v"+jsonld.softwareVersion.replace(/\./,'-')+" "+jsonld.dateModified.replace(/\./,'-');
-   }
-   filename = 'converter phonebook fritzboxxml csv vcf vcard '+filename_add+'.'+filename_ending_target;
-   text="<!DOCTYPE html>"+text;
+  uploaded_file_convert_to='html'
+  var filename_add = '';
+  if (typeof document.querySelector !== "undefined") { 
+      var jsonld = JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText);
+      if (typeof jsonld !== "undefined" && jsonld.softwareVersion !== "undefined" && jsonld.dateModified !== "undefined" ) filename_add = " v"+jsonld.softwareVersion.replace(/\./,'-')+" "+jsonld.dateModified.replace(/\./,'-');
   }
+  filename = 'converter phonebook fritzboxxml csv vcf vcard '+filename_add+'.'+uploaded_file_convert_to;
+  text="<!DOCTYPE html>"+text;
   downloadAction(filename,text);
 }
 function downloadAction(filename, text) {
   var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  if     (uploaded_file_convert_to=='vcf') element.setAttribute('href', 'data:text/vcard;charset=utf-8,'      + encodeURIComponent(text));
+  else if(uploaded_file_convert_to=='csv') element.setAttribute('href', 'data:text/csv;charset=utf-8,'        + encodeURIComponent(text));
+  else if(uploaded_file_convert_to=='xml') element.setAttribute('href', 'data:application/xml;charset=utf-8,' + encodeURIComponent(text));
+  else if(uploaded_file_convert_to=='html')element.setAttribute('href', 'data:text/html;charset=utf-8,'       + encodeURIComponent(text));
+  else                                     element.setAttribute('href', 'data:text/plain;charset=utf-8,'      + encodeURIComponent(text));
   element.setAttribute('download', filename);
 
   element.style.display = 'none';
@@ -972,7 +975,7 @@ dropAreaDetect.addEventListener('drop', unhighlight, false);
 <details lang="en" class="en" id="sec_adv_en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Data-Privacy</summary><div>You Privacy are keept: This Page works just on your computer (or offline). Your Data will stay only on your own local computer. No Cloud. It is just pure local JavaScript-Code in your Browser. <br><br>You are still unsure, using this?: My Security-Advise:<br><a name="sec_adv_en" />
 <p>Option A:
   <ol>
-    <li>Open your Browser ( <i>e.g. Firefox, Chrome,..</i>) in the Privacy- / Incognito-Mode (e.g. <a href="sec_adv_en">click here</a> with right mouse-click <em>"open Link in private window"</em> )</li>
+    <li>Open your Browser ( <i>e.g. Firefox, Chrome,..</i>) in the Privacy- / Incognito-Mode (e.g. <a href="sec_adv_en">click here</a> with right mouse-click <em>"open Link in new private window"</em> )</li>
     <li>open this page again</li>
     <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet )</li>
     <li>and do you file convert</li>
@@ -1002,7 +1005,7 @@ Diese Seite arbeitet als offline-Programm (reines JavaScript im Browser). Anonym
 <p>
 Option A:
   <ol>
-    <li>öffnen Sie in Ihren Internet-Browser ( <i>z.B. Firefox, Chrome,..</i>) den Privat- / Inkognito-Modus (z.b. <a href="#sec_adv_de">hier klicken</a> mit rechte Maustasten <em>"Link in privaten Fenster öffnen"</em> )</li>
+    <li>öffnen Sie in Ihren Internet-Browser ( <i>z.B. Firefox, Chrome,..</i>) den Privat- / Inkognito-Modus (z.b. <a href="#sec_adv_de">hier klicken</a> mit rechte Maustasten <em>"Link in neuem privaten Fenster öffnen"</em> )</li>
     <li>öffnen Sie diese Seite hier erneut</li>
     <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet)</li>
     <li>und nun wandeln Sie Ihre Datei um</li>
@@ -1025,12 +1028,19 @@ Option B (alternativ) :
   </ol>
 </p>
 Natürlich trotzdem sinnvoll den Programmcode oder <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" xhref="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde. 
-</div></details>
+</div></details><br/>
 <details lang="en" class="en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="open .csv file in libreoffice / openoffice">Help: open .csv in LibreOffice</summary><div>How to open the .csv file in LibreOffice / OpenOffice:<ul><li>Please select <i>comma</i> as seperator. </li><li>Under <i>other options</i>: Please select <i>Format quoted fields as text</i> (otherwise the phone-Number may miss the beginning 0 <-- at least in  LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__en_8bit.png" alt="screenshot: import .csv-files settings in LibreOffice" /></div></details>
 <details lang="de" class="de" style="display: none;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="öffnen der .csv Datei in libreoffice / openoffice">Hilfe: öffne .csv in Libreoffice</summary><div>So öffnet man die .csv Datei in LibreOffice / OpenOffice:<ul><li>Bitte als Trenner <i>Komma</i> auswählen. </li><li>Unter <i>weitere Optionen</i>: Bitte anklicken von <i>Felder in Hochkommata als Text formatieren</i> (ansonsten könnte bei der Telefon-nummer die 0 am Anfang fehlen <!-- zumindest in LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__de_8bit.png" alt="Bildschirmfoto: import .csv-Datei Eintellungen in LibreOffice" /></div></details>
 <span style="display:block;bottom:2pt;padding:2pt;font-size:10pt;">
-<details style="padding-right:4pt;color:#999999"><summary>sourcecode (git)</summary>
-<a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">git (codeberg)</a> or <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">git (github)</a>
+<details style="padding-right:4pt;">
+ <summary style="color:#999999">
+  <span lang="en" class="en">sourcecode (git) <small>(( or report error / issue function)) </small></span>
+  <span lang="de" class="de">Quellcode (git) <small>((oder dort auch Fehler melden)) </small></span>
+ </summary>
+Licence: APGL <br>
+Quellcode: <a href="#" onClick="download_sourcecode();return false">Download this page (without images)</a><br>or<br>
+git ("codeberg"): <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/</a> <br>or <br>
+git ("github"): <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/</a>
 </details>
 </span>
 </footer>
