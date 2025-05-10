@@ -966,10 +966,21 @@ dropAreaDetect.addEventListener('drop', unhighlight, false);
 //-->
 </script>
 <br><br><br>
+<hr>
 <footer>
 <!--<em style="color:#ababab;float:right;padding-right:10pt; ">file process only name & phone number</em>-->
-<details lang="en" class="en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Data-Privacy</summary><div>You Privacy are keept: This Page works just on your computer (or offline). No Cloud. It is just pure local JavaScript-Code. <br>But anyway, bedder check the program-code or <a xhref="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" title="commit/version-history on git" href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Change-History</a>, in case this account was hacked.<br><br>You are still unsure, using this? Then: I suggest one of this two ways.<br>
-Option A:
+<details lang="en" class="en" id="sec_adv_en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Data-Privacy</summary><div>You Privacy are keept: This Page works just on your computer (or offline). Your Data will stay only on your own local computer. No Cloud. It is just pure local JavaScript-Code in your Browser. <br><br>You are still unsure, using this?: My Security-Advise:<br><a name="sec_adv_en" />
+<p>Option A:
+  <ol>
+    <li>Open your Browser ( <i>e.g. Firefox, Chrome,..</i>) in the Privacy- / Incognito-Mode (e.g. <a href="sec_adv_en">click here</a> with right mouse-click <em>"open Link in private window"</em> )</li>
+    <li>open this page again</li>
+    <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet )</li>
+    <li>and do you file convert</li>
+    <li>Important last Step: Close <u>ALL</u> Privacy/Incognito-Mode window afterwards, to finish up / clean up the whole <em>session</em>!</li>
+  </ol>
+</p>
+<p>
+Option B (alternativ) :
  <ol>
    <li>Download this Page: 
      <ul>
@@ -978,24 +989,29 @@ Option A:
       <li><i>save page</i> in your Browser <i>(e.g.: Menue File -&gt; Save Page - or - press hotkey <kbd>STRG</kbd>+<kbd>s</kbd>)</i></li>
      </ul>
    </li>
-   <li>go offline (= disconnect from Internet )</li>
+   <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet ) </li>
    <li>optional: open to your Download folder </li>
    <li>open the downloaded .html file at your computer. It should be automatically open in your browser (<i>e.g. Firefox, Chrome,..</i>).</li>
   </ol>
+</p>
+But anyway, good idea to check the program-code or <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" title="commit/version-history on git" xhref="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Change-History</a> (in case this account was hacked).
+</div></details>
+<details lang="de" class="de" style="display: none;" id="sec_adv_de"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">voller Datenschutz</summary><div>
+
+Diese Seite arbeitet als offline-Programm (reines JavaScript im Browser). Anonymität, Datenschutz ist daher gewahrt. Ihre Daten bleiben nur auf ihren Computer. Keine Cloud. Es ist reines, lokal ausgeführtes JavaScript. <br>Immernoch unsicher das hier zu nutzen?: Mein Sicherheits-Ratschlag:<br><a name="sec_adv_de" />
+<p>
+Option A:
+  <ol>
+    <li>öffnen Sie in Ihren Internet-Browser ( <i>z.B. Firefox, Chrome,..</i>) den Privat- / Inkognito-Modus (z.b. <a href="#sec_adv_de">hier klicken</a> mit rechte Maustasten <em>"Link in privaten Fenster öffnen"</em> )</li>
+    <li>öffnen Sie diese Seite hier erneut</li>
+    <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet)</li>
+    <li>und nun wandeln Sie Ihre Datei um</li>
+    <li>Wichtiger letzter Schritt: Schließen Sie <u>ALLE</u> ihre Privat/Inkognito-Modus Fenster dannach. Nur so kann die ganze sog. <i>Sitzung</i> gelöscht und wirklich beendet werden.</li>
+  </ol>
+</p>
+<p>
 Option B (alternativ) :
   <ol>
-    <li>Open your Browser (<i>e.g. Firefox, Chrome,..</i>) in the Privacy- / Incognito-Mode</li>
-    <li>open this page again</li>
-    <li>go offline (= disconnect from Internet )</li>
-    <li>and do you file convert</li>
-    <li>Important last Step: Close <u>ALL</u> Privacy/Incognito-Mode window afterwards, to finish up / clean up the whole session!</li>
-  </ol>
-</div></details>
-<details lang="de" class="de" style="display: none;" ><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">voller Datenschutz</summary><div>
-
-Diese Seite arbeitet als offline-Programm (reines javascript). Anonymität, Datenschutz ist daher gewahrt. Keine Cloud. Es ist reines, lokal ausgeführtes JavaScript. Aber natürlich trotzdem, besser den Programmcode oder <a xhref="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde.<br>Immernoch unsicher das hier zu nutzen? Dann schlage ich einen dieser zwei Nutzungswege vor:<br>
-Option A:
- <ol>
    <li>Download dieser Internet-Seite: 
      <ul>
       <li> <a href="#" onclick="download_sourcecode()">Hier klicken</a> oder </li>
@@ -1003,18 +1019,12 @@ Option A:
       <li><i>Seite speichern</i> in ihren Internet-Browser wählen <i>(z.B.: Menü Datei -&gt; Seite speichern - oder - Tastenkombination <kbd>STRG</kbd>+<kbd>s</kbd>)</i></li>
      </ul>
    </li>
-   <li>gehen Sie offline (= trennen Sie die Verbindung zum Internet) </li>
+   <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet) </li>
    <li>optional: öffnen Sie den Download Ordner </li>
    <li>öffnen Sie die runtergeladenen .html Datei auf ihren Computer. Es sollte sich automatisch in ihren Internet-browser (<i>z.B. Firefox, Chrome,..</i>) öffnen.</li>
   </ol>
-Option B (alternativ) :
-  <ol>
-    <li>Öffnen Sie in Ihren Internet-Browser (<i>z.B. Firefox, Chrome,..</i>) den Privat- / Inkognito-Modus</li>
-    <li>öffnen Sie diese Seite hier erneut</li>
-    <li>gehen Sie offline (= trennen Sie die Verbindung zum Internet)</li>
-    <li>und nun wandeln Sie Ihre Datei um</li>
-    <li>Wichtiger letzter Schritt: Schließen Sie <u>ALLE</u> ihre Privat/Inkognito-Modus Fenster dannach. Nur so kann die ganze <i>Sitzung</i> aufgeräumnt und auch wirklich beendet werden.</li>
-  </ol>
+</p>
+Natürlich trotzdem sinnvoll den Programmcode oder <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" xhref="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Versions-Verlauf</a> prüfen, für den Fall das dieser Account gehackt wurde. 
 </div></details>
 <details lang="en" class="en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="open .csv file in libreoffice / openoffice">Help: open .csv in LibreOffice</summary><div>How to open the .csv file in LibreOffice / OpenOffice:<ul><li>Please select <i>comma</i> as seperator. </li><li>Under <i>other options</i>: Please select <i>Format quoted fields as text</i> (otherwise the phone-Number may miss the beginning 0 <-- at least in  LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__en_8bit.png" alt="screenshot: import .csv-files settings in LibreOffice" /></div></details>
 <details lang="de" class="de" style="display: none;"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="öffnen der .csv Datei in libreoffice / openoffice">Hilfe: öffne .csv in Libreoffice</summary><div>So öffnet man die .csv Datei in LibreOffice / OpenOffice:<ul><li>Bitte als Trenner <i>Komma</i> auswählen. </li><li>Unter <i>weitere Optionen</i>: Bitte anklicken von <i>Felder in Hochkommata als Text formatieren</i> (ansonsten könnte bei der Telefon-nummer die 0 am Anfang fehlen <!-- zumindest in LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__de_8bit.png" alt="Bildschirmfoto: import .csv-Datei Eintellungen in LibreOffice" /></div></details>
@@ -1038,6 +1048,24 @@ if(language.substring(0,2)=='de'){
  for(i=0;i<e.length;i++){
   e[i].style.display='none';
  }
+}
+
+if(window.location.hash=="#sec_adv_en")document.getElementById("sec_adv_en").open="open";
+if(window.location.hash=="#sec_adv_de")document.getElementById("sec_adv_de").open="open";
+
+if(window.navigator.onLine!=undefined){
+  function offline_note(){
+    var text=''; var c_color='';
+    if(window.navigator.onLine=='off' || window.navigator.onLine==false ){ text='&check;'; c_color='green';}
+    var elems=document.getElementsByClassName('onlineoffline_state');
+    for(i=0;i<elems.length;i++){
+      elems[i].innerHTML=text;
+      elems[i].style.color=c_color;
+    }
+  }
+  window.addEventListener('online',  offline_note );
+  window.addEventListener('offline', offline_note );
+  if(window.navigator.onLine=='offline') offline_note();
 }
 </script>
 </body></html>
