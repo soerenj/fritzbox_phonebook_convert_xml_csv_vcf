@@ -4,7 +4,7 @@
 <title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
-<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
+<style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} @media (min-height:800pt){ textarea{ height:200pt;} } details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
 .drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } </style>
 </head>
 <body>
@@ -1041,11 +1041,10 @@ dropAreaDetect.addEventListener('drop', unhighlight, false);
 <details lang="en" class="en" id="sec_adv_en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Data-Privacy</summary><div>You Privacy are keept: This Page works just on your computer (or offline). Your Data will stay only on your own local computer. No Cloud. It is just pure local JavaScript-Code in your Browser. <br><br>You are still unsure, using this?: My Security-Advise:<br><a name="sec_adv_en" />
 <p>Option A:
   <ol>
-    <li>Open your Browser ( <i>e.g. Firefox, Chrome,..</i>) in the Privacy- / Incognito-Mode (e.g. <a href="sec_adv_en">click here</a> with right mouse-click <em>"open Link in new private window"</em> )</li>
-    <li>open this page again</li>
+    <li>Start Privacy- / Incognito-Mode in your Browser <i syle="color:#999">( e.g. Firefox, Chrome,..)</i> and open again this page. <br>(More easy: <a href="sec_adv_en">click here</a> with right mouse-click and select <em>"open Link in new private window"</em> )</li>
     <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet )</li>
-    <li>and do you file convert</li>
-    <li>Important last Step: Close <u>ALL</u> Privacy/Incognito-Mode window afterwards, to finish up / clean up the whole <em>session</em>!</li>
+    <li>Convert your files</li>
+    <li>Important last Step: Close <u>ALL</u> Privacy/Incognito-Mode window afterwards, to finish up / clean up the whole <em>session</em>.</li>
   </ol>
 </p>
 <p>
@@ -1059,23 +1058,22 @@ Option B (alternativ) :
      </ul>
    </li>
    <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet ) </li>
-   <li>optional: open to your Download folder </li>
+   <li>open to your Download folder</li>
    <li>open the downloaded .html file at your computer. It should be automatically open in your browser (<i>e.g. Firefox, Chrome,..</i>).</li>
   </ol>
 </p>
 But anyway, good idea to check the program-code or <a xhref="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/branch/pages" title="commit/version-history on git" href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Change-History</a> (in case this account was hacked).
 </div></details>
-<details lang="de" class="de" style="display: none;" id="sec_adv_de"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">voller Datenschutz</summary><div>
+<details lang="de" class="de" style="display: none;" id="sec_adv_de"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50);startOnlineOfflineStateReport();" title="more privacy info">voller Datenschutz</summary><div>
 
 Diese Seite arbeitet als offline-Programm (reines JavaScript im Browser). Anonymität, Datenschutz ist daher gewahrt. Ihre Daten bleiben nur auf ihren Computer. Keine Cloud. Es ist reines, lokal ausgeführtes JavaScript. <br>Immernoch unsicher das hier zu nutzen?: Mein Sicherheits-Ratschlag:<br><a name="sec_adv_de" />
 <p>
 Option A:
   <ol>
-    <li>öffnen Sie in Ihren Internet-Browser ( <i>z.B. Firefox, Chrome,..</i>) den Privat- / Inkognito-Modus (z.b. <a href="#sec_adv_de">hier klicken</a> mit rechte Maustasten <em>"Link in neuem privaten Fenster öffnen"</em> )</li>
-    <li>öffnen Sie diese Seite hier erneut</li>
+    <li>Den Privat- / Inkognito-Modus in Ihren Internet-Browser <i style="color:#999">( z.B. Firefox, Chrome,..)</i> starten und diese Seite erneut öffnen.<br> ( Vereinfachter Weg: <a href="#sec_adv_de">hier klicken</a> mit rechter Maustasten und <em>"Link in neuem privaten Fenster öffnen"</em> wählen )</li>
     <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet)</li>
-    <li>und nun wandeln Sie Ihre Datei um</li>
-    <li>Wichtiger letzter Schritt: Schließen Sie <u>ALLE</u> ihre Privat/Inkognito-Modus Fenster dannach. Nur so kann die ganze sog. <i>Sitzung</i> gelöscht und wirklich beendet werden.</li>
+    <li>wandeln Sie nun Ihre Datei um</li>
+    <li>Wichtiger letzter Schritt: Schließen Sie <u>ALLE</u> ihre Privat/Inkognito-Modus Fenster dannach. Nur so kann die ganze sog. <i>Sitzung</i> gelöscht, also wirklich beendet werden.</li>
   </ol>
 </p>
 <p>
@@ -1089,7 +1087,7 @@ Option B (alternativ) :
      </ul>
    </li>
    <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet) </li>
-   <li>optional: öffnen Sie den Download Ordner </li>
+   <li>öffnen Sie den Download Ordner</li>
    <li>öffnen Sie die runtergeladenen .html Datei auf ihren Computer. Es sollte sich automatisch in ihren Internet-browser (<i>z.B. Firefox, Chrome,..</i>) öffnen.</li>
   </ol>
 </p>
@@ -1129,8 +1127,16 @@ if(language.substring(0,2)=='de'){
 if(window.location.hash=="#sec_adv_en")document.getElementById("sec_adv_en").open="open";
 if(window.location.hash=="#sec_adv_de")document.getElementById("sec_adv_de").open="open";
 
-if(window.navigator.onLine!=undefined){
-  function offline_note(){
+//show Offline state in Help Privacy
+startOnlineOfflineStateReport_done=false;
+function startOnlineOfflineStateReport(){
+    if(window.navigator.onLine!=undefined && !startOnlineOfflineStateReport_done){
+      window.addEventListener('online',  offline_note );
+      window.addEventListener('offline', offline_note );
+      startOnlineOfflineStateReport_done=true;
+    }
+}
+function offline_note(){
     var text=''; var c_color='';
     if(window.navigator.onLine=='off' || window.navigator.onLine==false ){ text='&check;'; c_color='green';}
     var elems=document.getElementsByClassName('onlineoffline_state');
@@ -1138,10 +1144,8 @@ if(window.navigator.onLine!=undefined){
       elems[i].innerHTML=text;
       elems[i].style.color=c_color;
     }
-  }
-  window.addEventListener('online',  offline_note );
-  window.addEventListener('offline', offline_note );
-  if(window.navigator.onLine=='offline') offline_note();
 }
+if(window.navigator.onLine!=undefined && window.navigator.onLine=='offline') offline_note();
+
 </script>
 </body></html>
