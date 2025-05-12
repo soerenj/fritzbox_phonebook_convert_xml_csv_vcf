@@ -5,7 +5,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
 <style> input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} @media (min-height:800pt){ textarea{ height:200pt;} } details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
-.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } </style>
+.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } input#setting__xml2__phonenumber_edit_your_countrycode:invalid {border: medium solid red; }</style>
 </head>
 <body>
 <!--
@@ -92,14 +92,14 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
     </fieldset>
   <br />
   <fieldset ><legend>Convert * to xml (=import to fritzbox)</legend>
-    <span lang="en" class="en">Phone-Number edits:</span>
-    <span lang="de" class="de">Telefon-Nummer bearbeiten:</span>
+    <!--<span lang="en" class="en">Phone-Number edits:</span>
+    <span lang="de" class="de">Telefon-Nummer bearbeiten:</span>-->
     <p style="margin: 0pt;">
 
     <input type="checkbox" id="setting__2xml__phonenumber_edit_detect_mobile__active" autocomplete="off" checked/>
     <label for="setting__2xml__phonenumber_edit_detect_mobile__active">
      <span lang="en" class="en">Detect mobile phone-number (if already not set). <span style="color:#999">(to fit in the number categorie)</span></span>
-     <span lang="de" class="de">Erkennen Mobilfunk-Nummer automatisch (wenn noch nicht festgelegt). <span style="color:#999">(damit die Nummern Kategorie passt)</span></span>
+     <span lang="de" class="de">Mobilfunk-Nummer automatisch erkennen (wenn noch nicht festgelegt). <span style="color:#999">(damit die Nummern Kategorie passt)</span></span>
     </label>
     <label for="setting__2xml__phonenumber_edit_detect_mobile__your_countrycode">
      <span lang="en" class="en">Therefore, set your own country:</span>
@@ -108,6 +108,19 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
     <select name="setting__2xml__phonenumber_edit_detect_mobile__your_countrycode" id="setting__2xml__phonenumber_edit_detect_mobile__your_countrycode" autocomplete="off">
       <option value="">-</value>
     </select>
+    </p>
+  </fieldset>
+  <fieldset ><legend>Convert xml to * (=export from fritzbox)</legend>
+    <!--<span lang="en" class="en">Phone-Number edits:</span>
+    <span lang="de" class="de">Telefon-Nummer bearbeiten:</span>-->
+    <p style="margin: 0pt;">
+    <input type="checkbox" id="setting__xml2__phonenumber_edit_your_countrycode__active" autocomplete="off" />
+    <label for="setting__xml2__phonenumber_edit_your_countrycode__active">
+     <span lang="en" class="en">Add your Telephone country codes: <span style="color:#999">(if missing)</span></span>
+     <span lang="de" class="de">Ihre Land-Vorwahl hinzufügen: <span style="color:#999">(wenn sie fehlt)</span></span>
+    </label><!-- v(([0-9][0-9])|(\+)) -->
+    <input type="text" size="8" pattern="((00)|\+)[0-9][0-9]*?" name="setting__xml2__phonenumber_edit_your_countrycode" id="setting__xml2__phonenumber_edit_your_countrycode" autocomplete="off" />
+    <span style="color:#999">E.g. +49 or 0049 for germany.</span>
     </p>
   </fieldset>
   <fieldset ><legend>Convert xml to csv (=export from fritzbox)</legend>
@@ -282,6 +295,7 @@ for(i=0;i<pre_numbers__with_country_codes__and_mobile.length;i++){
  option.text = a[0]+" "+a[1]+" "+a[2];
  option.value = a[2];
  e.add(option);
+ if(detected_default_langcountrycode!='') document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value=detected_default_langcountrycode;
 }
 if(detected_default_langcountrycode!='')e.value=detected_default_langcountrycode;
 
@@ -342,8 +356,11 @@ function convert_to_csv(){
    //if(telephony[j].length==undefined) continue; 
    if(null==telephony[j].firstChild || undefined==telephony[j].firstChild.nodeValue || null==telephony[j].firstChild.nodeValue) { logError.push(person); if(telephony[j].firstChild==null)logError.push('empty number:'); logError.push(telephony[j]);  continue; }
    phone = telephony[j].firstChild.nodeValue;
+   phone = myTrimQuotes(phone);
+   var countrycode__pre_phone=''; if(document.getElementById('setting__xml2__phonenumber_edit_your_countrycode__active').checked && !document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').validity.patternMismatch ) countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
+   if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,1)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
    if(counter_num>0  && setting__xml2csv__just_one_phonenumer_each>1) out += "\n";
-   if(counter_num==0 || setting__xml2csv__just_one_phonenumer_each>1) out += '"'+person.replace('"','\\"')+'"';
+   if(counter_num==0 || setting__xml2csv__just_one_phonenumer_each>1) out += '"'+myTrimQuotes(person).replace('"','\\"')+'"';
    out += ", "+ '"'+phone.replace('"','\\"')+'"';
    if(setting__xml2csv__just_one_phonenumer_each==3){
        if(telephony[j].getAttribute('type')!=undefined && telephony[j].getAttribute('type')!=null) out += ', "'+telephony[j].getAttribute('type')+'"';
@@ -409,9 +426,12 @@ function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
   for(j=0;j<telephony.length;j++){
    if(null==telephony[j].firstChild || undefined==telephony[j].firstChild.nodeValue || null==telephony[j].firstChild.nodeValue) { logError.push(person); if(telephony[j].firstChild==null)logError.push('empty number:'); logError.push(telephony[j]); continue; }
    out += "TEL;";
+   phone = myTrimQuotes(telephony[j].firstChild.nodeValue);
+   var countrycode__pre_phone=''; if(document.getElementById('setting__xml2__phonenumber_edit_your_countrycode__active').checked && !document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').validity.patternMismatch ) countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
+   if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,1)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
    if(v==2.1)if(telephony[j].getAttribute('type')!=undefined) out += ''+telephony[j].getAttribute('type').toUpperCase()+';';
    if(v>2.1) if(telephony[j].getAttribute('type')!=undefined) out += 'TYPE='+telephony[j].getAttribute('type').toUpperCase()+';';
-   out += "VOICE:"+telephony[j].firstChild.nodeValue+'\n';
+   out += "VOICE:"+phone+'\n';
   }
   if(telephony.length>0 && telephony[0].getAttribute('prio')!='')out += "NOTE:importantContact(fritzbox)\n";
   
