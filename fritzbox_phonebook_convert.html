@@ -34,10 +34,10 @@
 <noscript style="color:red">You need JavaScript, to use this service.</noscript>
 <hr>
 <div id="select_file_auto-detect_div">
-<span lang="en" class="en">Select &nbsp;- or -&nbsp; drag & drop a File: </span>
-<span lang="de" class="de">Auswählen &nbsp;- oder -&nbsp; hier reinziehen <span style="color:#999;">("drag & drop")</span> einer Datei:</span>
+<span lang="en" class="en">Select &nbsp;- or -&nbsp; drag & drop file(s): </span>
+<span lang="de" class="de">Auswählen &nbsp;- oder -&nbsp; hier reinziehen von Datei(en) <span style="color:#999;">("drag & drop")</span>:</span>
 <br />
-<span style="color:#999999"><i>Fritzbox .XML &nbsp; - or - &nbsp; .CSV &nbsp; - or - &nbsp; .VCF <span lang="en" class="en">File</span><span lang="de" class="de">Datei</span></i></span><br>
+<span style="color:#999999"><i><span lang="en" class="en">Allowed</span><span lang="de" class="de">Erlaubt</span>: Fritzbox .xml , .csv , .vc , .vcard</i></span><br>
 <span id="file-input_auto-detect_text_drophere" style="display:none">Drop your file here</span>
 <input type="file" multiple id="file-input_auto-detect" autocomplete="off" /><a href="#" id="file-input_auto-detect_close_button" style="display:none;background: white;  font-size: 2em;  text-align: right;  top: 10%;  position: absolute;  padding: 0.5em;  right: 10%; border-radius:20pt;" onClick="unhighlight();return false;">Close X</a><br>
 </div><br>
@@ -100,9 +100,10 @@
     </label> <br />
     <input type="checkbox" id="setting__upload__filetype_auto_detect" checked autocomplete="off">
     <label for="setting__upload__filetype_auto_detect">
-      <span lang="en" class="en">automatic detection of file-type</span>
-      <span lang="de" class="de">automatische Datei-Type feststellung</span>
-    </label> <span style="color:#999">(detected by file-extension .xml / .csv / .vcf. ; Otherwise you will be ask)</span>
+      <span lang="en" class="en">Automatic detection of file-type</span>
+      <span lang="de" class="de">Automatisch Datei-Type feststellen</span>
+    </label> <span style="color:#999">(detected by file-extension .xml / .csv / .vcf /.vcard /or MIME-Type ; Otherwise you will be ask)</span>
+  </fieldset>
   <fieldset ><legend>Convert * to xml (=import to fritzbox)</legend>
     <!--<span lang="en" class="en">Phone-Number edits:</span>
     <span lang="de" class="de">Telefon-Nummer bearbeiten:</span>-->
@@ -200,6 +201,18 @@
  </details>
  
 </div>
+<p id="show_advanced_view_link_link_close" style="display:none">
+<a href="#" onclick="show_advanced_view('hide');return false">
+    <span lang="en" class="en">close text source window</span>
+    <span lang="de" class="de">schließe Text-Fenster</span>
+</a>
+</p>
+<p id="show_advanced_view_link_wrapper">
+  <a href="#" onclick="show_advanced_view('show');return false">
+    <span lang="en" class="en">show text source window</span>
+    <span lang="de" class="de">Text-Fenster anzeigen </span>
+  </a>
+</p>
 <div id="select_file_xml_csv" class="advanced_view">
 <br><br>
 <label for="phonebook_csv">From .CSV File:</label> <input type="button" value="convert: ⇧ csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  <br>
@@ -236,21 +249,8 @@ END:VCARD
 
 <textarea id="error_logs" style="display:none" class=""></textarea>
 
-<p id="show_advanced_view_link_wrapper">
-  <a href="#" onclick="show_advanced_view('show');return false">
-    <span lang="en" class="en">show text source window</span>
-    <span lang="de" class="de">Text-Fenster zeigen </span>
-  </a>
-</p>
-
 <input type="button" id="file-input_reset" style="display:none;margin-top:22pt" value="reset" onclick="reset_to_default()" />
 
-<p id="show_advanced_view_link_link_close" style="display:none">
-<a href="#" onclick="show_advanced_view('hide');return false">
-    <span lang="en" class="en">close text source window</span>
-    <span lang="de" class="de">schließe Text-Fenster</span>
-</a>
-</p>
 <script type='application/ld+json'>
 {
 	"@context": "http://schema.org/",
@@ -280,7 +280,7 @@ var uploaded_file_convert_to = '';
 var counter_convert = 0;
 var show_advanced_view__state = false;
 var new_phonebook_name = 'convertedPhonebook';
-var setting__xml2csv__just_one_phonenumer_each = 1;
+var setting__xml2csv__just_one_phonenumer_each = 3;
 var setting__csv2xml__merge_samename = 1;
 var maxPhoneNumbersPerEntry = 9; //maximal Numbers on Fritzbox 7390 per each contact
 var phonetypes = ["mobile","home","work","fax_work"];//on fritzbox 7390
@@ -344,7 +344,10 @@ function convert_to_csv(){
  xmlDoc = parser.parseFromString(text, "text/xml");
 
  var out, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone, email;
- out = 'name, phone\n'; logError=[];
+ if(setting__xml2csv__just_one_phonenumer_each==1) out = 'name, phone, (maybe more phones following...)\n';
+ if(setting__xml2csv__just_one_phonenumer_each==2) out = 'name, phone\n';
+ if(setting__xml2csv__just_one_phonenumer_each==3) out = 'name, phone, type, importantPerson, email\n';
+ logError=[];
  var contacts = xmlDoc.getElementsByTagName("contact");
  for(i=0;i<contacts.length;i++)
  {
