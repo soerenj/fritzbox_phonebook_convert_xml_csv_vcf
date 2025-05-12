@@ -161,6 +161,7 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
 
   <br />
   Name of new Phonebook-Name: <input type="text" value="phonebook_name" title="" id="new_phonebook_name" onchange="new_phonebook_name=this.value" autocomplete="off" /> <i style="color:#999">When importing the .xml file in Fritzbox (this is not the filename).</i>  
+  <button type="button" onClick="document.getElementById('file-input_auto-detect').dispatchEvent(new Event('change'));" id="convert_again_file" style="display:none;margin-top:10pt;margin-bottom:10pt;" value="Convert the same file again" ><span lang="en" class="en">Convert the same file again</span><span lang="de" class="de">Konvertiere die gleiche Datei nochmal</span></button>
   </div>
   </fieldset>
  </details>
@@ -916,7 +917,7 @@ function readMultipleFiles(e) {
   if (!files || files.length==0) {
     return;
   }
-
+  document.getElementById('convert_again_file').style.display='block';
   if(files.length>1 && confirm("Merge the multiple files to a single phonebook? (only with the same file-format possible)")) f_merge=true;
   
   readfiles__files_count = files.length;
