@@ -1179,7 +1179,6 @@ window.addEventListener('hashchange', function(){
     if(window.location.hash.length>2 && all_languages.indexOf( window.location.hash.substring(1) )>=0) changeLanguage( window.location.hash.substring(1) ); 
     });
 function changeLanguage(newSetLang){
- if(all_languages.indexOf( window.location.hash.substring(1) )<0)return;
  var e = document.getElementsByClassName(newSetLang);
   for(i=0;i<e.length;i++){
    e[i].style.display='inline-block';
