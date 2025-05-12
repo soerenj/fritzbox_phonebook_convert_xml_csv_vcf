@@ -69,12 +69,10 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
 
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <br>
-<div class="advanced_view">Convert:
- <input type="button" value="⬇ xml to csv" onclick="convert_to_csv()" />  &nbsp;
- <input type="button" value="⬇ xml to vcf (vcard v2.1)" onclick="convert_to_vcf(2.1)" />  &nbsp;
- <input type="button" value="⬇ xml to vcf (vcard v4.0)" onclick="convert_to_vcf(4.0)" />  &nbsp;
- <input type="button" value="⇧ csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  
- <input type="button" value="⇧ vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  <br>
+<div class="advanced_view">
+ <input type="button" value="convert: ⬇ xml to csv" onclick="convert_to_csv()" />  &nbsp;
+ <input type="button" value="convert: ⬇ xml to vcf (vcard v2.1)" onclick="convert_to_vcf(2.1)" />  &nbsp;
+ <input type="button" value="convert: ⬇ xml to vcf (vcard v4.0)" onclick="convert_to_vcf(4.0)" />  &nbsp;
  <input type="button" value="Download" title="Download one file" onclick="download_one_file_ask()" />   &nbsp; 
  <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;  
 </div>
@@ -182,7 +180,7 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
 </div>
 <div id="select_file_xml_csv" class="advanced_view">
 <br><br>
-<label for="phonebook_csv">From .CSV File:</label><br>
+<label for="phonebook_csv">From .CSV File:</label> <input type="button" value="convert: ⇧ csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  <br>
 <textarea id="phonebook_csv" autocomplete="off">name, phone
 "Person C", "080123456789"
 "Person C", "0801234567890978768"
@@ -196,7 +194,7 @@ Select &nbsp;- or -&nbsp; drag & drop a File: <span style="color:#999999"><i>Fri
 </div>
 
 <div id="select_file_vcf_div" class="advanced_view">
-<label for="phonebook_vcf">From .VCF File:</label><br>
+<label for="phonebook_vcf">From .VCF File:</label> <input type="button" value="convert: ⇧ vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  <br>
 <textarea id="phonebook_vcf" autocomplete="off">BEGIN:VCARD
 VERSION:4.0
 N:Person E
@@ -509,14 +507,14 @@ function convert_vcf_to_xml(){
         strOut=str.substr(3);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
-        strOut = strOut.replace(/&(?!amp;)/g,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+        strOut = sanitize_personname(strOut,false);
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     if(str.substr(0,2)=='N:' && vcf_use_which_name=='N'){
         strOut=str.substr(2);
         while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
         while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
-        strOut = strOut.replace(/&(?!amp;)/g,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+        strOut = sanitize_personname(strOut,false);
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
     
@@ -575,6 +573,26 @@ function convert_vcf_to_xml(){
 }
 
 
+function sanitize_personname(person,inkluding_quotes){
+  person = person.replace(/^\s+|\s+$/gm,'');        //trim spaces
+  //replace character & , otherwise import to fritzbox not possible
+  person = person.replace(/&(?!amp;)/gm,'&amp;');
+  //replace character " , otherwise import to fritzbox not possible //please dont change the order
+  person = person.replace(/""/gm,"&quot;");       //handle "" (from libre office export of single " possible )
+  person = person.replace(/\"/gm,"&quot;");       //handle "
+  person = person.replace(/"/gm,"&quot;");        //handle "
+  if(inkluding_quotes){
+    var tmp = '';
+    tmp= person.replace(/^"(.*)"$/gm,'$1'); //trim " (only once at beginn and end)
+    if(tmp.length>0) person = tmp;
+    tmp= person.replace(/^'?(.*)'?$/gm,'$1'); //trim ' (only once at beginn and end)
+    if(tmp.length>0) person = tmp;
+  }
+  person = person.replace(/^\s+|\s+$/gm,'');        //trim spaces (again)
+  return person;
+}
+
+
 function convert_csv_to_xml(){
   var text = document.getElementById('phonebook_csv').value;
   var out = ''; var person; logError=[];
@@ -629,8 +647,7 @@ function convert_csv_to_xml(){
     var email = '';
     var entrys = [];
     //if(row==0 && phone.search(/[0-9][0-9]/)==-1)continue; //ignore headline  //obsolute: with sort the headline is on other position. and will be dealtet before
-    person = person.replace(/^\s+|\s+$/g,''); //trim spaces
-    person = person.replace(/&(?!amp;)/g,'&amp;'); //replace this character, otherwise import in fritzbox not possible
+    person = sanitize_personname(person,true);
     person = myTrimQuotes(person);
     var start = 1;
     if(forceSplitAndJumpOverEntrys>=0){ start=forceSplitAndJumpOverEntrys; forceSplitAndJumpOverEntrys=-1;}
@@ -1011,11 +1028,13 @@ function show_advanced_view(state){
    show_advanced_view__state = true;
    document.getElementById("show_advanced_view_link_wrapper").style.display='none';
    document.getElementById("show_advanced_view_link_link_close").style.display='block';
+   document.getElementById("file-input_reset").style.display='';
  }
  if(state=='hide'){
    show_advanced_view__state = false;
    document.getElementById("show_advanced_view_link_wrapper").style.display='';
    document.getElementById("show_advanced_view_link_link_close").style.display='none';
+   if(document.getElementById('file-input_auto-detect').value!='')document.getElementById('file-input_reset').style.display='block';
  }
 }
 
@@ -1136,7 +1155,7 @@ if(language.substring(0,2)=='de'){
  var e = document.getElementsByClassName('de');
  for(i=0;i<e.length;i++){
   e[i].style.display='inline-block';
-  if(e[i].style.tagName=="h1") e[i].style.display='block';
+  if(e[i].tagName=="h1") e[i].style.display='block';
  }
  var e = document.getElementsByClassName('en');
  for(i=0;i<e.length;i++){
