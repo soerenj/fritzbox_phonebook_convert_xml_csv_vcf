@@ -118,6 +118,56 @@
  <input type="button" value="Download" title="Download one file" onclick="download_one_file_ask()" />   &nbsp; 
  <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;  
 </div>
+<br/>
+<div id="select_file_xml_csv" class="advanced_view">
+<br><br>
+<label for="phonebook_csv">From .CSV File:</label> <input type="button" value="convert: ⇧ csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  <br>
+<textarea id="phonebook_csv" autocomplete="off">name, phone
+"Person C", "080123456789"
+"Person C", "0801234567890978768"
+"Person C", "01769999999"
+"Person D", "+49176987654321", "+498091239856789"
+"Person E", "004949176222222", "mobile", "", "test@example.com"
+"Person E", "+4911111", "work", "1", "test@example.com"
+"Person E", "00494933333", "home", "", "test@example.com"
+</textarea>
+<br>
+</div>
+
+<div id="select_file_vcf_div" class="advanced_view">
+<label for="phonebook_vcf">From .VCF File:</label> <input type="button" value="convert: ⇧ vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  <br>
+<textarea id="phonebook_vcf" autocomplete="off">BEGIN:VCARD
+VERSION:4.0
+N:Person E
+FN:Person E
+TEL;TYPE=WORK;VOICE:090123456789
+END:VCARD
+BEGIN:VCARD
+VERSION:2.1
+N:Person=20F
+FN:Person=20F
+TEL;VOICE:+4990987654321
+NOTE:importantContact(fritzbox)
+END:VCARD
+
+</textarea>
+</div>
+
+<p id="show_advanced_view_link_link_close" style="display:none">
+<a href="#" onclick="show_advanced_view('hide');return false">
+    <span lang="en" class="en">close text source window</span>
+    <span lang="de" class="de">schließe Text-Fenster</span>
+</a>
+</p>
+<p id="show_advanced_view_link_wrapper">
+  <a href="#" onclick="show_advanced_view('show');return false">
+    <span lang="en" class="en">show text source window</span>
+    <span lang="de" class="de">Text-Fenster anzeigen </span>
+  </a>
+</p>
+
+<textarea id="error_logs" style="display:none" class=""></textarea>
+
 <div>
  <details>
   <summary>
@@ -239,53 +289,6 @@
  </details>
  
 </div>
-<p id="show_advanced_view_link_link_close" style="display:none">
-<a href="#" onclick="show_advanced_view('hide');return false">
-    <span lang="en" class="en">close text source window</span>
-    <span lang="de" class="de">schließe Text-Fenster</span>
-</a>
-</p>
-<p id="show_advanced_view_link_wrapper">
-  <a href="#" onclick="show_advanced_view('show');return false">
-    <span lang="en" class="en">show text source window</span>
-    <span lang="de" class="de">Text-Fenster anzeigen </span>
-  </a>
-</p>
-<div id="select_file_xml_csv" class="advanced_view">
-<br><br>
-<label for="phonebook_csv">From .CSV File:</label> <input type="button" value="convert: ⇧ csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  <br>
-<textarea id="phonebook_csv" autocomplete="off">name, phone
-"Person C", "080123456789"
-"Person C", "0801234567890978768"
-"Person C", "01769999999"
-"Person D", "+49176987654321", "+498091239856789"
-"Person E", "004949176222222", "mobile", "", "test@example.com"
-"Person E", "+4911111", "work", "1", "test@example.com"
-"Person E", "00494933333", "home", "", "test@example.com"
-</textarea>
-<br>
-</div>
-
-<div id="select_file_vcf_div" class="advanced_view">
-<label for="phonebook_vcf">From .VCF File:</label> <input type="button" value="convert: ⇧ vcf to xml" onclick="convert_vcf_to_xml()" />   &nbsp;  <br>
-<textarea id="phonebook_vcf" autocomplete="off">BEGIN:VCARD
-VERSION:4.0
-N:Person E
-FN:Person E
-TEL;TYPE=WORK;VOICE:090123456789
-END:VCARD
-BEGIN:VCARD
-VERSION:2.1
-N:Person=20F
-FN:Person=20F
-TEL;VOICE:+4990987654321
-NOTE:importantContact(fritzbox)
-END:VCARD
-
-</textarea>
-</div>
-
-<textarea id="error_logs" style="display:none" class=""></textarea>
 
 <input type="button" id="file-input_reset" style="display:none;margin-top:22pt" value="reset" onclick="reset_to_default()" />
 
@@ -1069,7 +1072,7 @@ function show_advanced_view(state){
    show_advanced_view__state = true;
    document.getElementById("show_advanced_view_link_wrapper").style.display='none';
    document.getElementById("show_advanced_view_link_link_close").style.display='block';
-   document.getElementById("file-input_reset").style.display='';
+   document.getElementById("file-input_reset").style.display='none';
  }
  if(state=='hide'){
    show_advanced_view__state = false;
@@ -1182,7 +1185,7 @@ Option B (alternativ) :
  <h3>Description:</h3>
 
 This is a Web-App, or call it online convert-Service .
-
+<br />
 Possible to convert:
 <ul>
 <li> Fritzbox <em>.xml</em> to <em>.csv</em></li>
@@ -1200,8 +1203,9 @@ Other functions:
  
 </span>
 <span lang="de" class="de">
+ <h3>Beschreibung:</h3>
 Dies ist eine Web-App, oder nenne es online konvertier Dienst.
-
+<br />
 Möglich umzuwandeln ist:
 <ul>
 <li> Fritzbox <em>.xml</em> zu <em>.csv</em></li>
@@ -1213,7 +1217,7 @@ Möglich umzuwandeln ist:
 
 Weitere Funktionen:
 <ul>
-<li> Mehrere Dateien auswählen und vorher zusammenfügen: .csv und .vcf Dateien können vorher zusammengefügt werden. (beim Hochladen <kbd>STRG</kdb> gedrückt halten)</li>
+<li> Mehrere Dateien auswählen und vorher zusammenfügen: .csv und .vcf Dateien können vorher zusammengefügt werden. (beim Hochladen <kbd>STRG</kbd> gedrückt halten)</li>
 <li> öffne die .csv Dateien in Ihren Office Programm (z.B. LibreOffice).</li>
 <li> Es läuft direkt im Browser.  ( Es ist keine Installtion nötig. Kein Server. Keine Cloud. Nur lokal ausgeführte Programmcode. )</li>
 </ul>
@@ -1238,9 +1242,11 @@ git ("github"): <a href="https://github.com/soerenj/fritzbox_phonebook_convert_x
 </details>
 
 </footer>
+<br/>
 
 <script language="JavaScript">
-//replace text with german translation
+
+//translation text replace
 var language = window.navigator.userLanguage || window.navigator.language;
 var all_languages=Array('en','de');
 if(window.location.hash.length>2 && all_languages.indexOf( window.location.hash.substring(1) )>=0) changeLanguage( window.location.hash.substring(1) );
@@ -1267,10 +1273,9 @@ function changeLanguage(newSetLang){
   else if(document.documentElement.lang!='') document.documentElement.lang='';
 }
 
+//Help Privacy & Help Privacy show Offline state in 
 if(window.location.hash=="#sec_adv_en")document.getElementById("sec_adv_en").open="open";
 if(window.location.hash=="#sec_adv_de")document.getElementById("sec_adv_de").open="open";
-
-//show Offline state in Help Privacy
 startOnlineOfflineStateReport_done=false;
 function startOnlineOfflineStateReport(){
     if(window.navigator.onLine!=undefined && !startOnlineOfflineStateReport_done){
@@ -1289,6 +1294,11 @@ function offline_note(){
     }
 }
 if(window.navigator.onLine!=undefined && window.navigator.onLine=='offline') offline_note();
+
 if(new FileReader==undefined)alert("Sorry, your Internet-Browser is too old. You can not use this Service :-( "); //just for old Browsers before Year ~ 2010/2013
+if (typeof document.querySelector !== "undefined") { //version-info in help
+  var jsonld = JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText);
+  if (typeof jsonld !== "undefined" && jsonld.softwareVersion !== "undefined" && jsonld.dateModified !== "undefined" ) document.getElementById('version_out').innerText = " v"+jsonld.softwareVersion+" "+jsonld.dateModified;
+}
 </script>
 </body></html>

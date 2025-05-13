@@ -1,5 +1,5 @@
-# Converts Phonebook between Fritzbox-xml &lt;=> csv/vcf 
-online convert-Service.
+# Phonebook convert between Fritzbox-xml &lt;=> csv/vcf 
+<!-- *In language english ( 🇬🇧 :gb: ) :* -->
 
 This is a Web-App, or call it online convert-Service .
 
@@ -23,7 +23,7 @@ Other functions:
 -----------------------------------
 
 # Telefonbuch konvertieren zwischen Fritzbox-xml &lt;=> csv/vcf 
-*In deutscher Sprache / in language german ( 🇩🇪 :de: ) :*
+*In deutscher Sprache / In language german ( 🇩🇪 :de: ) :*
 
 Dies ist eine Web-App, oder nenne es online konvertier Dienst.
 
@@ -32,11 +32,11 @@ Dies ist eine Web-App, oder nenne es online konvertier Dienst.
 
 Möglich umzuwandeln ist:
 
-* Fritzbox **.xml** zu **.csv**
-* **.csv** zu Fritzbox **.xml**
+* Fritzbox *.xml* zu *.csv*
+* *.csv* zu Fritzbox *.xml*
 
-* Fritzbox **.xml** zu **.vcf** / Vcard
-* **.vcf** / Vcard zu Fritzbox **.xml**
+* Fritzbox *.xml* zu *.vcf* / Vcard
+* *.vcf* / Vcard zu Fritzbox *.xml*
 
 
 Weitere Funktionen:
@@ -50,7 +50,7 @@ Weitere Funktionen:
 
 # Other Tools:
 
-You are maybe also interested in (external Links):
+You are maybe interested in (external Links):
 
 * Online Web-Service: .xml to .vcf (=export) <https://blog.rillke.com/fritzXML2vcard/> [Sourcecode](https://github.com/Rillke/fritzXML2vcard?tab=readme-ov-file) This Tool can export to multiple .vcf files (which my tool can't do at the moment)
 * Computer-Programm: supports lots of file-formats (=import/export) <https://github.com/Rillke/Contact-Conversion-Wizard> (based on <https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/> )
