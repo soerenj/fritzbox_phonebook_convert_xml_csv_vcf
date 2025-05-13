@@ -108,6 +108,11 @@
  <span lang="en" class="en">Ready. Check now your download folder</span>
  <span lang="de" class="de">Fertig. Überprüfen Sie Ihren Download-Ordner</span>
 </div>
+<div id="ready_note_export_to_vcf_multivcard" style="display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
+ <span lang="en" class="en">Please Note: This is a Multi-Vcard file. It have all Contacts in one File. Some Programs does not support this. In that case please try this another tool: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a> or use the other file-Format (.csv) (if possible).</span>
+ <span lang="de" class="de">Bitte beachten Sie: Die ist eine Multi-Vcard Datei. Sie enthält alle Kontakte in einer Datei. Manche Programme unterstützen dies nicht. In dem Fall verwenden Sie bitte ein anderen Tool. z.B.: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a> oder verwenden das .csv-Format (wenn möglich).</span>
+ 
+</div>
 
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <br>
@@ -582,6 +587,8 @@ function convert_vcf_to_xml(){
                 }
             } else type=typeRow;
             typeOut='type="'+type.toLowerCase()+'"';
+        }else{       
+          if( document.getElementById("setting__2xml__phonenumber_edit_detect_mobile__active").checked && is_this_a_mobile_phonenumber(phone))     typeOut='type="mobile"';
         }
         }
         /*else if(str.substr(0,4)=='TEL;'){
@@ -803,6 +810,8 @@ function downloadAction(filename, text) {
   if(counter_convert%2){ document.getElementById('ready').style.border="solid 1pt black"; document.getElementById('ready').style.background='#fff'; }
   else { document.getElementById('ready').style.border=""; document.getElementById('ready').style.background='#aaa';}
   //window.setTimeout("document.getElementById('ready').style.display='none';",10000);
+  if(uploaded_file_convert_to=='vcf') document.getElementById('ready_note_export_to_vcf_multivcard').style.display='block';
+  else document.getElementById('ready_note_export_to_vcf_multivcard').style.display='none';
 }
 
 function myTrimQuotes(aa){
