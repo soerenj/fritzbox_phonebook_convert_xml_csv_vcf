@@ -37,18 +37,18 @@
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
 	"dateModified": "2025-05-14",
-	"softwareVersion": "0.26",
+	"softwareVersion": "0.261",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
 </script>
 <style>  input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} @media (min-height:800pt){ textarea{ height:200pt;} } details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
-.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } input#setting__xml2__phonenumber_edit_your_countrycode:invalid {border: medium solid red; } .onlytouchscreen{ display:none; } @media (pointer: coarse){.onlytouchscreen{ display:inline; } }</style>
+.drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } input#setting__xml2__phonenumber_edit_your_countrycode:invalid, input#setting__xml2__phonenumber_edit_your_areacode:invalid {border: medium solid red; } .onlytouchscreen{ display:none; } @media (pointer: coarse){.onlytouchscreen{ display:inline; } }</style>
 </head>
 <body>
 <!--
  /*
- * version: 0.26
+ * version: 0.261
  * date: 2025-05-14
  *
  * Licence 
@@ -224,11 +224,22 @@ END:VCARD
     <p style="margin: 0pt;">
     <input type="checkbox" id="setting__xml2__phonenumber_edit_your_countrycode__active" autocomplete="off" />
     <label for="setting__xml2__phonenumber_edit_your_countrycode__active">
-     <span lang="en" class="en">Add your Telephone country codes: <span style="color:#999">(if missing)</span></span>
-     <span lang="de" class="de">Ihre Land-Vorwahl hinzufügen: <span style="color:#999">(wenn sie fehlt)</span></span>
+     <span lang="en" class="en">Add your Telephone country codes:</span>
+     <span lang="de" class="de">Ihre Land-Vorwahl hinzufügen:</span>
     </label><!-- v(([0-9][0-9])|(\+)) -->
     <input type="text" size="8" pattern="((00)|\+)[0-9][0-9]*?" name="setting__xml2__phonenumber_edit_your_countrycode" id="setting__xml2__phonenumber_edit_your_countrycode" autocomplete="off" />
-    <span style="color:#999">E.g. +49 or 0049 for germany.</span>
+    <span lang="en" class="en" style="color:#999">(if missing) Example: +49 or 0049 for germany.</span>
+    <span lang="de" class="de" style="color:#999">(wenn sie fehlt) Beispiel: +49 oder 0049 für Deuschland.</span>
+    </p>
+    <p style="margin: 0pt;">
+    <input type="checkbox" id="setting__xml2__phonenumber_edit_your_areacode__active" autocomplete="off" />
+    <label for="setting__xml2__phonenumber_edit_your_areacode__active">
+     <span lang="en" class="en">Add your local Area (City/Town) code:</span>
+     <span lang="de" class="de">Ihre lokale Stadt/Orts-Vorwahl hinzufügen:</span>
+    </label><!-- v(([0-9][0-9])|(\+)) -->
+    <input type="text" size="8" pattern="0[1-9][0-9].*?" name="setting__xml2__phonenumber_edit_your_areacode" id="setting__xml2__phonenumber_edit_your_areacode" autocomplete="off" />
+    <span lang="en" class="en" style="color:#999">(if missing) Example: 030 for City Berlin in Germany.</span>
+    <span lang="de" class="de" style="color:#999">(wenn sie fehlt) Beispiel: 030 für die Stadt Berlin.</span>
     </p>
   </fieldset>
   <fieldset ><legend>xml to csv (=export from fritzbox)</legend>
@@ -466,8 +477,11 @@ function convert_to_csv(){
    if(null==telephony[j].firstChild || undefined==telephony[j].firstChild.nodeValue || null==telephony[j].firstChild.nodeValue) { logError.push(person); if(telephony[j].firstChild==null)logError.push('empty number:'); logError.push(telephony[j]);  continue; }
    phone = telephony[j].firstChild.nodeValue;
    phone = myTrimQuotes(phone);
+   var areacode__pre_phone=''; if(document.getElementById('setting__xml2__phonenumber_edit_your_areacode__active').checked && !document.getElementById('setting__xml2__phonenumber_edit_your_areacode').validity.patternMismatch ) areacode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_areacode').value;
+   if(areacode__pre_phone.substring(0,1)=="0")areacode__pre_phone=areacode__pre_phone.substring(1);
+   if(phone.substring(0,1)!="0" && areacode__pre_phone!='' && phone.match(/[2-9][0-9][0-9].*?/).length>0)phone="0"+areacode__pre_phone+phone;
    var countrycode__pre_phone=''; if(document.getElementById('setting__xml2__phonenumber_edit_your_countrycode__active').checked && !document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').validity.patternMismatch ) countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
-   if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,1)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
+   if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,2)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
    if(counter_num>0  && setting__xml2csv__just_one_phonenumer_each>1) out += "\n";
    if(counter_num==0 || setting__xml2csv__just_one_phonenumer_each>1) out += '"'+myTrimQuotes(person).replace('"','\\"')+'"';
    out += ", "+ '"'+phone.replace('"','\\"')+'"';
