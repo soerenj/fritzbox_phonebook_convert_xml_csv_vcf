@@ -36,8 +36,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-05-13",
-	"softwareVersion": "0.251",
+	"dateModified": "2025-05-14",
+	"softwareVersion": "0.26",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
@@ -48,8 +48,8 @@
 <body>
 <!--
  /*
- * version: 0.251
- * date: 2025-05-13
+ * version: 0.26
+ * date: 2025-05-14
  *
  * Licence 
  *
@@ -104,22 +104,24 @@
 </textarea>
 </div>
 
-<div id="ready" style="display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
+<div id="ready" style="display:none;margin-top:5pt;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
  <span lang="en" class="en">Ready. Check now your download folder</span>
  <span lang="de" class="de">Fertig. Überprüfen Sie Ihren Download-Ordner</span>
 </div>
-<div id="ready_note_export_to_vcf_multivcard" style="display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
- <span lang="en" class="en">Please Note: This is a Multi-Vcard file. It have all Contacts in one File. Some Programs does not support this. In that case please try this another tool: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a> or use the other file-Format (.csv) (if possible).</span>
- <span lang="de" class="de">Bitte beachten Sie: Die ist eine Multi-Vcard Datei. Sie enthält alle Kontakte in einer Datei. Manche Programme unterstützen dies nicht. In dem Fall verwenden Sie bitte ein anderen Tool. z.B.: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a> oder verwenden das .csv-Format (wenn möglich).</span>
- 
+<div id="ready_note_export_to_vcf_multivcard" style="margin-top:5pt;display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
+ <span lang="en" class="en">Please Note: This is a Multi-Vcard file. It have all Contacts in one File. Some Programs does not support this. In that case please try this another tool: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a></span>
+ <span lang="de" class="de">Bitte beachten Sie: Die ist eine Multi-Vcard Datei. Sie enthält alle Kontakte in einer Datei. Manche Programme unterstützen dies nicht. In dem Fall verwenden Sie bitte ein anderen Tool. z.B.: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a></span>
+</div>
+<div id="ready_note_export_to_vcf_allversions" style="margin-top:5pt;display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
+ <span lang="en" class="en">Please Note: There was three files created. There have different vcard Version (v2.1 , v3.0 , v4.0). Which file you need may depends on your target.</span>
+ <span lang="de" class="de">Bitte beachten Sie: Es wurden drei Dateien erstellt. Es sind verschiedene vcard Versionen (v2.1 , v3.0 , v4.0). Welche Datei Sie benötigen, kommt auf ihr Ziel-Programm an.</span>
 </div>
 
 <!-- ↓↑ ⇓⇑ ⇩⇧ ⟱ ⟰ ⬆⬇ -->
 <br>
 <div class="advanced_view">
  <input type="button" value="convert: ⬇ xml to csv" onclick="convert_to_csv()" />  &nbsp;
- <input type="button" value="convert: ⬇ xml to vcf (vcard v2.1)" onclick="convert_to_vcf(2.1)" />  &nbsp;
- <input type="button" value="convert: ⬇ xml to vcf (vcard v4.0)" onclick="convert_to_vcf(4.0)" />  &nbsp;
+ <input type="button" value="convert: ⬇ xml to vcf (vcard)" onclick="convert_to_vcf()" />  &nbsp;
  <input type="button" value="Download" title="Download one file" onclick="download_one_file_ask()" />   &nbsp; 
  <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;  
 </div>
@@ -197,7 +199,7 @@ END:VCARD
       <span lang="de" class="de">Automatisch Datei-Type feststellen</span>
     </label> <span style="color:#999">(detected by file-extension .xml / .csv / .vcf /.vcard /or MIME-Type ; Otherwise you will be ask)</span>
   </fieldset>
-  <fieldset ><legend>Convert * to xml (=import to fritzbox)</legend>
+  <fieldset ><legend>* to xml (=import to fritzbox)</legend>
     <!--<span lang="en" class="en">Phone-Number edits:</span>
     <span lang="de" class="de">Telefon-Nummer bearbeiten:</span>-->
     <p style="margin: 0pt;">
@@ -216,7 +218,7 @@ END:VCARD
     </select>
     </p>
   </fieldset>
-  <fieldset ><legend>Convert xml to * (=export from fritzbox)</legend>
+  <fieldset ><legend>xml to * (=export from fritzbox)</legend>
     <!--<span lang="en" class="en">Phone-Number edits:</span>
     <span lang="de" class="de">Telefon-Nummer bearbeiten:</span>-->
     <p style="margin: 0pt;">
@@ -229,7 +231,7 @@ END:VCARD
     <span style="color:#999">E.g. +49 or 0049 for germany.</span>
     </p>
   </fieldset>
-  <fieldset ><legend>Convert xml to csv (=export from fritzbox)</legend>
+  <fieldset ><legend>xml to csv (=export from fritzbox)</legend>
     <span lang="en" class="en">How to handle multiple phone numbers per each Person entry:</span>
     <span lang="de" class="de">Wie mit meheren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
     <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__single_row" name="setting__xml2csv__just_one_phonenumer_each_text" value="1" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__single_row">
@@ -246,7 +248,7 @@ END:VCARD
     <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234, mobile, 1, mail@example.com <br/ >Person A, +4940-567, home</div>
     <!--<s><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't restore the addational information ( <i>type (mobile/home) and Priority(=important Person)</i>).</span></s>--></label></p>
   </fieldset>
-  <fieldset ><legend>Convert csv to xml (=import to fritzbox)</legend>
+  <fieldset ><legend>csv to xml (=import to fritzbox)</legend>
     <span lang="en" class="en">How to handle multiple phone numbers per each Person entry:</span>
     <span lang="de" class="de">Wie mit meheren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
     <p style="margin: 0pt;"><input type="checkbox" autocomplete="off" id="setting__csv2xml__merge_samename_checkbox" name="setting__csv2xml__merge_samename" value="1" autocomplete="off" checked onChange="if(this.checked==true)setting__csv2xml__merge_samename=1;else setting__csv2xml__merge_samename=0;" />
@@ -276,8 +278,68 @@ END:VCARD
      <span lang="en" class="en">Example: on device <em>Fritzbox 7390</em>: That device allow normally maximal 9 numbers per each entry. But it looks like, you can also import entry with more numbers. But, then you will get some problem or error: you can't delete the last phone numbers (>9), but they are still editable. ( Maybe other problems possible.) My advise: Bedder set split to 9 - or -  test yourself how many phone numbers you can add (in Web Interface in Browser fritz.box).</span>
     <span lang="de" class="de">Beispiel: beim Gerät <em>Fritzbox 7390</em>: Bei diesen Gerät sind normalerweise maximal 9 Telefon-Nummer in jeden Eintrag möglich. Es ist scheinbar trotzdem möglich Telefonbücher mit mehr Telefon-Nummern je Eintrag, zu importieren. Es kommt dann aber zu Problemen oder Fehlern: Die letzten Telefon-Nummern (>9) sind dann nicht mehr löschbar, aber noch bearbeitet-bar. (Möglicherweise andere Probleme möglich.) Meine Empfehlung: Besser bei 9 Telefon-Nummern aufteilen - oder - selber testen wie viele Telefon-Nummern je Eintrag ihre Gerät erlaubt (im der Benutzeroberfläche ( Web-Interface auf fritz.box ) )</span>
     </span></div></p>
-  </fieldset> 
-
+  </fieldset>
+  <fieldset ><legend>xml to .vcf (=export from fritzbox)</legend>
+    <p style="margin: 0pt;">
+    <script language="javascript">
+    function settings_ui_toggleVcfAllV(show){
+      document.getElementById('set_vcf_only_for2.1').style.display='block';
+      if(show){
+        document.getElementById('setting__xml2vcf__version__container').style.display='none';
+        if(show_advanced_view__state) var e=document.getElementsByClassName('no_for_textfields');
+      }else{
+        document.getElementById('setting__xml2vcf__version__container').style.display='block'; if(document.getElementById('setting__xml2vcf__version').value!='2.1') document.getElementById('set_vcf_only_for2.1').style.display='none';
+      }
+    }
+    </script>
+    <input type="checkbox" id="setting__xml2vcf__allversions" autocomplete="off" checked onChange="settings_ui_toggleVcfAllV(this.checked)"/>
+    <label for="setting__xml2vcf__allversions">
+      <span lang="en" class="en">Convert to all VCard-Versions at the same time (=you get three files)<!-- <span style="color:#999">(only for uploaded files. That means: not for the Textarea / <em>text source window<em> view)</span>--></span>
+      <span lang="de" class="de">Konvertiere in alle VCard-Versionen gleichzeitig (=Sie erhalten drei verschiedene Dateien)<!--<span style="color:#999">(nur für hochgeladene Dateien. Also nicht für die Textarea / <em>Text-Fenster</em> Ansicht)</span>--></span>
+    </label><br/>
+    <span id="setting__xml2vcf__version__container" style="display:none;">
+    <label for="setting__xml2vcf__version">VCard Version:</label>
+    <select name="setting__xml2vcf__version" id="setting__xml2vcf__version" autocomplete="off" onChange="if(this.value=='2.1')document.getElementById('set_vcf_only_for2.1').style.display='block';else document.getElementById('set_vcf_only_for2.1').style.display='none';">
+      <option value="2.1" selected>v2.1</option>
+      <option value="3.0">v3.0</option>
+      <option value="4.0">v4.0</option>
+    </select>
+    </span>
+    <fieldset id="set_vcf_only_for2.1" style="display:block">
+    <legend>
+      <span lang="en" class="en">Improve data of file-version v2.1: (no changes needed here)</span>
+      <span lang="de" class="de">Verbessere die Daten von Datei-Version v2.1: (keine Änderungen nötig)</span>
+    </legend>
+    <input type="checkbox" id="setting__xml2vcf__uri_encode" autocomplete="off" checked />
+    <label for="setting__xml2vcf__uri_encode">
+      <span lang="en" class="en">URI-Encoding for name, email. (maybe helpfull for Special Characters, <em>German: Umlauten</em>, empty spaces)</span>
+      <span lang="de" class="de">URI-Encoding für Name, Email. (hilf evtl. bei Sonderzeichen, Umlauten, Leerzeichen)</span>
+    </label><br/>
+    <input type="checkbox" id="setting__xml2vcf__add_charset" autocomplete="off" checked />
+    <label for="setting__xml2vcf__add_charset">
+      <span lang="en" class="en">Add to String charset:UTF-8</span>
+      <span lang="de" class="de">Füge den Zeichensatz (EN:"Charset") zum Text hinzu</span>
+    </label>
+    </fieldset>
+    <span lang="en" class="en">Export addational data: </span>
+    <span lang="de" class="de">Exportiere diese weiteren Felder: </span>
+    <input type="checkbox" id="setting__xml2vcf__also_phonetype" checked autocomplete="off" />
+    <label for="setting__xml2vcf__also_phonetype">
+      <span lang="en" class="en">phone-type (mobile,work,...)</span>
+      <span lang="de" class="de">Telefon-Type (mobile,work,...)</span>
+    </label> &nbsp;
+    <input type="checkbox" id="setting__xml2vcf__also_prio" checked autocomplete="off" />
+    <label for="setting__xml2vcf__also_prio">
+      <span lang="en" class="en">marked Note for important Person (=just a note)</span>
+      <span lang="de" class="de">markierung als wichtige Person(nur eine notiz)</span>
+    </label> &nbsp;
+    <input type="checkbox" id="setting__xml2vcf__also_email" checked autocomplete="off" />
+    <label for="setting__xml2vcf__also_prio">
+      <span lang="en" class="en">Email</span>
+      <span lang="de" class="de">Email</span>
+    </label>
+    </p>
+  </fieldset>
   <br />
   <label for="new_phonebook_name">
     <span lang="en" class="en">Name of new Phonebook-Name: </span>
@@ -438,7 +500,26 @@ function show_errors(logError){
 
 }
 
-function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
+function convert_to_vcf__maybe_all(){ //=vcard
+ var selfcall=true;
+ if(document.getElementById('setting__xml2vcf__allversions').checked){
+     document.getElementById('setting__xml2vcf__version').value="4.0";
+     prepare_and_download( convert_to_vcf() );
+     document.getElementById('setting__xml2vcf__version').value="3.0";
+     prepare_and_download( convert_to_vcf() );
+     document.getElementById('setting__xml2vcf__version').value="2.1";
+     document.getElementById('set_vcf_only_for2.1').style.display='block';
+     return convert_to_vcf();
+ }else convert_to_vcf();
+}
+
+function convert_to_vcf(){ //=vcard
+ var v = document.getElementById('setting__xml2vcf__version').value; //v=Version 2.1|3.0|4.0
+ var uri_encode = document.getElementById('setting__xml2vcf__uri_encode').checked;
+ var add_charset = document.getElementById('setting__xml2vcf__add_charset').checked;
+ var export_also_phonetype = document.getElementById('setting__xml2vcf__also_phonetype').checked;
+ var export_also_email = document.getElementById('setting__xml2vcf__also_email').checked;
+ var export_also_prio = document.getElementById('setting__xml2vcf__also_prio').checked;
  var text = document.getElementById('phonebook_xml').value;
  parser = new DOMParser();
  xmlDoc = parser.parseFromString(text, "text/xml");
@@ -457,15 +538,17 @@ function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
   ){ logError.push(contacts[i].innerHTML); continue; }
   
   out += 'BEGIN:VCARD\n';
-  if(v==2.1)out += 'VERSION:2.1\n';
-  if(v>2.1) out += 'VERSION:4.0\n';
+  if(v=="2.1")out += 'VERSION:2.1\n';
+  if(v=="3.0") out += 'VERSION:3.0\n';
+  if(v=="4.0") out += 'VERSION:4.0\n';
   contact = contacts[i];
   person  = contact.getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue;
   telephony = contact.getElementsByTagName("telephony")[0].getElementsByTagName("number");
   
   //name
   tmp = person.replace('\n','');
-  if(v==2.1)tmp = encodeURI(tmp).replace(/%/g,'=');
+  if(uri_encode  && v=="2.1")tmp = encodeURI(tmp).replace(/%/g,'=');
+  if(add_charset && v=="2.1")tmp = ";CHARSET=UTF-8:"+tmp;
   out += 'N:' +tmp+'\n';
   out += 'FN:'+tmp+'\n';
   
@@ -476,21 +559,25 @@ function convert_to_vcf(v=2.1){ //=vcard (v=Version 2.1|4.0)
    phone = myTrimQuotes(telephony[j].firstChild.nodeValue);
    var countrycode__pre_phone=''; if(document.getElementById('setting__xml2__phonenumber_edit_your_countrycode__active').checked && !document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').validity.patternMismatch ) countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
    if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,1)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
-   if(v==2.1)if(telephony[j].getAttribute('type')!=undefined) out += ''+telephony[j].getAttribute('type').toUpperCase()+';';
-   if(v>2.1) if(telephony[j].getAttribute('type')!=undefined) out += 'TYPE='+telephony[j].getAttribute('type').toUpperCase()+';';
+   //if(v=="2.1" )
+   if( export_also_phonetype && telephony[j].getAttribute('type')!=undefined) out +=      ''+telephony[j].getAttribute('type').toUpperCase()+';';
+   //if(v!="2.1" && export_also_phonetype && telephony[j].getAttribute('type')!=undefined) out += 'TYPE='+telephony[j].getAttribute('type').toUpperCase()+';';
    out += "VOICE:"+phone+'\n';
   }
-  if(telephony.length>0 && telephony[0].getAttribute('prio')!='')out += "NOTE:importantContact(fritzbox)\n";
+  if(export_also_prio && telephony.length>0 && telephony[0].getAttribute('prio')!='')out += "NOTE:importantContact(fritzbox)\n";
   
   //email
+  if(export_also_email){
   services = Array();
   if(undefined==contact.getElementsByTagName("services")) { logError.push(services[j]); continue; }
   if(contact.getElementsByTagName("services").length>0)services = contact.getElementsByTagName("services")[0].getElementsByTagName("email");
   for(j=0;j<services.length;j++){
    if(undefined==services[j].firstChild.nodeValue) { logError.push(services[j]); continue; }
    tmp = services[j].firstChild.nodeValue;
-   if(v==2.1)tmp = encodeURI(tmp).replace(/%/g,'=');
+   if(uri_encode  && v==2.1)tmp = encodeURI(tmp).replace(/%/g,'=');
+   if(add_charset && v==2.1)tmp = ";CHARSET=UTF-8:"+tmp;
    out += "EMAIL:"+tmp+'\n';
+  }
   }
   
   out += "END:VCARD\n";
@@ -771,6 +858,7 @@ function prepare_and_download(text) {
   }
   if(uploaded_file_convert_to=='csv' || uploaded_file_convert_to=='vcf'){
    if(uploaded_filename!='')filename = uploaded_filename.replace(/(\.)(xml)$/i,'_$2');
+   if(document.getElementById('setting__xml2vcf__allversions').checked) filename += '_v'+document.getElementById('setting__xml2vcf__version').value.replace(/\./,'-')+'_';
    filename += "_converted_."+uploaded_file_convert_to;
   }
   counter_convert++;
@@ -810,8 +898,13 @@ function downloadAction(filename, text) {
   if(counter_convert%2){ document.getElementById('ready').style.border="solid 1pt black"; document.getElementById('ready').style.background='#fff'; }
   else { document.getElementById('ready').style.border=""; document.getElementById('ready').style.background='#aaa';}
   //window.setTimeout("document.getElementById('ready').style.display='none';",10000);
-  if(uploaded_file_convert_to=='vcf') document.getElementById('ready_note_export_to_vcf_multivcard').style.display='block';
-  else document.getElementById('ready_note_export_to_vcf_multivcard').style.display='none';
+  document.getElementById('ready_note_export_to_vcf_multivcard').style.display='none';
+  document.getElementById('ready_note_export_to_vcf_allversions').style.display='none';
+    if(uploaded_file_convert_to=='vcf'){
+      document.getElementById('ready_note_export_to_vcf_multivcard').style.display='block';
+      if(document.getElementById('setting__xml2vcf__allversions').checked)
+        document.getElementById('ready_note_export_to_vcf_allversions').style.display='block';
+  }
 }
 
 function myTrimQuotes(aa){
@@ -940,11 +1033,8 @@ function get_filetype_by_ext(filename){
 }
 
 function ask__xml_convert_to(text) {
-  if( confirm("convert to .csv?") ) { uploaded_file_convert_to='csv'; return convert_to_csv(text); }
-  else if( confirm("convert to .vcf? (vcard)") ){
-    if( confirm("convert to .vcf? (version 2.1?)") ) { uploaded_file_convert_to='vcf'; return convert_to_vcf(text, 2.1); }
-    else if( confirm("convert to .vcf? (version 4.0?)") ) { uploaded_file_convert_to='cvf'; return convert_to_vcf(text, 4.0); }
-  }
+  if( confirm("convert to .csv?") ) { uploaded_file_convert_to='csv'; return convert_to_csv(); }
+  else if( confirm("convert to .vcf? (vcard)") ) { uploaded_file_convert_to='vcf'; return convert_to_vcf__maybe_all(); }
 }
 
 function f_merge__appendfile(format,origin,add){
