@@ -738,7 +738,7 @@ function convert_csv_to_xml(){
   var contacts = CSVToArray(text);
    
   //old:if(contacts.length>0 && contacts[0].length>1 && contacts[0][1].search(/[0-9][0-9]/)==-1)contacts[0]=""; //ignore headline (the frist line, and without any phonenumber)
-  if(contacts.length>0 && contacts[0].length>1 && is_maybe_headline(contacts[0])) contacts[0]="";
+  if(contacts.length>0 && contacts[0].length>1 && is_maybe_headline__object(contacts[0])) contacts[0]="";
 
   contacts.sort( function(a,b) { 
       if(a.length<=1)return false;   //empty lines
@@ -1051,7 +1051,7 @@ function f_merge__appendfile(format,origin,add){
   if(format=="csv"){
      if(origin.length==0) origin=add;
      else {       
-       if(is_maybe_headline(add))add=add.replace(/^([^(\r\n)|(\n\r)|\n|\r])*/,''); //delete 1st Line = normaly = Headline 
+       if(is_maybe_headline__fulltext(add))add=add.replace(/^([^(\r\n)|(\n\r)|\n|\r])*/,''); //delete 1st Line = normaly = Headline
        origin+=add;
      }
   }
@@ -1059,23 +1059,22 @@ function f_merge__appendfile(format,origin,add){
   return origin;
 }
 
-function is_maybe_headline(a){ //for .csv
+function is_maybe_headline__object(a){ //for .csv  //just a single line
   if( typeof a=='object'){
       if(myTrimQuotes( a[0] ).toLowerCase() =="name" )    return true;
       if(myTrimQuotes( a[1] ).toLowerCase() =="phone" )   return true;
-      if(myTrimQuotes( a[1] ).search(/[0-9][0-9]/) ==-1 ) return true; //ignore headline (the frist line, and without any phonenumber)
+      if(myTrimQuotes( a[1] ).search(/[0-9][0-9][0-9]/) ==-1 ) return true; //ignore headline (the frist line, and without any phonenumber)
   }
+  return false;
+}
+function is_maybe_headline__fulltext(a){ //for .csv  //alle lines in one string
   if( typeof a=='string'){
       var first_linebreak = a.search(/((\r\n)|(\n\r)|\n|\r])/);
       var first_line = a.substring(0,first_linebreak);
       if(first_line.length<5)return true;
-      var comma_1 = first_line.search(/,/);
-      var column1 = first_line.substring(0,comma_1);
-      if(myTrimQuotes( column1 ).toLowerCase() =="name" ) return true;
-      var comma_2 = first_line.search(/,/);
-      var column2 = first_line.substring(comma_1,comma_2);
-      if(myTrimQuotes( column2 ).toLowerCase() =="phone" ) return true;
-      if(myTrimQuotes( column2 ).search(/[0-9][0-9]/) ==-1 ) return true; //ignore headline (the frist line, and without any phonenumber)
+      var b = CSVToArray(first_line);
+      if(b[0].length<2)return false;
+      return is_maybe_headline__object(b[0]);
   }
   return false;
 }
@@ -1323,12 +1322,14 @@ Weitere Funktionen:
 </span>
  <h3>Alternative Services / Tools</h3>
  <ul>
-  <li>Online Web-Service:<br/>
+  <li>Online Web-Service: (local JavaScript inside Browser)<br/>
 convert .xml to .vcf (=export)<a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a> <a href="https://github.com/Rillke/fritzXML2vcard?tab=readme-ov-file">Sourcecode</a> This Tool can export to multiple .vcf files (which my tool can't do at the moment)</li>
   <li>Computer-Programm:<br/>
 supports lots of file-formats (=import/export)<a href="https://github.com/Rillke/Contact-Conversion-Wizard">https://github.com/Rillke/Contact-Conversion-Wizard</a> (based on <a href="https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/">https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/</a> )</li>
-  <li>Computer-Programm (Java):<br/>
+  <li>Computer-Programm (Java ; No GUI, just a Comand Line Tool):<br/>
    .vcf (vcard) or .csv to Fritzbox .xml (=import)<a href="https://github.com/berkholz/vcard2fritzXML">https://github.com/berkholz/vcard2fritzXML</a> </li>
+  <li>Computer-Programm (C++ ; for Windows und Linux):<br/>
+  csv , vcf , xml , vcard QR-Code für Android &nbsp; (=import/export)<a href="https://web.archive.org/web/20241205164750/http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html">https://web.archive.org/web/20241205164750/http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html</a>
   <li> ... lots of other... </li>
 </ul>
  <h3>Sourcecode</h3>

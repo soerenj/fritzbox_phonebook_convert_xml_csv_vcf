@@ -52,8 +52,9 @@ Weitere Funktionen:
 
 You are maybe interested in (external Links):
 
-* Online Web-Service: .xml to .vcf (=export) <https://blog.rillke.com/fritzXML2vcard/> [Sourcecode](https://github.com/Rillke/fritzXML2vcard?tab=readme-ov-file) This Tool can export to multiple .vcf files (which my tool can't do at the moment)
+* Online Web-Service (local JavaScript inside Browser): .xml to .vcf (=export) <https://blog.rillke.com/fritzXML2vcard/> [Sourcecode](https://github.com/Rillke/fritzXML2vcard?tab=readme-ov-file) This Tool can export to multiple .vcf files (which my tool can't do at the moment)
 * Computer-Programm: supports lots of file-formats (=import/export) <https://github.com/Rillke/Contact-Conversion-Wizard> (based on <https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/> )
-* Computer-Programm (Java):.vcf (vcard) or .csv to Fritzbox .xml (=import) <https://github.com/berkholz/vcard2fritzXML> 
+* Computer-Programm (Java ; No GUI, just a Comand Line Tool): .vcf (vcard) or .csv to Fritzbox .xml (=import) <https://github.com/berkholz/vcard2fritzXML>
+* Computer-Programm (C++ ; for Windows und Linux): csv , vcf , xml , vcard QR-Code für Android <https://web.archive.org/web/20241205164750/http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html>
 * ... lots of other... 
 
