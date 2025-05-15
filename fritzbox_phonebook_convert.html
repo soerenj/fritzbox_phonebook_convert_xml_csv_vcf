@@ -62,6 +62,7 @@
  * (at your option) any later version.
  */
   -->
+<header>
 <img src="img/icon_convert_formats.png" style="float:left;padding:6pt;" />
 <span style="float:right"><a href="#en" onClick="changeLanguage('en')" alt="en" hreflang="en" title="change language to english">&#127468&#127463</a> <a href="#de" onClick="changeLanguage('de')" hreflang="de" alt="de" title="wechsel die Sprache zu deutsch / german">&#127465&#127466</a></span>
 <h1 lang="en" class="en">Phonebook Contact convert for Fritzbox</h1>
@@ -69,6 +70,7 @@
 <p lang="en" class="en">Converts Fritzbox-XML-Files to/from .CSV or .VCF(vcard)-File with Phone Numbers.</p>
 <p lang="de" class="de">Konvertiert Fritzbox-XML-Dateien zu/von .CSV oder .VCF(vcard)-Dateien mit Telefonnummer</p>
 <span style="clear:both"></span><br>
+</header>
 <noscript style="color:red">You need JavaScript, to use this service.</noscript>
 <hr>
 <div id="select_file_auto-detect_div">
@@ -244,10 +246,10 @@ END:VCARD
   </fieldset>
   <fieldset ><legend>xml to csv (=export from fritzbox)</legend>
     <span lang="en" class="en">How to handle multiple phone numbers per each Person entry:</span>
-    <span lang="de" class="de">Wie mit meheren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
+    <span lang="de" class="de">Wie mit mehreren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
     <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__single_row" name="setting__xml2csv__just_one_phonenumer_each_text" value="1" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__single_row">
     <span lang="en" class="en">Each table-row can have multiple phone-numbers (= multiple columns)</span>
-    <span lang="de" class="de">Jede Tabellen-Zeile kann mehere Telefon-Nummern enthalten (=mehere Spalten)</span>
+    <span lang="de" class="de">Jede Tabellen-Zeile kann mehrere Telefon-Nummern enthalten (=mehrere Spalten)</span>
     <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234, +4940-567</div></label></p>
     <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows" name="setting__xml2csv__just_one_phonenumer_each_text" value="2" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows">
     <span lang="en" class="en">Each table-row has only a single phone-number (per row )</span>
@@ -261,7 +263,7 @@ END:VCARD
   </fieldset>
   <fieldset ><legend>csv to xml (=import to fritzbox)</legend>
     <span lang="en" class="en">How to handle multiple phone numbers per each Person entry:</span>
-    <span lang="de" class="de">Wie mit meheren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
+    <span lang="de" class="de">Wie mit mehreren Telefon-Nummern je Personen-Eintrag umgegangen werden soll:</span>
     <p style="margin: 0pt;"><input type="checkbox" autocomplete="off" id="setting__csv2xml__merge_samename_checkbox" name="setting__csv2xml__merge_samename" value="1" autocomplete="off" checked onChange="if(this.checked==true)setting__csv2xml__merge_samename=1;else setting__csv2xml__merge_samename=0;" />
     <label for="setting__csv2xml__merge_samename_checkbox">
       <span lang="en" class="en">Merge to a single entry</span>
@@ -477,11 +479,19 @@ function convert_to_csv(){
    if(null==telephony[j].firstChild || undefined==telephony[j].firstChild.nodeValue || null==telephony[j].firstChild.nodeValue) { logError.push(person); if(telephony[j].firstChild==null)logError.push('empty number:'); logError.push(telephony[j]);  continue; }
    phone = telephony[j].firstChild.nodeValue;
    phone = myTrimQuotes(phone);
-   var areacode__pre_phone=''; if(document.getElementById('setting__xml2__phonenumber_edit_your_areacode__active').checked && !document.getElementById('setting__xml2__phonenumber_edit_your_areacode').validity.patternMismatch ) areacode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_areacode').value;
-   if(areacode__pre_phone.substring(0,1)=="0")areacode__pre_phone=areacode__pre_phone.substring(1);
-   if(phone.substring(0,1)!="0" && areacode__pre_phone!='' && phone.match(/[2-9][0-9][0-9].*?/).length>0)phone="0"+areacode__pre_phone+phone;
-   var countrycode__pre_phone=''; if(document.getElementById('setting__xml2__phonenumber_edit_your_countrycode__active').checked && !document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').validity.patternMismatch ) countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
-   if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,2)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
+   if(document.getElementById('setting__xml2__phonenumber_edit_your_areacode__active').checked &&
+     !document.getElementById('setting__xml2__phonenumber_edit_your_areacode').validity.patternMismatch ){
+     var areacode__pre_phone='';
+     areacode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_areacode').value;
+     if(areacode__pre_phone.substring(0,1)=="0")areacode__pre_phone=areacode__pre_phone.substring(1);
+     if(phone.substring(0,1)!="0" && areacode__pre_phone!='' && phone.match(/[2-9][0-9][0-9].*?/).length>0)phone="0"+areacode__pre_phone+phone;
+   }
+   if(document.getElementById('setting__xml2__phonenumber_edit_your_countrycode__active').checked &&
+     !document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').validity.patternMismatch ){
+     var countrycode__pre_phone='';
+     countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
+     if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,2)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
+   }
    if(counter_num>0  && setting__xml2csv__just_one_phonenumer_each>1) out += "\n";
    if(counter_num==0 || setting__xml2csv__just_one_phonenumer_each>1) out += '"'+myTrimQuotes(person).replace('"','\\"')+'"';
    out += ", "+ '"'+phone.replace('"','\\"')+'"';
@@ -571,8 +581,19 @@ function convert_to_vcf(){ //=vcard
    if(null==telephony[j].firstChild || undefined==telephony[j].firstChild.nodeValue || null==telephony[j].firstChild.nodeValue) { logError.push(person); if(telephony[j].firstChild==null)logError.push('empty number:'); logError.push(telephony[j]); continue; }
    out += "TEL;";
    phone = myTrimQuotes(telephony[j].firstChild.nodeValue);
-   var countrycode__pre_phone=''; if(document.getElementById('setting__xml2__phonenumber_edit_your_countrycode__active').checked && !document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').validity.patternMismatch ) countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
-   if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,1)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
+   if(document.getElementById('setting__xml2__phonenumber_edit_your_areacode__active').checked &&
+     !document.getElementById('setting__xml2__phonenumber_edit_your_areacode').validity.patternMismatch ){
+     var areacode__pre_phone='';
+     areacode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_areacode').value;
+     if(areacode__pre_phone.substring(0,1)=="0")areacode__pre_phone=areacode__pre_phone.substring(1);
+     if(phone.substring(0,1)!="0" && areacode__pre_phone!='' && phone.match(/[2-9][0-9][0-9].*?/).length>0)phone="0"+areacode__pre_phone+phone;
+   }
+   if(document.getElementById('setting__xml2__phonenumber_edit_your_countrycode__active').checked &&
+     !document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').validity.patternMismatch ){
+     var countrycode__pre_phone='';
+     countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
+     if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,2)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
+   }
    //if(v=="2.1" )
    if( export_also_phonetype && telephony[j].getAttribute('type')!=undefined) out +=      ''+telephony[j].getAttribute('type').toUpperCase()+';';
    //if(v!="2.1" && export_also_phonetype && telephony[j].getAttribute('type')!=undefined) out += 'TYPE='+telephony[j].getAttribute('type').toUpperCase()+';';
@@ -1334,18 +1355,20 @@ Weitere Funktionen:
 <li> Es läuft direkt im Browser.  ( Es ist keine Installtion nötig. Kein Server. Keine Cloud. Nur lokal ausgeführte Programmcode. )</li>
 </ul>
 </span>
+<aside>
  <h3>Alternative Services / Tools</h3>
  <ul>
   <li>Online Web-Service: (local JavaScript inside Browser)<br/>
-convert .xml to .vcf (=export)<a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a> <a href="https://github.com/Rillke/fritzXML2vcard?tab=readme-ov-file">Sourcecode</a> This Tool can export to multiple .vcf files (which my tool can't do at the moment)</li>
+convert .xml to .vcf (=export) <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a>  &nbsp; ; &nbsp; <a href="https://github.com/Rillke/fritzXML2vcard?tab=readme-ov-file">Sourcecode</a> This Tool can export to multiple .vcf files (which my tool can't do at the moment)</li>
   <li>Computer-Programm:<br/>
-supports lots of file-formats (=import/export)<a href="https://github.com/Rillke/Contact-Conversion-Wizard">https://github.com/Rillke/Contact-Conversion-Wizard</a> (based on <a href="https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/">https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/</a> )</li>
+supports lots of file-formats (=import/export) <a href="https://github.com/Rillke/Contact-Conversion-Wizard">https://github.com/Rillke/Contact-Conversion-Wizard</a> (based on <a href="https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/">https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/</a> )</li>
   <li>Computer-Programm (Java ; No GUI, just a Comand Line Tool):<br/>
-   .vcf (vcard) or .csv to Fritzbox .xml (=import)<a href="https://github.com/berkholz/vcard2fritzXML">https://github.com/berkholz/vcard2fritzXML</a> </li>
+   .vcf (vcard) or .csv to Fritzbox .xml (=import) <a href="https://github.com/berkholz/vcard2fritzXML">https://github.com/berkholz/vcard2fritzXML</a> </li>
   <li>Computer-Programm (C++ ; for Windows und Linux):<br/>
-  csv , vcf , xml , vcard QR-Code für Android &nbsp; (=import/export)<a href="https://web.archive.org/web/20241205164750/http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html">https://web.archive.org/web/20241205164750/http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html</a>
+  csv , vcf , xml , vcard QR-Code für Android &nbsp; (=import/export) <a href="http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html">http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html</a>
   <li> ... lots of other... </li>
 </ul>
+</aside>
  <h3>Sourcecode</h3>
  <small lang="en" class="en">Or also report error / issue there.</small><small lang="de" class="de">Oder auch Fehler melden dort.</small><br>
 Licence: <a href="LICENSE" rel="jslicense">APGL</a> and  | Version: <span id="version_out"></span> | <a href="#" onClick="download_sourcecode();return false">Download this page (without images)</a><br>
