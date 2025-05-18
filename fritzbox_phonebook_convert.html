@@ -513,7 +513,7 @@ function convert_to_csv(){
 function show_errors(logError){
  //show convert errors
  if(logError.length>0){
-   if(language.substring(0,2)=='de') alert("Datei konvertiert. Es gab "+logError.length+" Fehler (möglicherweise auch unrelevant).");
+   if(selectedLanguage=='de') alert("Datei konvertiert. Es gab "+logError.length+" Fehler (möglicherweise auch unrelevant).");
    else alert("File converted. There are "+logError.length+" errors (maybe not import).");
    document.getElementById('error_logs').style.display='block';
    document.getElementById('error_logs').value='Errors in these lines:\n'+logError.join("\n");
@@ -1133,7 +1133,9 @@ function readMultipleFiles(e) {
     return;
   }
   document.getElementById('convert_again_file').style.display='block';
-  if(files.length>1 && confirm("Merge the multiple files to a single phonebook? (only with the same file-format possible)")) f_merge=true;
+  var text__AskShouldIMerge="Merge the multiple files to a single phonebook? \n(only with the same file-format possible)";
+  if(selectedLanguage=="de")text__AskShouldIMerge="Zusammenfügen von verschienden einzelenen Telefonbüchern zu einen einzigen? \n(nur wenn es im gleichen Datei-Format ist möglich)";
+  if(files.length>1 && confirm(text__AskShouldIMerge)) f_merge=true;
   
   readfiles__files_count = files.length;
   for(i=0;i<files.length;i++){
@@ -1385,6 +1387,7 @@ Developer-Portal "github": <a href="https://github.com/soerenj/fritzbox_phoneboo
 <script language="JavaScript">
 
 //translation text replace
+var selectedLanguage=null;
 var language = window.navigator.userLanguage || window.navigator.language;
 var all_languages=Array('en','de');
 if(window.location.hash.length>2 && all_languages.indexOf( window.location.hash.substring(1) )>=0) changeLanguage( window.location.hash.substring(1) );
@@ -1393,6 +1396,7 @@ window.addEventListener('hashchange', function(){
     if(window.location.hash.length>2 && all_languages.indexOf( window.location.hash.substring(1) )>=0) changeLanguage( window.location.hash.substring(1) ); 
     });
 function changeLanguage(newSetLang){
+ selectedLanguage=newSetLang;
  var e = document.getElementsByClassName(newSetLang);
   for(i=0;i<e.length;i++){
    e[i].style.display='inline-block';
