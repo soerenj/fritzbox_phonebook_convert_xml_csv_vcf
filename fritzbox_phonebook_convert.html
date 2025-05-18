@@ -1073,6 +1073,7 @@ function ask__xml_convert_to(text) {
 }
 
 function f_merge__appendfile(format,origin,add){
+  if(!f_merge)return add;
   if(format=="xml"){
      var start =add.search(/<contact/);
      if(start<=0){ alert("no entry found in one file");return origin;} //=not found
@@ -1173,7 +1174,8 @@ function readMultipleFiles(e) {
             document.getElementById('phonebook_vcf').value = f_merge__appendfile('vcf',document.getElementById('phonebook_vcf').value,contents);
             f_merge_vcf++; done=true;}
           readfiles__files_counter++;
-          if(readfiles__files_count==readfiles__files_counter)reader_finish();
+          if(!f_merge)reader_finish(); //single files
+          else if(readfiles__files_count==readfiles__files_counter)reader_finish();
         };
       }
       reader.readAsText(file);
