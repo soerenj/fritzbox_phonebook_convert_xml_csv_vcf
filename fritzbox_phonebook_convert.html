@@ -38,6 +38,8 @@
 	"programmingLanguage": "javascript",
 	"dateModified": "2025-05-14",
 	"softwareVersion": "0.261",
+	"dateModified": "2025-05-20",
+	"softwareVersion": "0.27",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
@@ -48,8 +50,8 @@
 <body>
 <!--
  /*
- * version: 0.261
- * date: 2025-05-14
+ * version: 0.27
+ * date: 2025-05-20
  *
  * Licence 
  *
@@ -374,7 +376,6 @@ END:VCARD
 
 <script language="JavaScript">
 <!--
-var uploaded_filename = '';
 var uploaded_file_convert_from = '';
 var uploaded_file_convert_to = '';
 var counter_convert = 0;
@@ -535,13 +536,13 @@ function show_errors(logError){
 
 }
 
-function convert_to_vcf__maybe_all(){ //=vcard
+function convert_to_vcf__maybe_all(filename){ //=vcard
  var selfcall=true;
  if(document.getElementById('setting__xml2vcf__allversions').checked){
      document.getElementById('setting__xml2vcf__version').value="4.0";
-     prepare_and_download( convert_to_vcf() );
+     prepare_and_download( convert_to_vcf(), filename );
      document.getElementById('setting__xml2vcf__version').value="3.0";
-     prepare_and_download( convert_to_vcf() );
+     prepare_and_download( convert_to_vcf(), filename );
      document.getElementById('setting__xml2vcf__version').value="2.1";
      document.getElementById('set_vcf_only_for2.1').style.display='block';
      return convert_to_vcf();
@@ -918,17 +919,17 @@ function download_one_file_ask(){
   if (confirm('Download text in .csv window?')) { uploaded_file_convert_to='csv'; prepare_and_download(document.getElementById('phonebook_csv').value); return; }
   if (confirm('Download text in .vcf window?')) { uploaded_file_convert_to='vcf'; prepare_and_download(document.getElementById('phonebook_vcf').value); return; }
 }
-function prepare_and_download(text) {
+function prepare_and_download(text,filename) {
   if(text==undefined || text==null || text==false || text==""){ alert("Finish. End. No Output. Nothing to output."); return;}
-  var filename = '';
-  filename = 'phonebook_for_fritzbox';
+  if(filename == undefined || filename=='') filename='';
+  if(filename=='') filename='phonebook_for_fritzbox';
   if(uploaded_file_convert_to=='xml'){
-   if(uploaded_filename!='')filename = uploaded_filename.replace(/(\.)(csv)$/i,'_$2');
-   if(uploaded_filename!='')filename = uploaded_filename.replace(/(\.)(vcf)$/i,'_$2');
+   filename = filename.replace(/(\.)(csv)$/i,'_$2');
+   filename = filename.replace(/(\.)(vcf)$/i,'_$2');
    filename += "_converted_.xml";
   }
   if(uploaded_file_convert_to=='csv' || uploaded_file_convert_to=='vcf'){
-   if(uploaded_filename!='')filename = uploaded_filename.replace(/(\.)(xml)$/i,'_$2');
+   if(filename!='')filename = filename.replace(/(\.)(xml)$/i,'_$2');
    if(document.getElementById('setting__xml2vcf__allversions').checked) filename += '_v'+document.getElementById('setting__xml2vcf__version').value.replace(/\./,'-')+'_';
    filename += "_converted_."+uploaded_file_convert_to;
   }
@@ -1103,9 +1104,9 @@ function get_filetype_by_ext(filename){
   return filetype_by_ext;
 }
 
-function ask__xml_convert_to(text) {
+function ask__xml_convert_to(filename) {
   if( confirm("convert to .csv?") ) { uploaded_file_convert_to='csv'; return convert_to_csv(); }
-  else if( confirm("convert to .vcf? (vcard)") ) { uploaded_file_convert_to='vcf'; return convert_to_vcf__maybe_all(); }
+  else if( confirm("convert to .vcf? (vcard)") ) { uploaded_file_convert_to='vcf'; return convert_to_vcf__maybe_all(filename); }
 }
 
 function f_merge__appendfile(format,origin,add){
@@ -1162,6 +1163,7 @@ function readMultipleFiles(e) {
   f_merge_xml = 0;
   f_merge_csv = 0;
   f_merge_vcf = 0;
+  f_merge=false;
   readfiles__files_counter = 0;
   document.getElementById('file-input_reset').style.display='block';
   var files = e.target.files;
@@ -1178,11 +1180,11 @@ function readMultipleFiles(e) {
       var file = files[i];
       var reader = new FileReader();
       if(e.target.id=='file-input_auto-detect'){
-        uploaded_filename = file['name'];//old get_filename(document.getElementById(e.target.id).value);
+        reader.fileName = files[i].name;
         reader.onload = function(e) {
           var done=false;
           var contents = e.target.result;
-          var filename = document.getElementById('file-input_auto-detect').value;
+          var filename = get_filename(e.target.fileName);
           var filetype_by_ext = get_filetype_by_ext(filename);
           if( typeof filetype_by_ext.toLowerCase() === "undefined" ) filetype_by_ext ='';
           if (document.getElementById('setting__upload__filetype_auto_detect').checked && filetype_by_ext!='' ){
@@ -1212,19 +1214,24 @@ function readMultipleFiles(e) {
             document.getElementById('phonebook_vcf').value = f_merge__appendfile('vcf',document.getElementById('phonebook_vcf').value,contents);
             f_merge_vcf++; done=true;}
           readfiles__files_counter++;
-          if(!f_merge)reader_finish(); //single files
-          else if(readfiles__files_count==readfiles__files_counter)reader_finish();
+          if(f_merge && readfiles__files_count==readfiles__files_counter)filename+="_merged_";
+          if(!f_merge)reader_finish(filename); //single files
+          else if(readfiles__files_count==readfiles__files_counter)reader_finish(filename);
         };
       }
       reader.readAsText(file);
   }
 }
 
-function reader_finish(){
-   if(f_merge_xml>0){ uploaded_file_convert_from='xml'; prepare_and_download( ask__xml_convert_to() );}
-   if(f_merge_csv>0){ uploaded_file_convert_from='csv'; uploaded_file_convert_to='xml'; prepare_and_download( convert_csv_to_xml() ); }
-   if(f_merge_vcf>0){ uploaded_file_convert_from='vcf'; uploaded_file_convert_to='xml'; prepare_and_download( convert_vcf_to_xml() ); }
-   uploaded_filename=''; 
+function reader_finish(filename){
+   if(
+     (f_merge_xml>0 && (f_merge_csv>0 || f_merge_vcf>0) ) ||
+     (f_merge_csv>0 && (f_merge_vcf>0 || f_merge_xml>0) ) ||
+     (f_merge_vcf>0 && (f_merge_xml>0 || f_merge_csv>0) )
+     ) { alert("Error: Please only upload files of one single type. No mixing allowed. \n I try to continue anyway. But you will get wrong or missing data."); } 
+   if(f_merge_xml>0){ uploaded_file_convert_from='xml'; prepare_and_download( ask__xml_convert_to(filename) , filename);}
+   if(f_merge_csv>0){ uploaded_file_convert_from='csv'; uploaded_file_convert_to='xml'; prepare_and_download( convert_csv_to_xml() , filename); }
+   if(f_merge_vcf>0){ uploaded_file_convert_from='vcf'; uploaded_file_convert_to='xml'; prepare_and_download( convert_vcf_to_xml() , filename); }
 }
 
 
