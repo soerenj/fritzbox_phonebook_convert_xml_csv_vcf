@@ -36,10 +36,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-05-14",
-	"softwareVersion": "0.261",
-	"dateModified": "2025-05-20",
-	"softwareVersion": "0.27",
+	"dateModified": "2025-05-21",
+	"softwareVersion": "0.272",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
@@ -50,8 +48,8 @@
 <body>
 <!--
  /*
- * version: 0.27
- * date: 2025-05-20
+ * version: 0.272
+ * date: 2025-05-21
  *
  * Licence 
  *
@@ -572,7 +570,7 @@ function convert_to_vcf(){ //=vcard
     (undefined==contacts[i].getElementsByTagName("person")[0].getElementsByTagName("realName")[0].firstChild.nodeValue) ||
     (undefined==contacts[i].getElementsByTagName("telephony")[0].getElementsByTagName("number")[0].firstChild.nodeValue)
   ){ logError.push(contacts[i].innerHTML); continue; }
-  
+
   out += 'BEGIN:VCARD\n';
   if(v=="2.1")out += 'VERSION:2.1\n';
   if(v=="3.0") out += 'VERSION:3.0\n';
@@ -641,6 +639,7 @@ function convert_vcf_to_xml(){
  var text = document.getElementById('phonebook_vcf').value;
  var person, email, v;
  var out = '';
+ var cantHandleCharset_showMessage=false;
  out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="'+new_phonebook_name+'">\n';
  var contacts = text.split('BEGIN:VCARD');
  for(i=0;i<contacts.length;i++)
@@ -681,6 +680,12 @@ function convert_vcf_to_xml(){
    
         elements[j] = match[1]+':'+str;
         
+     }
+     else if( elements[j].search(/CHARSET=UTF-8:/)>=0){
+        elements[j] = elements[j].replace(/CHARSET=UTF-8:/,'');
+     }
+     else if( elements[j].search(/CHARSET=/)>=0){
+       if(!cantHandleCharset_showMessage)alert("sorry. Can't handle this charset. Possible some special character are wrong. Or the file is not import-able."); cantHandleCharset_showMessage=true;
      }
   }
   
