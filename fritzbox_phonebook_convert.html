@@ -36,8 +36,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-05-21",
-	"softwareVersion": "0.272",
+	"dateModified": "2025-05-22",
+	"softwareVersion": "0.28",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
@@ -48,8 +48,8 @@
 <body>
 <!--
  /*
- * version: 0.272
- * date: 2025-05-21
+ * version: 0.28
+ * date: 2025-05-22
  *
  * Licence 
  *
@@ -111,8 +111,8 @@
  <span lang="de" class="de">Fertig. Überprüfen Sie Ihren Download-Ordner</span>
 </div>
 <div id="ready_note_export_to_vcf_multivcard" style="margin-top:5pt;display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
- <span lang="en" class="en">Please Note: This is a Multi-Vcard file. It have all Contacts in one File. Some Programs does not support this. In that case please try this another tool: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a></span>
- <span lang="de" class="de">Bitte beachten Sie: Die ist eine Multi-Vcard Datei. Sie enthält alle Kontakte in einer Datei. Manche Programme unterstützen dies nicht. In dem Fall verwenden Sie bitte ein anderen Tool. z.B.: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a></span>
+ <span lang="en" class="en">Please Note: This is a Multi-Vcard file. It have all Contacts in one File. Some Programs does not support this. <br>Split: If you need a vcard-file per each Person: <a href="#" onclick="convert_to_vcf(true);return false;">Split in <span id="ready_note_export_to_vcf_multivcard__counter_splited1">X</span> seperated files<a/>.<br> Alternativ: please try this other tool: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a></span>
+ <span lang="de" class="de">Bitte beachten Sie: Die ist eine Multi-Vcard Datei. Sie enthält alle Kontakte in einer Datei. Manche Programme unterstützen dies nicht. <br>Aufteilen: Wenn sie jedoch je Person eine einzelne Vcard-Datei benötigen: <a href="#" onclick="convert_to_vcf(true);return false;">Aufteilen in <span id="ready_note_export_to_vcf_multivcard__counter_splited2">X</span> verschiedene Dateien<a/>.<br> Alternativ: Bitte eine anderes Tool verwenden: z.B.: <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a></span>
 </div>
 <div id="ready_note_export_to_vcf_allversions" style="margin-top:5pt;display:none;margin-left: 50pt;background: #ddd;padding: 10pt;border-radius: 5pt;">
  <span lang="en" class="en">Please Note: There was three files created. There have different vcard Version (v2.1 , v3.0 , v4.0). Which file you need may depends on your target.</span>
@@ -352,6 +352,14 @@ END:VCARD
       <span lang="de" class="de">Email</span>
     </label>
     </p>
+    <span lang="en" class="en">At splited (=seperated) files Export: </span>
+    <span lang="de" class="de">Bei geteilte dateien export: </span>
+    <input type="checkbox" id="setting__xml2vcf__splited__filename_fullname" autocomplete="off" />
+    <label for="setting__xml2vcf__splited__filename_fullname">
+      <span lang="en" class="en">Filename: Full Name</span>
+      <span lang="de" class="de">Dateiname: Ganze Name</span>
+    </label>
+    </p>
   </fieldset>
   <br />
   <label for="new_phonebook_name">
@@ -547,7 +555,7 @@ function convert_to_vcf__maybe_all(filename){ //=vcard
  }else convert_to_vcf();
 }
 
-function convert_to_vcf(){ //=vcard
+function convert_to_vcf(multipleDirectDownload=false){ //=vcard
  var v = document.getElementById('setting__xml2vcf__version').value; //v=Version 2.1|3.0|4.0
  var uri_encode = document.getElementById('setting__xml2vcf__uri_encode').checked;
  var add_charset = document.getElementById('setting__xml2vcf__add_charset').checked;
@@ -558,9 +566,26 @@ function convert_to_vcf(){ //=vcard
  parser = new DOMParser();
  xmlDoc = parser.parseFromString(text, "text/xml");
 
- var out, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone, tmp;
- out = ''; logError=[];
+ var out, outTotal, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone, tmp;
+ out = ''; outTotal=''; logError=[];
  var contacts = xmlDoc.getElementsByTagName("contact");
+ document.getElementById('ready_note_export_to_vcf_multivcard__counter_splited1').innerText=contacts.length;
+ document.getElementById('ready_note_export_to_vcf_multivcard__counter_splited2').innerText=contacts.length;
+ if(multipleDirectDownload==true){
+   var text__AskMultipleVcf="It will be created and downloaded lots of files: \ncounted: "+contacts.length+" files.\nDo you want really want continue??";
+   if(selectedLanguage=="de")text__AskMultipleVcf="Es werden gleiche (sehr) vielen Dateien erstellt und runtergeladen: \n"+contacts.length+" Stück. \nMöchten Sie fortfahren?";
+   var text__AskMultipleVcf_name="Filename example (look in settings):\nPerson-Name: Max Muster\nFile-name: ";
+   if(selectedLanguage=="de") text__AskMultipleVcf_name="Dateiname Beispiel (siehe in Einstellungen):\nPerson Name: Max Muster\nDateiname: ";
+   if(!document.getElementById('setting__xml2vcf__splited__filename_fullname').checked) text__AskMultipleVcf_name+="Ma Mu_v2-1__converted_.vcf";
+   var text__AskMultipleVcf_version="";
+   if(document.getElementById('setting__xml2vcf__allversions').checked){
+     text__AskMultipleVcf_version="Export in VCard-Version "+document.getElementById('setting__xml2vcf__version').value;
+     if(selectedLanguage!="de")text__AskMultipleVcf_version+="\nIt is not possible to export in all vcard-version in this step.";
+     if(selectedLanguage=="de")text__AskMultipleVcf_version+="\nEs ist nicht möglich in alle Vcard-Versionen gleichzeitig zu exportieren.";
+   }
+   if(!confirm(text__AskMultipleVcf) || !confirm(text__AskMultipleVcf_name)) return ""; //multipleDirectDownload=false;
+   if(text__AskMultipleVcf_version!='' && !confirm(text__AskMultipleVcf_version)) return "";
+ }
  for(i=0;i<contacts.length;i++)
  {
   //check values
@@ -571,7 +596,7 @@ function convert_to_vcf(){ //=vcard
     (undefined==contacts[i].getElementsByTagName("telephony")[0].getElementsByTagName("number")[0].firstChild.nodeValue)
   ){ logError.push(contacts[i].innerHTML); continue; }
 
-  out += 'BEGIN:VCARD\n';
+  out = 'BEGIN:VCARD\n';
   if(v=="2.1")out += 'VERSION:2.1\n';
   if(v=="3.0") out += 'VERSION:3.0\n';
   if(v=="4.0") out += 'VERSION:4.0\n';
@@ -626,8 +651,14 @@ function convert_to_vcf(){ //=vcard
   }
   
   out += "END:VCARD\n";
+  if(multipleDirectDownload){
+    var filen=person
+    if(!document.getElementById('setting__xml2vcf__splited__filename_fullname').checked) filen=filen.replace(/([^ \.;,])([^ \.;,])*/g,'$1');
+    prepare_and_download(out,filen);
+  }
+  outTotal+=out;
  }
- document.getElementById('phonebook_vcf').value = out;
+ document.getElementById('phonebook_vcf').value = outTotal;
  return out;
  //download('vcf',out);
 }
@@ -1115,7 +1146,7 @@ function ask__xml_convert_to(filename) {
 }
 
 function f_merge__appendfile(format,origin,add){
-  if(!f_merge)return add;
+  if(!do_a_merge)return add;
   if(format=="xml"){
      var start =add.search(/<contact/);
      if(start<=0){ alert("no entry found in one file");return origin;} //=not found
@@ -1157,18 +1188,19 @@ function is_maybe_headline__fulltext(a){ //for .csv  //alle lines in one string
   return false;
 }
 
-var f_merge = false;
+var do_a_merge = false;
 var readfiles__files_count = 0;
 var readfiles__files_counter = 0;
-var f_merge_xml = 0;
-var f_merge_csv = 0;
-var f_merge_vcf = 0;
+var f_merge_c = Array();
+f_merge_c["xml"] = 0;
+f_merge_c["csv"] = 0;
+f_merge_c["vcf"] = 0;
   
 function readMultipleFiles(e) {
-  f_merge_xml = 0;
-  f_merge_csv = 0;
-  f_merge_vcf = 0;
-  f_merge=false;
+  f_merge_c["xml"] = 0;
+  f_merge_c["csv"] = 0;
+  f_merge_c["vcf"] = 0;
+  do_a_merge=false;
   readfiles__files_counter = 0;
   document.getElementById('file-input_reset').style.display='block';
   var files = e.target.files;
@@ -1177,66 +1209,67 @@ function readMultipleFiles(e) {
   }
   document.getElementById('convert_again_file').style.display='block';
   var text__AskShouldIMerge="Merge the multiple files to a single phonebook? \n(only with the same file-format possible)";
-  if(selectedLanguage=="de")text__AskShouldIMerge="Zusammenfügen von verschienden einzelenen Telefonbüchern zu einen einzigen? \n(nur wenn es im gleichen Datei-Format ist möglich)";
-  if(files.length>1 && confirm(text__AskShouldIMerge)) f_merge=true;
+  if(selectedLanguage=="de")text__AskShouldIMerge="Zusammenfügen von verschiedenen einzelenen Telefonbüchern zu einen einzigen?";
+  if(files.length>1 && confirm(text__AskShouldIMerge)) do_a_merge=true;
   
   readfiles__files_count = files.length;
   for(i=0;i<files.length;i++){
       var file = files[i];
       var reader = new FileReader();
       if(e.target.id=='file-input_auto-detect'){
-        reader.fileName = files[i].name;
+        reader.fileName = file.name;
+        reader.fileType = file['type'];
         reader.onload = function(e) {
-          var done=false;
+          var type_from = '';
           var contents = e.target.result;
           var filename = get_filename(e.target.fileName);
-          var filetype_by_ext = get_filetype_by_ext(filename);
-          if( typeof filetype_by_ext.toLowerCase() === "undefined" ) filetype_by_ext ='';
-          if (document.getElementById('setting__upload__filetype_auto_detect').checked && filetype_by_ext!='' ){
-              if( !done ) if( filetype_by_ext.toLowerCase()=='xml' || file['type']=='application/xml' || file['type']=='text/xml' ) {
-                 if(f_merge_xml==0)document.getElementById('phonebook_xml').value = '';
-                 document.getElementById('phonebook_xml').value = f_merge__appendfile('xml',document.getElementById('phonebook_xml').value,contents);
-                 f_merge_xml++; done=true;}
-              if( !done ) if( filetype_by_ext.toLowerCase()=='csv' || file['type']=='text/csv' ) {
-                 if(f_merge_csv==0)document.getElementById('phonebook_csv').value = '';
-                 document.getElementById('phonebook_csv').value = f_merge__appendfile('csv',document.getElementById('phonebook_csv').value,contents);
-                 f_merge_csv++; done=true;}
-              if( !done ) if( filetype_by_ext.toLowerCase()=='vcf' || file['type']=='text/vcard' || file['type']=='text/x-vcard' || file['type']=='text/directory;profile=vCard' || file['type']=='text/directory' ) {
-                 if(f_merge_vcf==0)document.getElementById('phonebook_vcf').value = '';
-                 document.getElementById('phonebook_vcf').value = f_merge__appendfile('vcf',document.getElementById('phonebook_vcf').value,contents);
-                 f_merge_vcf++; done=true;  }
+          var filetype_by_ext = get_filetype_by_ext(filename).toLowerCase();
+          if( typeof filetype_by_ext === "undefined" ) filetype_by_ext ='';
+          if (document.getElementById('setting__upload__filetype_auto_detect').checked && ( filetype_by_ext!='' || e.target.fileType!='' )  ){
+              if( filetype_by_ext=='xml' || e.target.fileType=='application/xml' || e.target.fileType=='text/xml' ) type_from="xml";
+              if( filetype_by_ext=='csv' || e.target.fileType=='text/csv' ) type_from="csv";
+              if( filetype_by_ext=='vcf' || e.target.fileType=='text/vcard' || e.target.fileType=='text/x-vcard' || e.target.fileType=='text/directory;profile=vCard' || e.target.fileType=='text/directory' ) type_from="vcf";
           }
-          if( !done ) if( confirm("Is this a .xml file?") ) {
-            if(f_merge_xml==0)document.getElementById('phonebook_xml').value = '';
-            document.getElementById('phonebook_xml').value = f_merge__appendfile('xml',document.getElementById('phonebook_xml').value,contents);
-            f_merge_xml++; done=true;}
-          if( !done ) if( confirm("Is this a .csv file?") ) {
-            if(f_merge_csv==0)document.getElementById('phonebook_csv').value = '';
-            document.getElementById('phonebook_csv').value = f_merge__appendfile('csv',document.getElementById('phonebook_csv').value,contents);
-            f_merge_csv++; done=true;}
-          if( !done ) if( confirm("Is this a .vcf (vcard) file?") ) {
-            if(f_merge_vcf==0)document.getElementById('phonebook_vcf').value = '';
-            document.getElementById('phonebook_vcf').value = f_merge__appendfile('vcf',document.getElementById('phonebook_vcf').value,contents);
-            f_merge_vcf++; done=true;}
+          if(type_from==''){
+            if(      confirm("Is this a .xml file?") ) type_from="xml";
+            else if( confirm("Is this a .csv file?") ) type_from="csv";
+            else if( confirm("Is this a .vcf file?") ) type_from="vcf";
+          }
           readfiles__files_counter++;
-          if(f_merge && readfiles__files_count==readfiles__files_counter)filename+="_merged_";
-          if(!f_merge)reader_finish(filename); //single files
-          else if(readfiles__files_count==readfiles__files_counter)reader_finish(filename);
+          if(type_from==''){ alert("ignore this file"); return; }
+
+          var textfield_id = "phonebook_"+type_from;
+          f_merge_c[type_from]++;
+
+          if(!do_a_merge){ //single file(s)
+              document.getElementById(textfield_id).value = contents;
+              if(type_from=="xml"){ uploaded_file_convert_from='xml'; prepare_and_download( ask__xml_convert_to(filename) , filename);}
+              if(type_from=="csv"){ uploaded_file_convert_from='csv'; uploaded_file_convert_to='xml'; prepare_and_download( convert_csv_to_xml() , filename); }
+              if(type_from=="vcf"){ uploaded_file_convert_from='vcf'; uploaded_file_convert_to='xml'; prepare_and_download( convert_vcf_to_xml() , filename); }
+          }
+          if(do_a_merge){ //merged files
+            if(f_merge_c[type_from]==0)  document.getElementById(textfield_id).value= '';
+            document.getElementById(textfield_id).value = f_merge__appendfile(type_from,document.getElementById(textfield_id).value,contents);
+            if(readfiles__files_count==readfiles__files_counter){ //last file
+              filename+="_merged_";
+              reader_finish__andDownloadMergedFile(filename);
+            }
+          }
         };
       }
       reader.readAsText(file);
   }
 }
 
-function reader_finish(filename){
-   if(
-     (f_merge_xml>0 && (f_merge_csv>0 || f_merge_vcf>0) ) ||
-     (f_merge_csv>0 && (f_merge_vcf>0 || f_merge_xml>0) ) ||
-     (f_merge_vcf>0 && (f_merge_xml>0 || f_merge_csv>0) )
-     ) { alert("Error: Please only upload files of one single type. No mixing allowed. \n I try to continue anyway. But you will get wrong or missing data."); } 
-   if(f_merge_xml>0){ uploaded_file_convert_from='xml'; prepare_and_download( ask__xml_convert_to(filename) , filename);}
-   if(f_merge_csv>0){ uploaded_file_convert_from='csv'; uploaded_file_convert_to='xml'; prepare_and_download( convert_csv_to_xml() , filename); }
-   if(f_merge_vcf>0){ uploaded_file_convert_from='vcf'; uploaded_file_convert_to='xml'; prepare_and_download( convert_vcf_to_xml() , filename); }
+function reader_finish__andDownloadMergedFile(filename){
+   if(do_a_merge) if(
+     (f_merge_c["xml"]>0 && (f_merge_c["csv"]>0 || f_merge_c["vcf"]>0) ) ||
+     (f_merge_c["csv"]>0 && (f_merge_c["vcf"]>0 || f_merge_c["xml"]>0) ) ||
+     (f_merge_c["vcf"]>0 && (f_merge_c["xml"]>0 || f_merge_c["csv"]>0) )
+     ) { alert("Error: Please only upload files of a one single type (e.g. only .xml files). No mixing allowed."); return; }
+   if(f_merge_c["xml"]>0){ uploaded_file_convert_from='xml'; prepare_and_download( ask__xml_convert_to(filename) , filename);}
+   if(f_merge_c["csv"]>0){ uploaded_file_convert_from='csv'; uploaded_file_convert_to='xml'; prepare_and_download( convert_csv_to_xml() , filename); }
+   if(f_merge_c["vcf"]>0){ uploaded_file_convert_from='vcf'; uploaded_file_convert_to='xml'; prepare_and_download( convert_vcf_to_xml() , filename); }
 }
 
 
@@ -1411,13 +1444,20 @@ Weitere Funktionen:
  <h3>Alternative Services / Tools</h3>
  <ul>
   <li>Online Web-Service: (local JavaScript inside Browser)<br/>
-convert .xml to .vcf (=export) <a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a>  &nbsp; ; &nbsp; <a href="https://github.com/Rillke/fritzXML2vcard?tab=readme-ov-file">Sourcecode</a> This Tool can export to multiple .vcf files (which my tool can't do at the moment)</li>
+convert .xml to .vcf (=export) <br/>
+<a href="https://blog.rillke.com/fritzXML2vcard/">https://blog.rillke.com/fritzXML2vcard/</a>  &nbsp; ; &nbsp; <a href="https://github.com/Rillke/fritzXML2vcard?tab=readme-ov-file">Sourcecode</a> <br>
+<span lang="en" class="en">This Tool can export to multiple .vcf files. You can (de)-select each single contact. Or you can export single contacts (also copy & paste possible).</span>
+<span lang="de" class="de">Dieses Tool kann mehrere .vcf Dateien erstellen. Man kann einzelne Kontakte auswählen oder auch raus-löschen. Es ist auch der export einzelner Kontakte möglich (auch Copy & Paste möglich)</span>
+</li>
   <li>Computer-Programm:<br/>
-supports lots of file-formats (=import/export) <a href="https://github.com/Rillke/Contact-Conversion-Wizard">https://github.com/Rillke/Contact-Conversion-Wizard</a> (based on <a href="https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/">https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/</a> )</li>
-  <li>Computer-Programm (Java ; No GUI, just a Comand Line Tool):<br/>
-   .vcf (vcard) or .csv to Fritzbox .xml (=import) <a href="https://github.com/berkholz/vcard2fritzXML">https://github.com/berkholz/vcard2fritzXML</a> </li>
+   <span lang="en" class="en">supports lots of file-formats</span><span lang="de" class="de">Unterstützt sehr viele Datei-Formate</span> (=import/export) <br/>
+   <a href="https://github.com/Rillke/Contact-Conversion-Wizard">https://github.com/Rillke/Contact-Conversion-Wizard</a> (based on <a href="https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/">https://web.archive.org/web/20160408131050/http://software.nv-systems.net/ccw/download/</a> )</li>
+  <li>Computer-Programm (Java ; No GUI, just a Comand Line Tool) <span lang="en" class="en">Keine Grapische Oberfläche (=GUI), sonder nur als Komando-Zeilen-Progamm (="Eingabeaufforderung") verwendbar</span> (=import/export):<br/>
+   .vcf (vcard) or .csv to Fritzbox .xml (=import) <br/>
+   <a href="https://github.com/berkholz/vcard2fritzXML">https://github.com/berkholz/vcard2fritzXML</a> </li>
   <li>Computer-Programm (C++ ; for Windows und Linux):<br/>
-  csv , vcf , xml , vcard QR-Code für Android &nbsp; (=import/export) <a href="http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html">http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html</a>
+  csv , vcf , xml , vcard QR-Code für Android &nbsp; (=import/export) <br/>
+  <a href="http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html">http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html</a>
   <li> ... lots of other... </li>
 </ul>
 </aside>
