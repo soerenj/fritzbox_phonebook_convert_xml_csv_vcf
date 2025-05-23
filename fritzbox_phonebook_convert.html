@@ -4,6 +4,8 @@
 <title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta charset="utf-8">
+<meta name="robots" content="noindex">
+<!--
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name=”name” content=”title” lang="en" content="Convert Fritzbox Phonebook | webservice" />
 <meta name=”name” content=”title” lang="de" content=">Umwandlung Fritzbox Telefonbuch | web-dienst" />
@@ -16,20 +18,23 @@
 <meta property="og:type" content="webapp" />
 <link rel="icon" href="img/icon_convert_formats.png" sizes="141x96" />
 <link rel="apple-touch-icon" href="img/icon_convert_formats.png" sizes="141x96" />
-<meta property="og:url" lang="de" content="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#de" />
-<meta property="og:url" lang="en" content="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#en" />
+<meta property="og:url" lang="de" content="https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#de" />
+<meta property="og:url" lang="en" content="https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#en" />
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
-<link rel="alternate" href="/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#en" lang="en" />
-<link rel="alternate" href="/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#de" lang="de" />
+<link rel="alternate" href="https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#en" lang="en" hreflang="en" />
+<link rel="alternate" href="https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#de" lang="de" hreflang="de" />
+-->
 <script type='application/ld+json'>
 {
 	"@context": "http://schema.org/",
 	"@type": "WebApplication",
+	"@id": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
+	"author":[{"@context":"https://schema.org", "@type":"Person", "name:":"soerenj", "url":"https://codeberg.org/soerenj/","url":"https://github.com/soerenj/"}],
 	"applicationCategory": "UtilitiesApplication",
 	"applicationSubCategory": "convert",
 	"image": "https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/img/icon_convert_formats.png",
 	"isAccessibleForFree": "true",
-	"license": "AGPL",
+	"license": "https://www.gnu.org/licenses/agpl-3.0.txt",
 	"name": "convert phonebook Fritzbox",
 	"description": "convert phonebook files from router Fritzbox .xml to .csv or to .vcf (vcard)",
 	"mainEntityOfPage":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
@@ -37,18 +42,20 @@
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
 	"dateModified": "2025-05-23",
-	"softwareVersion": "0.281",
+	"softwareVersion": "0.282",
 	"inLanguage": ["en", "de"],
-	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
+	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
+	"creativeWorkStatus": "Deprecated"
 }
 </script>
 <style>  input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} @media (min-height:800pt){ textarea{ height:200pt;} } details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
 .drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } input#setting__xml2__phonenumber_edit_your_countrycode:invalid, input#setting__xml2__phonenumber_edit_your_areacode:invalid {border: medium solid red; } .onlytouchscreen{ display:none; } @media (pointer: coarse){.onlytouchscreen{ display:inline; } }</style>
+<style>  body .outd_note ~ *{ opacity: 0.5; }  body .outd_note{ opacity: 1; } </style>
 </head>
 <body>
 <!--
  /*
- * version: 0.281
+ * version: 0.282
  * date: 2025-05-23
  *
  * Licence 
@@ -62,11 +69,39 @@
  * (at your option) any later version.
  */
   -->
+<div class="outd_note" style="background: #ddd;margin: 5pt;padding: 5pt;border-radius: 5pt;border: 1pt solid black;">
+<h1>
+<span lang="en" class="en">What you want convert?</span>
+<span lang="de" class="de">Was möchten Sie umwandeln?</span>
+</h1>
+<ul>
+<li><h2> Fritzbox .xml* &lt;=> (to/from)  .csv : </h2>
+
+Open here: <a href="https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv/">https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv/</a>
+
+<!--https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv/-->
+</li>
+<li>
+<h2> Fritzbox .xml &lt;=> (to/from)  .vcf / Vcard : </h2>
+
+Open here: <a href="https://soerenj.github.io/fritzbox_phonebook_convert_xml_vcf/">https://soerenj.github.io/fritzbox_phonebook_convert_xml_vcf/</a>
+
+<!--https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_vcf/-->
+</li></ul>
+<hr>
+<span lang="en" class="en">This Page was splited in May 2025 in two different services. Please select the one you need. <!--This Page her is now deprecated and will be not updated anymore.--></span>
+<span lang="de" class="de">Diese Seite wurde im Mai 2025 auf zwei verschiedene Dienst aufgeteilt. Daher wählen Sie bitte den für Sie passenden. <!--Diese Seite hier nun veraltet und wird nicht mehr aktualisiert.--></span>
+<a style="float:right" href="#" onClick="var e=document.getElementsByClassName('outd_note')[0]; e.classList.remove('outd_note'); e.style.display='none';return false;">
+<span lang="en" class="en">Nevertheless: Close this note and continue anyway (with this outdated Service-Version)</span>
+<span lang="de" class="de">Trotzdem diesen Hinwei&szlig; schlie&szlig; und fortfahren (mit diesen veralteten Service-Version).</span>
+</a>
+<br> &nbsp; <br>
+</div>
 <header>
 <img src="img/icon_convert_formats.png" style="float:left;padding:6pt;" />
 <span style="float:right"><a href="#en" onClick="changeLanguage('en')" alt="en" hreflang="en" title="change language to english">&#127468&#127463</a> <a href="#de" onClick="changeLanguage('de')" hreflang="de" alt="de" title="wechsel die Sprache zu deutsch / german">&#127465&#127466</a></span>
-<h1 lang="en" class="en">Phonebook Contact convert for Fritzbox</h1>
-<h1 lang="de" class="de">Telefonbuch Kontakte konvertieren für Fritzbox</h1>
+<h1 lang="en" class="en">Phonebook Contact convert for Fritzbox (outdated Version)</h1>
+<h1 lang="de" class="de">Telefonbuch Kontakte konvertieren für Fritzbox (veraltet Version)</h1>
 <p lang="en" class="en">Converts Fritzbox-XML-Files to/from .CSV or .VCF(vcard)-File with Phone Numbers.</p>
 <p lang="de" class="de">Konvertiert Fritzbox-XML-Dateien zu/von .CSV oder .VCF(vcard)-Dateien mit Telefonnummer</p>
 <span style="clear:both"></span><br>
@@ -1527,8 +1562,11 @@ if(window.navigator.onLine!=undefined && window.navigator.onLine=='offline') off
 
 if(new FileReader==undefined)alert("Sorry, your Internet-Browser is too old. You can not use this Service :-( "); //just for old Browsers before Year ~ 2010/2013
 if (typeof document.querySelector !== "undefined") { //version-info in help
-  var jsonld = JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText);
-  if (typeof jsonld !== "undefined" && jsonld.softwareVersion !== "undefined" && jsonld.dateModified !== "undefined" ) document.getElementById('version_out').innerText = " v"+jsonld.softwareVersion+" "+jsonld.dateModified;
+  document.getElementById('version_out').innerText = "last Version was on 2025-05-23 with Version 0.282 (no updates anymore, due to splited service)";
+  if(document.querySelector('script[type="application/ld+json"]')!=null){
+    var jsonld = JSON.parse(document.querySelector('script[type="application/ld+json"]').innerText);
+    if (typeof jsonld !== "undefined" && jsonld.softwareVersion !== "undefined" && jsonld.dateModified !== "undefined" ) document.getElementById('version_out').innerText = " v"+jsonld.softwareVersion+" "+jsonld.dateModified;
+  }
 }
 </script>
 </body></html>
