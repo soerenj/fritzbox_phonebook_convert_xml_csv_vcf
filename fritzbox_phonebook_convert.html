@@ -36,8 +36,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-05-22",
-	"softwareVersion": "0.28",
+	"dateModified": "2025-05-23",
+	"softwareVersion": "0.281",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html"
 }
@@ -48,8 +48,8 @@
 <body>
 <!--
  /*
- * version: 0.28
- * date: 2025-05-22
+ * version: 0.281
+ * date: 2025-05-23
  *
  * Licence 
  *
@@ -1239,7 +1239,6 @@ function readMultipleFiles(e) {
           if(type_from==''){ alert("ignore this file"); return; }
 
           var textfield_id = "phonebook_"+type_from;
-          f_merge_c[type_from]++;
 
           if(!do_a_merge){ //single file(s)
               document.getElementById(textfield_id).value = contents;
@@ -1249,6 +1248,7 @@ function readMultipleFiles(e) {
           }
           if(do_a_merge){ //merged files
             if(f_merge_c[type_from]==0)  document.getElementById(textfield_id).value= '';
+            f_merge_c[type_from]++;
             document.getElementById(textfield_id).value = f_merge__appendfile(type_from,document.getElementById(textfield_id).value,contents);
             if(readfiles__files_count==readfiles__files_counter){ //last file
               filename+="_merged_";
