@@ -1,6 +1,6 @@
 # What you want convert?
 
-## Fritzbox *.xml* &lt;=> *.csv* :
+## Fritzbox *.xml*  ⮂ *.csv* :
 
 Open the Web-App here: **<https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv/>**
 
@@ -8,7 +8,7 @@ Git: <https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv/>
 
 -----------------------------------
 
-## Fritzbox *.xml* &lt;=>  *.vcf* / Vcard  :
+## Fritzbox *.xml*  ⮂ *.vcf* / Vcard  :
 
 Open the Web-App here: **<https://soerenj.github.io/fritzbox_phonebook_convert_xml_vcf/>**
 

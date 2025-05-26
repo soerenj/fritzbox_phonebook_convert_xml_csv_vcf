@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Convert Fritzbox Phonebook Telefonbuch | webservice online</title>
+<title>Convert Fritzbox Phonebook Telefonbuch | webservice online (Deprecated)</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <meta charset="utf-8">
-<meta name="robots" content="noindex">
-<!--
+<meta name="robots" content="noindex, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name=”name” content=”title” lang="en" content="Convert Fritzbox Phonebook | webservice" />
 <meta name=”name” content=”title” lang="de" content=">Umwandlung Fritzbox Telefonbuch | web-dienst" />
@@ -50,7 +49,10 @@
 </script>
 <style>  input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} @media (min-height:800pt){ textarea{ height:200pt;} } details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
 .drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } input#setting__xml2__phonenumber_edit_your_countrycode:invalid, input#setting__xml2__phonenumber_edit_your_areacode:invalid {border: medium solid red; } .onlytouchscreen{ display:none; } @media (pointer: coarse){.onlytouchscreen{ display:inline; } }</style>
-<style>  body .outd_note ~ *{ opacity: 0.5; }  body .outd_note{ opacity: 1; } </style>
+<style>  body .outd_note ~ *{ opacity: 0.25; }  body .outd_note{ opacity: 1; } </style>
+<script language="javascript" type="text/javascript">
+function closemessage(){ var e=document.getElementsByClassName('outd_note')[0]; e.classList.remove('outd_note'); e.style.display='none';return false;}
+</script>
 </head>
 <body>
 <!--
@@ -70,31 +72,33 @@
  */
   -->
 <div class="outd_note" style="background: #ddd;margin: 5pt;padding: 5pt;border-radius: 5pt;border: 1pt solid black;">
+<!--
 <h1>
 <span lang="en" class="en">What you want convert?</span>
 <span lang="de" class="de">Was möchten Sie umwandeln?</span>
 </h1>
-<ul>
-<li><h2> Fritzbox .xml* &lt;=> (to/from)  .csv : </h2>
+-->
+<h1>
+<span lang="en" class="en">Please select:</span>
+<span lang="de" class="de">Bitte wählen:</span>
+</h1>
+<ul style="list-style:none">
+<li style="margin-bottom:10pt;">
+<a href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv/"><button style="font-size:1.8em;cursor:pointer;"> .csv &nbsp; <!--⇿--> ⮂  &nbsp; <!--(to/from)--> .xml Fritzbox</button></a>
 
-Open here: <a href="https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv/">https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv/</a>
+<span lang="en" class="en">or</span>
+<span lang="de" class="de">oder</span>
+</li><li>
+<a href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_vcf/"><button style="font-size:1.8em;cursor:pointer;"> .vcf / Vcard &nbsp; <!--⇿--> ⮂ &nbsp; <!--(to/from)-->.xml Fritzbox</button></a>
 
-<!--https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv/-->
-</li>
-<li>
-<h2> Fritzbox .xml &lt;=> (to/from)  .vcf / Vcard : </h2>
-
-Open here: <a href="https://soerenj.github.io/fritzbox_phonebook_convert_xml_vcf/">https://soerenj.github.io/fritzbox_phonebook_convert_xml_vcf/</a>
-
-<!--https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_vcf/-->
-</li></ul>
+<span lang="en" class="en">convert.</span>
+<span lang="de" class="de">umwandeln.</span>
+</li></ul><br/>
 <hr>
-<span lang="en" class="en">This Page was splited in May 2025 in two different services. Please select the one you need. <!--This Page her is now deprecated and will be not updated anymore.--></span>
-<span lang="de" class="de">Diese Seite wurde im Mai 2025 auf zwei verschiedene Dienst aufgeteilt. Daher wählen Sie bitte den für Sie passenden. <!--Diese Seite hier nun veraltet und wird nicht mehr aktualisiert.--></span>
-<a style="float:right" href="#" onClick="var e=document.getElementsByClassName('outd_note')[0]; e.classList.remove('outd_note'); e.style.display='none';return false;">
-<span lang="en" class="en">Nevertheless: Close this note and continue anyway (with this outdated Service-Version)</span>
-<span lang="de" class="de">Trotzdem diesen Hinwei&szlig; schlie&szlig; und fortfahren (mit diesen veralteten Service-Version).</span>
-</a>
+<span lang="en" class="en">This Service moved to new URL: splited in May 2025 in two different services. Please select the one you need. <!--This Page her is now deprecated and will be not updated anymore.--> But, you can <a href="#" onClick="closemessage()">close</a> this note and continue anyway (with this outdated Service-Version).</span>
+<span lang="de" class="de">Dieser Dienst umgezogen zu neuer Adresse: im Mai 2025 auf zwei verschiedene Dienst aufgeteilt. <!--Diese Seite hier nun veraltet und wird nicht mehr aktualisiert.--> Sie können diesen Hinwei&szlig; aber auch <a href="#" onClick="closemessage()">schlie&szlig;</a> und fortfahren (mit dieser veralteten Version).</span>
+<a href="#" title="close / schlie&szlig;en" onClick="javascript:closemessage();" style="position: absolute;top: 5pt;right: 10pt;margin: 5pt;border-radius: 5pt;border: solid black 1pt;padding: 5pt;background: rgba(255,255,255,0.5);">🗙</a>
+
 <br> &nbsp; <br>
 </div>
 <header>
@@ -1372,12 +1376,16 @@ dropAreaDetect.addEventListener('drop', unhighlight, false);
 </script>
 <br><br><br>
 <hr>
-<footer>
+
 <!--<em style="color:#ababab;float:right;padding-right:10pt; ">file process only name & phone number</em>-->
-<details lang="en" class="en" id="sec_adv_en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">Full Data-Privacy</summary><div>You Privacy are keept: This Page works just on your computer (or offline). Your Data will stay only on your own local computer. No Cloud. It is just pure local JavaScript-Code in your Browser. <br><br>You are still unsure, using this?: My Security-Advise:<br><a name="sec_adv_en" />
+<details>
+ <summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">
+  <span lang="en" class="en">Full Data-Privacy, due to convert directly inside Browser (no server)</span>
+  <span lang="de" class="de">Voller Datenschutz, da direkt im Browser konvertiert wird (ohne Server)</span>
+ </summary>
+<div lang="en" class="en" id="sec_adv_en"><h3>Privacy</h3>You Privacy are keept: This Page works just on your computer (or offline). Your Data will stay only on your own local computer. No Cloud, no Server. It is just pure local JavaScript-Code in your Browser. <br><br>You are still unsure, using this?: My Security-Advise:<br><a name="sec_adv_en" />
 <p>Option A:
-  <ol>
-    <li>Start Privacy- / Incognito-Mode in your Browser <i syle="color:#999">( e.g. Firefox, Chrome,..)</i> and open again this page. <br>(More easy: <a href="sec_adv_en">click here</a> with right mouse-click and select <em>"open Link in new private window"</em> <span class="onlytouchscreen">/ <em>"open in new private Tab"</em> and <em>Tab change</em> (at buttom)</span> )</li>
+    <li>Change to Privat-Mode <small syle="color:#999">( e.g. Firefox)</small> or Incognito-Mode <small syle="color:#999">( e.g. Chrome,..)</small> inside your Browser and open again this page. <br>Faster: <a href="sec_adv_en">Click here</a> with right mouse-click and select <em>"open Link in new private window"</em> <span class="onlytouchscreen">/ <em>"open in new private Tab"</em> and <em>Tab change</em> (at buttom)</span></li>
     <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet )</li>
     <li>Convert your files</li>
     <li>Important last Step: Close <u>ALL</u> Privacy/Incognito-Mode window afterwards, to finish up / clean up the whole <em>session</em>.</li>
@@ -1389,23 +1397,23 @@ Option B (alternativ) :
    <li>Download this Page: 
      <ul>
       <li><a href="#" onclick="download_sourcecode()">click here</a> or </li>
-      <li>alternative <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/raw/branch/pages/fritzbox_phonebook_convert.html">here</a> or </li>
-      <li><i>save page</i> in your Browser <i>(e.g.: Menue File -&gt; Save Page - or - press hotkey <kbd>STRG</kbd>+<kbd>s</kbd>)</i></li>
+      <li>alternative <a href="https://raw.codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html">here</a> and / or </li>
+      <li><i>save page</i> in your Browser <i>(e.g.: ☰ Menue File -&gt; Save Page - or - press hotkey <kbd>STRG</kbd>+<kbd>S</kbd>)</i></li>
      </ul>
    </li>
    <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet ) </li>
    <li>open to your Download folder</li>
-   <li>open the downloaded .html file at your computer. It should be automatically open in your browser (<i>e.g. Firefox, Chrome,..</i>).</li>
+   <li>open the downloaded .html file at your computer. It should be automatically open in your browser <small syle="color:#999">(e.g. Firefox, Chrome,..)</small>.</li>
   </ol>
 </p>
-</div></details>
-<details lang="de" class="de" id="sec_adv_de"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50);startOnlineOfflineStateReport();" title="more privacy info">voller Datenschutz</summary><div>
-
-Diese Seite arbeitet als offline-Programm (reines JavaScript im Browser). Anonymität, Datenschutz ist daher gewahrt. Ihre Daten bleiben nur auf ihren Computer. Keine Cloud. Es ist reines, lokal ausgeführtes JavaScript. <br>Immernoch unsicher das hier zu nutzen?: Mein Sicherheits-Ratschlag:<br><a name="sec_adv_de" />
+</div>
+<div lang="de" class="de" id="sec_adv_de"><h3>Datenschutz</h3>
+Diese Seite arbeitet als offline-Programm (reines JavaScript im Browser). Anonymität, Datenschutz ist daher gewahrt. Ihre Daten bleiben nur auf ihren Computer. Keine Cloud, kein Server. Es ist reines, lokal ausgeführtes JavaScript. <br>Immernoch unsicher das hier zu nutzen?: Mein Sicherheits-Ratschlag:<br><a name="sec_adv_de" />
+<p>Der erste Gedanke ist: Einfach trennen vom Internet beim umwandeln der Datei und die Seite gleich wieder schließen. Das reicht aber nicht ganze aus. Ein <em>böser Dienst</em> könnten mittels Cookies (u.ä.) ihre Daten zwischenspeichern, und bei einen späteren erneueten Aufruf (wenn Sie wieder was wandeln möchte), ihre Daten dann absenden.<p>
 <p>
 Option A:
   <ol>
-    <li>Den Privat- / Inkognito-Modus in Ihren Internet-Browser <i style="color:#999">( z.B. Firefox, Chrome,..)</i> starten und diese Seite erneut öffnen.<br>  Schneller Weg: <a href="#sec_adv_de">hier klicken</a> mit rechter Maustasten und dann auswählen <span class="onlytouchscreen">(oder lange drücken bei Touchscreens)</span>: <em>"Link in neuem privaten Fenster öffnen"</em> <span class="onlytouchscreen">/ <em>"in neuem privaten Tab öffnen"</em> und <em>in Tab wechsel</em> (unten)</span> )</li>
+    <li>Wechseln in den Privat-Modus (<small style="color:#999">Firefox</small>) oder Inkognito-Modus <small style="color:#999">( z.B. Chrome,..)</small> Ihres Internet-Browser und diese Seite erneut öffnen.<br>  Schneller: <a href="#sec_adv_de">Hier klicken</a> mit rechter Maustasten und dann auswählen <span class="onlytouchscreen">(oder lange drücken bei Touchscreens)</span>: <em>"Link in neuem privaten Fenster öffnen"</em> <span class="onlytouchscreen">/ <em>"in neuem privaten Tab öffnen"</em> und <em>in Tab wechsel</em> (unten)</span> </li>
     <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet)</li>
     <li>wandeln Sie nun Ihre Datei um</li>
     <li>Wichtiger letzter Schritt: Schließen Sie <u>ALLE</u> ihre Privat/Inkognito-Modus Fenster dannach. Nur so kann die ganze sog. <i>Sitzung</i> gelöscht, also wirklich beendet werden.</li>
@@ -1417,28 +1425,33 @@ Option B (alternativ) :
    <li>Download dieser Internet-Seite: 
      <ul>
       <li> <a href="#" onclick="download_sourcecode()">Hier klicken</a> oder </li>
-      <li>alternativ <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/raw/branch/pages/fritzbox_phonebook_convert.html">hier</a> oder </li>
-      <li><i>Seite speichern</i> in ihren Internet-Browser wählen <i>(z.B.: Menü Datei -&gt; Seite speichern - oder - Tastenkombination <kbd>STRG</kbd>+<kbd>s</kbd>)</i></li>
+      <li>alternativ <a href="https://raw.codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html">hier</a> und / oder </li>
+      <li><i>Seite speichern</i> in ihren Internet-Browser wählen <i>(z.B.: ☰ Menü Datei -&gt; Seite speichern - oder - Tastenkombination <kbd>STRG</kbd>+<kbd>S</kbd>)</i></li>
      </ul>
    </li>
    <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet) </li>
    <li>öffnen Sie den Download Ordner</li>
-   <li>öffnen Sie die runtergeladenen .html Datei auf ihren Computer. Es sollte sich automatisch in ihren Internet-browser (<i>z.B. Firefox, Chrome,..</i>) öffnen.</li>
+   <li>öffnen Sie die runtergeladenen .html Datei auf ihren Computer. Es sollte sich automatisch in ihren Internet-browser <small syle="color:#999">(z.B. Firefox, Chrome,..)</small> öffnen.</li>
   </ol>
 </p>
-</div></details><br/>
-<details lang="en" class="en"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="open .csv file in libreoffice / openoffice">Help: open .csv in LibreOffice</summary><div>How to open the .csv file in LibreOffice / OpenOffice:<ul><li>Please select <i>comma</i> as seperator. </li><li>Under <i>other options</i>: Please select <i>Format quoted fields as text</i> (otherwise the phone-Number may miss the beginning 0 <-- at least in  LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__en_8bit.png" alt="screenshot: import .csv-files settings in LibreOffice" /></div></details>
-<details lang="de" class="de"><summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="öffnen der .csv Datei in libreoffice / openoffice">Hilfe: öffne .csv in Libreoffice</summary><div>So öffnet man die .csv Datei in LibreOffice / OpenOffice:<ul><li>Bitte als Trenner <i>Komma</i> auswählen. </li><li>Unter <i>weitere Optionen</i>: Bitte anklicken von <i>Felder in Hochkommata als Text formatieren</i> (ansonsten könnte bei der Telefon-nummer die 0 am Anfang fehlen <!-- zumindest in LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__de_8bit.png" alt="Bildschirmfoto: import .csv-Datei Eintellungen in LibreOffice" /></div></details>
+</div>
+</details>
+<details>
+ <summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="open .csv file in libreoffice / openoffice">
+  <span lang="en" class="en">Help: open .csv in LibreOffice</span>
+  <span lang="de" class="de">Hilfe: öffne .csv in Libreoffice</span>
+ </summary>
+<div lang="en" class="en"><h3>How to open the .csv file in LibreOffice</h3><ul><li>Please select <i>comma</i> as seperator. </li><li>Under <i>other options</i>: Please select <i>Format quoted fields as text</i> (otherwise the phone-Number may miss the beginning 0 <-- at least in  LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__en_8bit.png" alt="screenshot: import .csv-files settings in LibreOffice" /></div>
+<div lang="de" class="de"><h3>So öffnet man die .csv Datei in LibreOffice</h3><ul><li>Bitte als Trenner <i>Komma</i> auswählen. </li><li>Unter <i>weitere Optionen</i>: Bitte anklicken von <i>Felder in Hochkommata als Text formatieren</i> (ansonsten könnte bei der Telefon-nummer die 0 am Anfang fehlen <!-- zumindest in LibreOffice (version 7.4.7.2)-->)</li></ul><br><img src="img/libre_office_open_import_csv__de_8bit.png" alt="Bildschirmfoto: import .csv-Datei Eintellungen in LibreOffice" /></div>
+</details>
 <details style="padding-right:4pt;">
  <summary>
   <span lang="en" class="en">About this Service</span>
-  <span lang="de" class="de">Über diesen Dienst / Seite</small></span>
+  <span lang="de" class="de">Über diesen Dienst / Seite</span>
  </summary>
  <span lang="en" class="en">
- <h3>Description:</h3>
-
-This is a Web-App, or call it online convert-Service .
-<br />
+ <h3>Service-Description:</h3>
+<p>This is a Web-App, or call it online convert-Service. Converted can be phonebook from or to the a Internet-Router, called name <em>Fritzbox</em>.</p>
 Possible to convert:
 <ul>
 <li> Fritzbox <em>.xml</em> to <em>.csv</em></li>
@@ -1449,16 +1462,19 @@ Possible to convert:
 </ul>
 Other functions:
 <ul>
-<li> Multiple Files can be selected and merge before: .csv or .vcf Files. (press <kbd>STRG</kbd> while file selection).</li>
+<li> Multiple Files can be selected and merge before: .csv or .vcf Files. (press <kbd>STRG</kbd> while file selection or with <kdb>⇧ Shift</kdb>).</li>
 <li> open the .csv file in your Office Programm (e.g. LibreOffice).</li>
 <li> It's running in directly your browser. ( No need of installation. No server. No Cloud. Only local Programm-Code. )</li>
 </ul>
- 
+Short URL:
+<ul>
+  <li><a href="https://soerenj.codeberg.page">https://soerenj.codeberg.page</a></li>
+  <li><a href="https://soerenj.github.io">https://soerenj.github.io</a></li>
+</ul>
 </span>
 <span lang="de" class="de">
- <h3>Beschreibung:</h3>
-Dies ist eine Web-App, oder nenne es online konvertier Dienst.
-<br />
+ <h3>Dienst-Beschreibung:</h3>
+<p>Dies ist eine Web-App, oder nenne es online konvertier Dienst. Umgewandelt werden können Telefonbücher vom oder zu diesen Internet-Router, der <em>Fritzbox</em> genannt wird.</p>
 Möglich umzuwandeln ist:
 <ul>
 <li> Fritzbox <em>.xml</em> zu <em>.csv</em></li>
@@ -1470,13 +1486,30 @@ Möglich umzuwandeln ist:
 
 Weitere Funktionen:
 <ul>
-<li> Mehrere Dateien auswählen und vorher zusammenfügen: .csv und .vcf Dateien können vorher zusammengefügt werden. (beim Hochladen <kbd>STRG</kbd> gedrückt halten)</li>
+<li> Mehrere Dateien auswählen und vorher zusammenfügen: .csv und .vcf Dateien können vorher zusammengefügt werden. (beim Hochladen <kbd>STRG</kbd> gedrückt halten oder per <kbd>⇧ Shift<small>(auch Umschalttaste genannt)</small></kbd>)</li>
 <li> öffne die .csv Dateien in Ihren Office Programm (z.B. LibreOffice).</li>
-<li> Es läuft direkt im Browser.  ( Es ist keine Installtion nötig. Kein Server. Keine Cloud. Nur lokal ausgeführte Programmcode. )</li>
+<li> Es läuft direkt im Browser.  ( Es ist keine Installtion nötig. Kein Server. Keine Cloud. Nur lokal ausgeführter Programmcode. )</li>
+</ul>
+Kurze URL:
+<ul>
+  <li><a href="https://soerenj.codebger.page">https://soerenj.codeberg.page</a></li>
+  <li><a href="https://soerenj.github.io">https://soerenj.github.io</a></li>
 </ul>
 </span>
+ <h3>Sourcecode</h3>
+ <small lang="en" class="en">Or also report error / issue there.</small><small lang="de" class="de">Oder auch Fehler melden dort.</small><br>
+Licence: <a href="LICENSE" rel="jslicense">APGL</a> and  | Version: <span id="version_out"></span> | <a href="#" onClick="download_sourcecode();return false">Download this page (without images)</a><br>
+Developer-Portal "codeberg": <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/</a> &nbsp; ; &nbsp; <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">change-Log/History</a>
+<br>or <br>
+Developer-Portal "github": <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/</a> &nbsp; ; &nbsp; <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Change-Log/History</a>
+</details>
 <aside>
- <h3>Alternative Services / Tools</h3>
+<details style="padding-right:4pt;">
+ <summary>
+  <span lang="en" class="en">Alternative Services / Tools</span>
+  <span lang="de" class="de">Alternative Dienste / Tools</span>
+ </summary>
+ <h3>Links to alternative Services or Tools</h3>
  <ul>
   <li>Online Web-Service: (local JavaScript inside Browser)<br/>
 convert .xml to .vcf (=export) <br/>
@@ -1496,15 +1529,9 @@ convert .xml to .vcf (=export) <br/>
   <li> ... lots of other... </li>
 </ul>
 </aside>
- <h3>Sourcecode</h3>
- <small lang="en" class="en">Or also report error / issue there.</small><small lang="de" class="de">Oder auch Fehler melden dort.</small><br>
-Licence: <a href="LICENSE" rel="jslicense">APGL</a> and  | Version: <span id="version_out"></span> | <a href="#" onClick="download_sourcecode();return false">Download this page (without images)</a><br>
-Developer-Portal "codeberg": <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/</a> &nbsp; ; &nbsp; <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">change-Log/History</a>
-<br>or <br>
-Developer-Portal "github": <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/</a> &nbsp; ; &nbsp; <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Change-Log/History</a>
 </details>
 
-</footer>
+
 <br/>
 
 <script language="JavaScript">
@@ -1539,8 +1566,8 @@ function changeLanguage(newSetLang){
 }
 
 //Help Privacy & Help Privacy show Offline state in 
-if(window.location.hash=="#sec_adv_en")document.getElementById("sec_adv_en").open="open";
-if(window.location.hash=="#sec_adv_de")document.getElementById("sec_adv_de").open="open";
+if(window.location.hash=="#sec_adv_en")document.getElementById("sec_adv_en").parentNode.open="open";
+if(window.location.hash=="#sec_adv_de")document.getElementById("sec_adv_de").parentNode.open="open";
 startOnlineOfflineStateReport_done=false;
 function startOnlineOfflineStateReport(){
     if(window.navigator.onLine!=undefined && !startOnlineOfflineStateReport_done){
