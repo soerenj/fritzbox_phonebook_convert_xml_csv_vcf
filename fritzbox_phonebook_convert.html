@@ -6,14 +6,14 @@
 <meta charset="utf-8">
 <meta name="robots" content="noindex, follow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name=”name” content=”title” lang="en" content="Convert Fritzbox Phonebook | webservice" />
-<meta name=”name” content=”title” lang="de" content=">Umwandlung Fritzbox Telefonbuch | web-dienst" />
-<meta name=”name” content=”description” lang="en" content="Online converter for phonebook files from router Fritzbox .xml : between .xml ↔ to / from .csv  ; or .xml ↔ to / from .vcf (vcard) and backwards" />
-<meta name=”name” content=”description” lang="de" content="Online konvertierung umwandlung vom Telefonbuch der Fritzbox (.xml Datei) : zwischn.xml ↔ von / nach .csv  ; oder  .xml ↔ von / nach .vcf (vcard) und zurück." />
+<meta name=”title” lang="en" content="Convert Fritzbox Phonebook | webservice" />
+<meta name=”title” lang="de" content="Umwandlung Fritzbox Telefonbuch | web-dienst" />
+<meta name=”description” lang="en" content="Online converter for phonebook files from router Fritzbox .xml : between .xml ↔ to / from .csv  ; or .xml ↔ to / from .vcf (vcard) and backwards" />
+<meta name=”name” content=”description” lang="de" content="Online konvertierung umwandlung vom Telefonbuch der Fritzbox (.xml Datei) : zwischen .xml ↔ von / nach .csv  ; oder  .xml ↔ von / nach .vcf (vcard) und zurück." />
 <meta property="og:title" lang="en" content="Convert Fritzbox Phonebook | webservice" />
 <meta property="og:title" lang="de" content="Umwandlung Fritzbox Telefonbuch | web-dienst" />
-<meta name=”name” content=”og:description” lang="en" content="Online converter for phonebook files from router Fritzbox .xml : between .xml ↔ to / from .csv  ; or .xml ↔ to / from .vcf (vcard) and backwards" />
-<meta name=”name” content=”og:description” lang="de" content="Online konvertierung umwandlung vom Telefonbuch der Fritzbox (.xml Datei) : zwischn.xml ↔ von / nach .csv  ; oder  .xml ↔ von / nach .vcf (vcard) und zurück." />
+<meta property=”og:description” lang="en" content="Online converter for phonebook files from router Fritzbox .xml : between .xml ↔ to / from .csv  ; or .xml ↔ to / from .vcf (vcard) and backwards" />
+<meta property=”og:description” lang="de" content="Online konvertierung umwandlung vom Telefonbuch der Fritzbox (.xml Datei) : zwischen .xml ↔ von / nach .csv  ; oder  .xml ↔ von / nach .vcf (vcard) und zurück." />
 <meta property="og:type" content="webapp" />
 <link rel="icon" href="img/icon_convert_formats.png" sizes="141x96" />
 <link rel="apple-touch-icon" href="img/icon_convert_formats.png" sizes="141x96" />
@@ -47,11 +47,57 @@
 	"creativeWorkStatus": "Deprecated"
 }
 </script>
-<style>  input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} @media (min-height:800pt){ textarea{ height:200pt;} } details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; }
+<style>  input{ cursor: pointer } .advanced_view{ display:none; } textarea{ min-width:500pt;width:80%;height:100pt;} @media (min-height:800pt){ textarea{ height:200pt;} } details summary { color:LinkText;} details summary:hover, details summary :hover, a .en:hover, a .de :hover{ text-decoration:underline; cursor:pointer; color:#000; } details div { margin-left: 12pt; } a:hover span{ text-decoration:underline; }
 .drop-area_highlight, .drop-area_text_highlight  { border-color: purple; width: 90%; min-width:90%; height:90%; min-height:90%; background:rgba(64, 64, 64, 0.5); position:absolute;  top:0px; left:0px; border: 2px dashed #ccc; border-radius: 20pt; margin:5%; font-size: 3em; text-align: center;  padding-top: 25%;} .de{ display:none; } input#setting__xml2__phonenumber_edit_your_countrycode:invalid, input#setting__xml2__phonenumber_edit_your_areacode:invalid {border: medium solid red; } .onlytouchscreen{ display:none; } @media (pointer: coarse){.onlytouchscreen{ display:inline; } }</style>
-<style>  body .outd_note ~ *{ opacity: 0.25; }  body .outd_note{ opacity: 1; } </style>
+<style>
+@media (pointer: coarse){
+  .onlytouchscreen{ display:inline; }
+  input[type="button"], input[type="file"], a.maybebutton, details summary {
+  padding: .4em .8em; 
+  background: #5a9900 linear-gradient(#8db243, #5a9900); 
+  background: #e6e6e6;
+  /*background: rgb(86, 97, 255) linear-gradient(rgb(191, 192, 255), rgb(235, 240, 255));*/
+  /*rgb(44, 58, 255) linear-gradient(rgb(150, 152, 255), rgb(179, 198, 255));*/
+  /*box-shadow: 0 .2em .4em gray;
+  text-shadow: 0 -.05em .05em #fff; */
+  font-size: 125%; 
+  line-height: 1.5;
+  margin: 2em;
+  padding: .5em 1em;
+  border-radius: .5em;color: black;
+  cursor: pointer;
+    border: 1pt solid black;
+  }
+  a:hover, details summary:hover{
+  outline: none;
+  background: white;
+  color: darkblue;}
+}
+</style>
+<!--<style>  body .outd_note ~ *{ opacity: 0.25; }  body .outd_note{ opacity: 1; } </style>-->
+<style>
+/*button { 
+  padding: .4em .8em; 
+  background: #5a9900 linear-gradient(#8db243, #5a9900); 
+  background: rgb(44, 58, 255) linear-gradient(rgb(150, 152, 255), rgb(179, 198, 255));
+  box-shadow: 0 .2em .4em gray;
+  text-shadow: 0 -.05em .05em #333; 
+  font-size: 125%; 
+  line-height: 1.5;
+  margin: 2em;
+  padding: .5em 1em;
+  border-radius: .5em;
+  cursor: pointer;
+}
+button:hover, button:active {
+  outline: none;
+  background: white;
+  color: darkblue;
+}*/
+.closebuttonmessage{ position: absolute;top: 5pt;right: 10pt;margin: 5pt;border-radius: 5pt;border: solid black 1pt;padding: 5pt;background: rgba(255,255,255,0.5);
+</style>
 <script language="javascript" type="text/javascript">
-function closemessage(){ var e=document.getElementsByClassName('outd_note')[0]; e.classList.remove('outd_note'); e.style.display='none';return false;}
+function closemessage(){ var e=document.getElementsByClassName('outd_note'); if(typeof e != "undefined" && e.length>0){ e[0].style.display='none'; e[0].classList.remove('outd_note');  window.scrollBy(0, 0);window.setTimeout('window.scrollBy(0, 0);',50); }return false;}
 </script>
 </head>
 <body>
@@ -72,6 +118,7 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note')[0]; 
  */
   -->
 <div class="outd_note" style="background: #ddd;margin: 5pt;padding: 5pt;border-radius: 5pt;border: 1pt solid black;">
+<noscript style="color:red">You need JavaScript, to use this service.</noscript>
 <!--
 <h1>
 <span lang="en" class="en">What you want convert?</span>
@@ -79,25 +126,25 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note')[0]; 
 </h1>
 -->
 <h1>
-<span lang="en" class="en">Please select:</span>
+<span lang="en" class="en">Please choose:</span>
 <span lang="de" class="de">Bitte wählen:</span>
 </h1>
 <ul style="list-style:none">
 <li style="margin-bottom:10pt;">
-<a href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv/"><button style="font-size:1.8em;cursor:pointer;"> .csv &nbsp; <!--⇿--> ⮂  &nbsp; <!--(to/from)--> .xml Fritzbox</button></a>
-
+<button style="font-size:1.8em;cursor:pointer;" onClick="location.href='https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv/'"> .csv &nbsp; <!--⇿--> <!-- &#8644; ⮂ --> <!-- ↔ &#x2194; &harr; --> ↔ &nbsp;  <!--(to/from)--> .xml Fritzbox</button> &nbsp; &nbsp; <a href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv/">https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv/</a>
+</li>
+<li  style="margin-bottom:10pt;margin-left:15em;">
 <span lang="en" class="en">or</span>
 <span lang="de" class="de">oder</span>
-</li><li>
-<a href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_vcf/"><button style="font-size:1.8em;cursor:pointer;"> .vcf / Vcard &nbsp; <!--⇿--> ⮂ &nbsp; <!--(to/from)-->.xml Fritzbox</button></a>
+</li>
+<li>
+<button style="font-size:1.8em;cursor:pointer;" onClick="location.href='https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_vcf/'"> .vcf / Vcard &nbsp; <!--⇿--> <!-- &#8644; ⮂ --> <!-- ↔ &#x2194; &harr; --> ↔ &nbsp;  <!--(to/from)--> .xml Fritzbox</button> &nbsp; &nbsp; <a href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_vcf/">https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_vcf/</a>
 
-<span lang="en" class="en">convert.</span>
-<span lang="de" class="de">umwandeln.</span>
 </li></ul><br/>
 <hr>
 <span lang="en" class="en">This Service moved to new URL: splited in May 2025 in two different services. Please select the one you need. <!--This Page her is now deprecated and will be not updated anymore.--> But, you can <a href="#" onClick="closemessage()">close</a> this note and continue anyway (with this outdated Service-Version).</span>
-<span lang="de" class="de">Dieser Dienst umgezogen zu neuer Adresse: im Mai 2025 auf zwei verschiedene Dienst aufgeteilt. <!--Diese Seite hier nun veraltet und wird nicht mehr aktualisiert.--> Sie können diesen Hinwei&szlig; aber auch <a href="#" onClick="closemessage()">schlie&szlig;</a> und fortfahren (mit dieser veralteten Version).</span>
-<a href="#" title="close / schlie&szlig;en" onClick="javascript:closemessage();" style="position: absolute;top: 5pt;right: 10pt;margin: 5pt;border-radius: 5pt;border: solid black 1pt;padding: 5pt;background: rgba(255,255,255,0.5);">🗙</a>
+<span lang="de" class="de">Dieser Dienst umgezogen zu neuer Adresse: im Mai 2025 auf zwei verschiedene Dienst aufgeteilt. <!--Diese Seite hier nun veraltet und wird nicht mehr aktualisiert.--> Sie können diesen Hinwei&szlig; aber auch <a href="#" onClick="closemessage()">schlie&szlig;en</a> und fortfahren (mit dieser veralteten Version).</span>
+<a href="#" title="close / schlie&szlig;en" onClick="javascript:closemessage();" class="closebuttonmessage maybebutton">🗙</a>
 
 <br> &nbsp; <br>
 </div>
@@ -105,7 +152,7 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note')[0]; 
 <img src="img/icon_convert_formats.png" style="float:left;padding:6pt;" />
 <span style="float:right"><a href="#en" onClick="changeLanguage('en')" alt="en" hreflang="en" title="change language to english">&#127468&#127463</a> <a href="#de" onClick="changeLanguage('de')" hreflang="de" alt="de" title="wechsel die Sprache zu deutsch / german">&#127465&#127466</a></span>
 <h1 lang="en" class="en">Phonebook Contact convert for Fritzbox (outdated Version)</h1>
-<h1 lang="de" class="de">Telefonbuch Kontakte konvertieren für Fritzbox (veraltet Version)</h1>
+<h1 lang="de" class="de">Telefonbuch Kontakte konvertieren für Fritzbox (veraltete Version)</h1>
 <p lang="en" class="en">Converts Fritzbox-XML-Files to/from .CSV or .VCF(vcard)-File with Phone Numbers.</p>
 <p lang="de" class="de">Konvertiert Fritzbox-XML-Dateien zu/von .CSV oder .VCF(vcard)-Dateien mit Telefonnummer</p>
 <span style="clear:both"></span><br>
@@ -118,8 +165,20 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note')[0]; 
 <br />
 <span style="color:#999999"><i><span lang="en" class="en">Allowed</span><span lang="de" class="de">Erlaubt</span>: Fritzbox .xml , .csv , .vc , .vcard</i></span><br>
 <span id="file-input_auto-detect_text_drophere" style="display:none">Drop your file here</span>
-<input type="file" multiple id="file-input_auto-detect" autocomplete="off" /><a href="#" id="file-input_auto-detect_close_button" style="display:none;background: white;  font-size: 2em;  text-align: right;  top: 10%;  position: absolute;  padding: 0.5em;  right: 10%; border-radius:20pt;" onClick="unhighlight();return false;">Close X</a><br>
+<input type="file" multiple id="file-input_auto-detect" autocomplete="off" /><a href="#" id="file-input_auto-detect_close_button" style="display:none;background: white;  font-size: 2em;  text-align: right;  top: 10%;  position: absolute;  padding: 0.5em;  right: 10%; border-radius:20pt;" onClick="unhighlight();return false;" class="maybebutton">Close 🗙</a><br>
 </div><br>
+<p id="show_advanced_view_link_link_close" style="display:none">
+<a href="#" onclick="show_advanced_view('hide');return false" class="maybebutton">
+    <span lang="en" class="en">&blacktriangledown; &nbsp; close text source window 🗙</span>
+    <span lang="de" class="de">&blacktriangledown; &nbsp; schließe Text-Fenster 🗙</span>
+</a>
+</p>
+<p id="show_advanced_view_link_wrapper">
+  <a href="#" onclick="show_advanced_view('show');return false" class="maybebutton">
+    <span lang="en" class="en">&blacktriangleright; &nbsp; show text source window</span>
+    <span lang="de" class="de">&blacktriangleright; &nbsp; Text-Fenster anzeigen </span>
+  </a>
+</p>
 <div id="select_file_xml_div" class="advanced_view">
 <label for="phonebook_xml">From Fritzbox .XML File:</label><br>
 <textarea id="phonebook_xml" autocomplete="off">
@@ -164,7 +223,7 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note')[0]; 
  <input type="button" value="convert: ⬇ xml to csv" onclick="convert_to_csv()" />  &nbsp;
  <input type="button" value="convert: ⬇ xml to vcf (vcard)" onclick="convert_to_vcf()" />  &nbsp;
  <input type="button" value="Download" title="Download one file" onclick="download_one_file_ask()" />   &nbsp; 
- <input type="button" value="✖ Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;  
+ <input type="button" value="Reset to Test-Values" title="reset to default" onclick="reset_to_default()" />   &nbsp;  
 </div>
 <br/>
 <div id="select_file_xml_csv" class="advanced_view">
@@ -200,19 +259,6 @@ END:VCARD
 
 </textarea>
 </div>
-
-<p id="show_advanced_view_link_link_close" style="display:none">
-<a href="#" onclick="show_advanced_view('hide');return false">
-    <span lang="en" class="en">close text source window</span>
-    <span lang="de" class="de">schließe Text-Fenster</span>
-</a>
-</p>
-<p id="show_advanced_view_link_wrapper">
-  <a href="#" onclick="show_advanced_view('show');return false">
-    <span lang="en" class="en">show text source window</span>
-    <span lang="de" class="de">Text-Fenster anzeigen </span>
-  </a>
-</p>
 
 <textarea id="error_logs" style="display:none" class=""></textarea>
 
@@ -1351,6 +1397,7 @@ function preventDefaults (e) {
 }
 
 function highlight(e) {
+  closemessage();
   dropArea.classList.add('drop-area_highlight');
   dropAreaText.classList.add('drop-area_text_highlight');
   dropAreaText.style.display='block';
@@ -1380,15 +1427,16 @@ dropAreaDetect.addEventListener('drop', unhighlight, false);
 <!--<em style="color:#ababab;float:right;padding-right:10pt; ">file process only name & phone number</em>-->
 <details>
  <summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">
-  <span lang="en" class="en">Full Data-Privacy, due to convert directly inside Browser (no server)</span>
-  <span lang="de" class="de">Voller Datenschutz, da direkt im Browser konvertiert wird (ohne Server)</span>
+  <span lang="en" class="en">Full Data-Privacy : because directly converted inside of your Browser: no server, no cloud)</span>
+  <span lang="de" class="de">Voller Datenschutz : da direkt im ihren Browser konvertiert wird: ohne Server, ohne cloud)</span>
  </summary>
 <div lang="en" class="en" id="sec_adv_en"><h3>Privacy</h3>You Privacy are keept: This Page works just on your computer (or offline). Your Data will stay only on your own local computer. No Cloud, no Server. It is just pure local JavaScript-Code in your Browser. <br><br>You are still unsure, using this?: My Security-Advise:<br><a name="sec_adv_en" />
 <p>Option A:
-    <li>Change to Privat-Mode <small syle="color:#999">( e.g. Firefox)</small> or Incognito-Mode <small syle="color:#999">( e.g. Chrome,..)</small> inside your Browser and open again this page. <br>Faster: <a href="sec_adv_en">Click here</a> with right mouse-click and select <em>"open Link in new private window"</em> <span class="onlytouchscreen">/ <em>"open in new private Tab"</em> and <em>Tab change</em> (at buttom)</span></li>
+  <ol>
+    <li>Change to Privat-Mode <small syle="color:#999">( so called inside Firefox)</small> or Incognito-Mode <small syle="color:#999">( called name inside of e.g. Chrome,..)</small> inside your Browser and open again this page. <br>Faster: <a href="sec_adv_en">Click here</a> with right mouse-click and select <em>"open Link in new private window"</em> <span class="onlytouchscreen">/ <em>"open in new private Tab"</em> and click <em>change to Tab</em> (at bottom)</span></li>
     <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet )</li>
-    <li>Convert your files</li>
-    <li>Important last Step: Close <u>ALL</u> Privacy/Incognito-Mode window afterwards, to finish up / clean up the whole <em>session</em>.</li>
+    <li>Convert your file</li>
+    <li>Important last Step: Close <u>ALL</u> Privacy/Incognito-Mode window afterwards, to clean up the whole <em>session</em>.</li>
   </ol>
 </p>
 <p>
@@ -1396,9 +1444,9 @@ Option B (alternativ) :
  <ol>
    <li>Download this Page: 
      <ul>
-      <li><a href="#" onclick="download_sourcecode()">click here</a> or </li>
-      <li>alternative <a href="https://raw.codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html">here</a> and / or </li>
-      <li><i>save page</i> in your Browser <i>(e.g.: ☰ Menue File -&gt; Save Page - or - press hotkey <kbd>STRG</kbd>+<kbd>S</kbd>)</i></li>
+      <li><a href="#" onclick="download_sourcecode();return false;">download page</a><br> or </li>
+      <!--<li>alternative <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/raw/branch/pages/fritzbox_phonebook_convert.html">here</a> and / or </li>-->
+      <li><i>save page</i> in your Browser <i>(press hotkey <kbd>STRG</kbd>+<kbd>S</kbd> &nbsp; - or - &nbsp; e.g.: ☰ Menue File &rarr; Save Page)</i></li>
      </ul>
    </li>
    <li><span class="onlineoffline_state"></span> go offline (= disconnect from Internet ) </li>
@@ -1413,10 +1461,10 @@ Diese Seite arbeitet als offline-Programm (reines JavaScript im Browser). Anonym
 <p>
 Option A:
   <ol>
-    <li>Wechseln in den Privat-Modus (<small style="color:#999">Firefox</small>) oder Inkognito-Modus <small style="color:#999">( z.B. Chrome,..)</small> Ihres Internet-Browser und diese Seite erneut öffnen.<br>  Schneller: <a href="#sec_adv_de">Hier klicken</a> mit rechter Maustasten und dann auswählen <span class="onlytouchscreen">(oder lange drücken bei Touchscreens)</span>: <em>"Link in neuem privaten Fenster öffnen"</em> <span class="onlytouchscreen">/ <em>"in neuem privaten Tab öffnen"</em> und <em>in Tab wechsel</em> (unten)</span> </li>
+    <li>Wechseln in den Privat-Modus (<small style="color:#999">so heißt es in Firefox</small>) oder Inkognito-Modus <small style="color:#999">( so heißt es in z.B. Chrome,..)</small> Ihres Internet-Browser und diese Seite erneut öffnen.<br>  Schneller: <a href="#sec_adv_de">Hier klicken</a> mit rechter Maustasten und dann auswählen <span class="onlytouchscreen">(oder lange drücken bei Touchscreens)</span>: <em>"Link in neuem privaten Fenster öffnen"</em> <span class="onlytouchscreen">/ <em>"in neuem privaten Tab öffnen"</em> und klicken auf <em>in Tab wechsel</em> (unten)</span> </li>
     <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet)</li>
     <li>wandeln Sie nun Ihre Datei um</li>
-    <li>Wichtiger letzter Schritt: Schließen Sie <u>ALLE</u> ihre Privat/Inkognito-Modus Fenster dannach. Nur so kann die ganze sog. <i>Sitzung</i> gelöscht, also wirklich beendet werden.</li>
+    <li>Wichtiger letzter Schritt: Schließen Sie <u>ALLE</u> ihre Privat/Inkognito-Modus Fenster dannach. Nur so kann die ganze sogenannte <i>Sitzung</i> gelöscht, also wirklich beendet werden.</li>
   </ol>
 </p>
 <p>
@@ -1424,14 +1472,14 @@ Option B (alternativ) :
   <ol>
    <li>Download dieser Internet-Seite: 
      <ul>
-      <li> <a href="#" onclick="download_sourcecode()">Hier klicken</a> oder </li>
-      <li>alternativ <a href="https://raw.codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html">hier</a> und / oder </li>
-      <li><i>Seite speichern</i> in ihren Internet-Browser wählen <i>(z.B.: ☰ Menü Datei -&gt; Seite speichern - oder - Tastenkombination <kbd>STRG</kbd>+<kbd>S</kbd>)</i></li>
+      <li> <a href="#" onclick="download_sourcecode();return false;">Download Seite</a><br> oder </li>
+      <!--<li>alternativ <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/raw/branch/pages/fritzbox_phonebook_convert.html">hier</a> und / oder </li>-->
+      <li><i>Seite speichern</i> in ihren Internet-Browser wählen <i>(Tastenkombination <kbd>STRG</kbd>+<kbd>S</kbd> &nbsp; - oder - &nbsp; z.B.: ☰ Menü Datei &rarr; Seite speichern)</i></li>
      </ul>
    </li>
    <li><span class="onlineoffline_state"></span> gehen Sie offline (= trennen Sie die Verbindung zum Internet) </li>
    <li>öffnen Sie den Download Ordner</li>
-   <li>öffnen Sie die runtergeladenen .html Datei auf ihren Computer. Es sollte sich automatisch in ihren Internet-browser <small syle="color:#999">(z.B. Firefox, Chrome,..)</small> öffnen.</li>
+   <li>öffnen Sie die runtergeladenen .html Datei auf ihren Computer. Diese sollte sich automatisch in ihren Internet-browser <small syle="color:#999">(z.B. Firefox, Chrome,..)</small> öffnen.</li>
   </ol>
 </p>
 </div>
@@ -1466,7 +1514,7 @@ Other functions:
 <li> open the .csv file in your Office Programm (e.g. LibreOffice).</li>
 <li> It's running in directly your browser. ( No need of installation. No server. No Cloud. Only local Programm-Code. )</li>
 </ul>
-Short URL:
+Short adress:
 <ul>
   <li><a href="https://soerenj.codeberg.page">https://soerenj.codeberg.page</a></li>
   <li><a href="https://soerenj.github.io">https://soerenj.github.io</a></li>
@@ -1490,18 +1538,26 @@ Weitere Funktionen:
 <li> öffne die .csv Dateien in Ihren Office Programm (z.B. LibreOffice).</li>
 <li> Es läuft direkt im Browser.  ( Es ist keine Installtion nötig. Kein Server. Keine Cloud. Nur lokal ausgeführter Programmcode. )</li>
 </ul>
-Kurze URL:
+Kurze Adresse:
 <ul>
   <li><a href="https://soerenj.codebger.page">https://soerenj.codeberg.page</a></li>
   <li><a href="https://soerenj.github.io">https://soerenj.github.io</a></li>
 </ul>
 </span>
- <h3>Sourcecode</h3>
- <small lang="en" class="en">Or also report error / issue there.</small><small lang="de" class="de">Oder auch Fehler melden dort.</small><br>
-Licence: <a href="LICENSE" rel="jslicense">APGL</a> and  | Version: <span id="version_out"></span> | <a href="#" onClick="download_sourcecode();return false">Download this page (without images)</a><br>
+ <h3>
+   <span lang="en" class="en">Sourcecode</span>
+   <span lang="de" class="de">Quellcode</span>
+ </h3>
+ <small lang="en" class="en">You can also report error / issue there.</small><small lang="de" class="de">Sie können dort auch Fehler melden.</small><br>
+Licence: <a href="LICENSE" rel="jslicense">AGPL</a> | Version: <span id="version_out"></span> | <a href="#" onClick="download_sourcecode();return false">Download this page (without images)</a>
+<ul>
+<li>
 Developer-Portal "codeberg": <a href="https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/</a> &nbsp; ; &nbsp; <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">change-Log/History</a>
-<br>or <br>
+</li>
+<li>
 Developer-Portal "github": <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/">https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/</a> &nbsp; ; &nbsp; <a href="https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf/commits/master">Change-Log/History</a>
+</li>
+</ul>
 </details>
 <aside>
 <details style="padding-right:4pt;">
@@ -1528,9 +1584,8 @@ convert .xml to .vcf (=export) <br/>
   <a href="http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html">http://www.sigvdr.de/Software/EasyKontakt/EasyKontakt.html</a>
   <li> ... lots of other... </li>
 </ul>
-</aside>
 </details>
-
+</aside>
 
 <br/>
 
