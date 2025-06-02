@@ -40,8 +40,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-05-23",
-	"softwareVersion": "0.282",
+	"dateModified": "2025-06-02",
+	"softwareVersion": "0.283",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
 	"creativeWorkStatus": "Deprecated"
@@ -103,8 +103,8 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note'); if(
 <body>
 <!--
  /*
- * version: 0.282
- * date: 2025-05-23
+ * version: 0.283
+ * date: 2025-06-02
  *
  * Licence 
  *
@@ -692,9 +692,9 @@ function convert_to_vcf(multipleDirectDownload=false){ //=vcard
   //name
   tmp = person.replace('\n','');
   if(uri_encode  && v=="2.1")tmp = encodeURI(tmp).replace(/%/g,'=');
-  if(add_charset && v=="2.1")tmp = ";CHARSET=UTF-8:"+tmp;
-  out += 'N:' +tmp+'\n';
-  out += 'FN:'+tmp+'\n';
+  if(add_charset && v=="2.1")tmp = ";CHARSET=UTF-8:"+tmp; else tmp = ":"+tmp;
+  out += 'N' +tmp+'\n';
+  out += 'FN'+tmp+'\n';
   
   //phone
   for(j=0;j<telephony.length;j++){
@@ -1428,7 +1428,7 @@ dropAreaDetect.addEventListener('drop', unhighlight, false);
 <details>
  <summary onclick="window.scrollBy(0, 100);window.setTimeout('window.scrollBy(0, 100);',50)" title="more privacy info">
   <span lang="en" class="en">Full Data-Privacy : because directly converted inside of your Browser: no server, no cloud)</span>
-  <span lang="de" class="de">Voller Datenschutz : da direkt im ihren Browser konvertiert wird: ohne Server, ohne cloud)</span>
+  <span lang="de" class="de">Voller Datenschutz : da direkt in ihrem Browser konvertiert wird: ohne Server, ohne cloud)</span>
  </summary>
 <div lang="en" class="en" id="sec_adv_en"><h3>Privacy</h3>You Privacy are keept: This Page works just on your computer (or offline). Your Data will stay only on your own local computer. No Cloud, no Server. It is just pure local JavaScript-Code in your Browser. <br><br>You are still unsure, using this?: My Security-Advise:<br><a name="sec_adv_en" />
 <p>Option A:
