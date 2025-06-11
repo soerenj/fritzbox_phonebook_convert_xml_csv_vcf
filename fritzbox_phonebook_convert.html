@@ -22,7 +22,6 @@
 <link rel="canonical" href="https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html" />
 <link rel="alternate" href="https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#en" lang="en" hreflang="en" />
 <link rel="alternate" href="https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html#de" lang="de" hreflang="de" />
--->
 <script type='application/ld+json'>
 {
 	"@context": "http://schema.org/",
@@ -40,8 +39,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-06-02",
-	"softwareVersion": "0.283",
+	"dateModified": "2025-06-04",
+	"softwareVersion": "0.284",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
 	"creativeWorkStatus": "Deprecated"
@@ -74,7 +73,7 @@
   color: darkblue;}
 }
 </style>
-<!--<style>  body .outd_note ~ *{ opacity: 0.25; }  body .outd_note{ opacity: 1; } </style>-->
+<style>  body .outd_note ~ *{ opacity: 0.25; }  body .outd_note{ opacity: 1; } </style>
 <style>
 /*button { 
   padding: .4em .8em; 
@@ -103,8 +102,8 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note'); if(
 <body>
 <!--
  /*
- * version: 0.283
- * date: 2025-06-02
+ * version: 0.284
+ * date: 2025-06-04
  *
  * Licence 
  *
@@ -254,6 +253,7 @@ VERSION:2.1
 N:Person=20F
 FN:Person=20F
 TEL;VOICE:+4990987654321
+TEL;TYPE=HOME,VOICE:+494414747747425
 NOTE:importantContact(fritzbox)
 END:VCARD
 
@@ -671,6 +671,10 @@ function convert_to_vcf(multipleDirectDownload=false){ //=vcard
    if(!confirm(text__AskMultipleVcf) || !confirm(text__AskMultipleVcf_name)) return ""; //multipleDirectDownload=false;
    if(text__AskMultipleVcf_version!='' && !confirm(text__AskMultipleVcf_version)) return "";
  }
+
+ var propertyAdd = '';
+ if(add_charset && v=="2.1")propertyAdd = ";CHARSET=UTF-8";
+
  for(i=0;i<contacts.length;i++)
  {
   //check values
@@ -682,7 +686,7 @@ function convert_to_vcf(multipleDirectDownload=false){ //=vcard
   ){ logError.push(contacts[i].innerHTML); continue; }
 
   out = 'BEGIN:VCARD\n';
-  if(v=="2.1")out += 'VERSION:2.1\n';
+  if(v=="2.1") out += 'VERSION:2.1\n';
   if(v=="3.0") out += 'VERSION:3.0\n';
   if(v=="4.0") out += 'VERSION:4.0\n';
   contact = contacts[i];
@@ -692,14 +696,13 @@ function convert_to_vcf(multipleDirectDownload=false){ //=vcard
   //name
   tmp = person.replace('\n','');
   if(uri_encode  && v=="2.1")tmp = encodeURI(tmp).replace(/%/g,'=');
-  if(add_charset && v=="2.1")tmp = ";CHARSET=UTF-8:"+tmp; else tmp = ":"+tmp;
-  out += 'N' +tmp+'\n';
-  out += 'FN'+tmp+'\n';
+  out += 'N' +propertyAdd+":"+tmp+'\n';
+  out += 'FN'+propertyAdd+":"+tmp+'\n';
   
   //phone
   for(j=0;j<telephony.length;j++){
    if(null==telephony[j].firstChild || undefined==telephony[j].firstChild.nodeValue || null==telephony[j].firstChild.nodeValue) { logError.push(person); if(telephony[j].firstChild==null)logError.push('empty number:'); logError.push(telephony[j]); continue; }
-   out += "TEL;";
+   out += "TEL";
    phone = myTrimQuotes(telephony[j].firstChild.nodeValue);
    if(document.getElementById('setting__xml2__phonenumber_edit_your_areacode__active').checked &&
      !document.getElementById('setting__xml2__phonenumber_edit_your_areacode').validity.patternMismatch ){
@@ -714,10 +717,9 @@ function convert_to_vcf(multipleDirectDownload=false){ //=vcard
      countrycode__pre_phone=document.getElementById('setting__xml2__phonenumber_edit_your_countrycode').value;
      if(phone.length>2 && phone.substring(0,1)!="+" && phone.substring(0,1)=="0" && phone.substring(0,2)!="00" && countrycode__pre_phone!='') phone=""+countrycode__pre_phone+""+phone.substring(1);
    }
-   //if(v=="2.1" )
-   if( export_also_phonetype && telephony[j].getAttribute('type')!=undefined) out +=      ''+telephony[j].getAttribute('type').toUpperCase()+';';
-   //if(v!="2.1" && export_also_phonetype && telephony[j].getAttribute('type')!=undefined) out += 'TYPE='+telephony[j].getAttribute('type').toUpperCase()+';';
-   out += "VOICE:"+phone+'\n';
+    if( export_also_phonetype && telephony[j].getAttribute('type')!=undefined) out += ';TYPE='+telephony[j].getAttribute('type').toUpperCase()+',VOICE';
+    out += ":"+phone+'\n';
+
   }
   if(export_also_prio && telephony.length>0 && telephony[0].getAttribute('prio')!='')out += "NOTE:importantContact(fritzbox)\n";
   
@@ -729,9 +731,7 @@ function convert_to_vcf(multipleDirectDownload=false){ //=vcard
   for(j=0;j<services.length;j++){
    if(undefined==services[j].firstChild.nodeValue) { logError.push(services[j]); continue; }
    tmp = services[j].firstChild.nodeValue;
-   if(uri_encode  && v==2.1)tmp = encodeURI(tmp).replace(/%/g,'=');
-   if(add_charset && v==2.1)tmp = ";CHARSET=UTF-8:"+tmp;
-   out += "EMAIL:"+tmp+'\n';
+   out += "EMAIL"+propertyAdd+":"+tmp+'\n';
   }
   }
   
@@ -771,8 +771,8 @@ function convert_vcf_to_xml(){
   var prio=false;
   
   for(j=0;j<elements.length;j++){ //handle utf8 hex code
-    if(elements[j].search(/CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE:/)>=0){
-        var match = elements[j].match("(.*);(CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE):(.*)");
+    if(elements[j].search(/;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE/)>=0){
+        var match = elements[j].match("(.*);(CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE.*?):(.*)");
         var splited = match[3].split("=");
         for(var k=0;k<splited.length;k++)
         {
@@ -797,27 +797,29 @@ function convert_vcf_to_xml(){
         elements[j] = match[1]+':'+str;
         
      }
-     else if( elements[j].search(/CHARSET=UTF-8:/)>=0){
-        elements[j] = elements[j].replace(/CHARSET=UTF-8:/,'');
+     else if( elements[j].search(/;CHARSET=UTF-8/)>=0){
+        elements[j] = elements[j].replace(/;CHARSET=UTF-8/,'');
      }
      else if( elements[j].search(/CHARSET=/)>=0){
-       if(!cantHandleCharset_showMessage)alert("sorry. Can't handle this charset. Possible some special character are wrong. Or the file is not import-able."); cantHandleCharset_showMessage=true;
+       if(!cantHandleCharset_showMessage){ alert("sorry. Can't handle this charset. Possible some special character are wrong. Or the file is not import-able."); cantHandleCharset_showMessage=true; }
      }
   }
   
   for(j=0;j<elements.length;j++){
     var str = elements[j];
-    if(str.substr(0,3)=='FN:' && vcf_use_which_name=='FN'){
-        strOut=str.substr(3);
-        while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
-        while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
+    if((str.substr(0,3)=='FN:'||str.substr(0,3)=='FN;') && vcf_use_which_name=='FN'){
+        //strOut=str.substr(3);
+        //while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
+        //while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
+        strOut = str.substr( str.indexOf(':') + 1 );
         strOut = sanitize_personname(strOut,false);
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
-    if(str.substr(0,2)=='N:' && vcf_use_which_name=='N'){
-        strOut=str.substr(2);
-        while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
-        while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
+    if((str.substr(0,2)=='N:'||str.substr(0,2)=='N;') && vcf_use_which_name=='N'){
+        //strOut=str.substr(2);
+        //while( strOut.substr(0,1)==";" ) strOut = strOut.substr(1); //remove beginning/starting ;;;
+        //while( strOut.substr(-1)==";")   strOut = strOut.substr(0,str.length-1); //remove ending ;;;
+        strOut = str.substr( str.indexOf(':') + 1 );
         strOut = sanitize_personname(strOut,false);
         personOut = '<person><realName>'+strOut+'</realName></person>\n';
     }
@@ -830,7 +832,7 @@ function convert_vcf_to_xml(){
         var nextSimokolon   = str.substr(10).indexOf(';');
         var end_c = nextDoppelpunkt;
         if(nextSimokolon>0 && nextSimokolon<nextDoppelpunkt)end_c = nextSimokolon;
-        if(end_c>0){
+        if(end_c>0){  //this part have some bugs. This is a deprecated part, look in new programm.
             typeRow = str.substr(9,end_c+1);
             if(typeRow.indexOf(',')>0){
                 var sub = typeRow.split(',');
@@ -858,18 +860,18 @@ function convert_vcf_to_xml(){
     if(str.substr(0,8)=='VERSION:')v=str.substr(8);
     if(str.substr(0,5)=='NOTE:' && str.indexOf('importantContact(fritzbox)')>0)prio=true;
     if(str.substr(0,5)=='EMAIL'){
-        var startEmail = str.substr(4).indexOf(':');
-        //if(startEmail>=0 && str.length>9)EmailOut+='<email>'+str.substr(startEmail+1)+'</email>';
+        var startEmail = str.indexOf(':');
+        if(startEmail>=0 && str.length>9)EmailOut+='<email>'+str.substr(startEmail+1)+'</email>';
     }
   }
   
   var catNumber=0;  if(prio) catNumber = 1;
   out += '<contact>\n<category>'+catNumber+'</category>\n';
   if(prio)phoneOut=phoneOut.replace(/(<number[^>]*)(>)/,'$1 prio="1">');
-  if(v==2.1)personOut = personOut.replace(/=/g,'%');
-  if(v==2.1)personOut = decodeURI(personOut);
+  if(v=="2.1")personOut = personOut.replace(/=/g,'%');
+  if(v=="2.1")personOut = decodeURI(personOut);
   out += personOut+'<telephony nid="'+i+'">\n' + phoneOut;
-  if(EmailOut!='') EmailOut='<services>'+EmailOut+'<services>';
+  if(EmailOut!='') EmailOut='<services>'+EmailOut+'</services>';
   out += '</telephony>\n'+EmailOut+'<setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
  }
  out += '</phonebook>\n</phonebooks>';
