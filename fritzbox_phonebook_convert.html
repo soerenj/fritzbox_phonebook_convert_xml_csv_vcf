@@ -39,8 +39,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2025-06-04",
-	"softwareVersion": "0.284",
+	"dateModified": "2026-03-02",
+	"softwareVersion": "0.285",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
 	"creativeWorkStatus": "Deprecated"
@@ -102,8 +102,8 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note'); if(
 <body>
 <!--
  /*
- * version: 0.284
- * date: 2025-06-04
+ * version: 0.285
+ * date: 2026-03-02
  *
  * Licence 
  *
@@ -539,7 +539,7 @@ function convert_to_csv(){
  if(setting__xml2csv__just_one_phonenumer_each==1) out = 'name, phone, (maybe more phones following...)\n';
  if(setting__xml2csv__just_one_phonenumer_each==2) out = 'name, phone\n';
  if(setting__xml2csv__just_one_phonenumer_each==3) out = 'name, phone, type, importantPerson, email, quickdial, vanity\n';
- logError=[];
+ var logError=[];
  var contacts = xmlDoc.getElementsByTagName("contact");
  for(i=0;i<contacts.length;i++)
  {
@@ -754,7 +754,7 @@ function convert_vcf_to_xml(){
 
  var text = document.getElementById('phonebook_vcf').value;
  var person, email, v;
- var out = '';
+ var out = '';  var logError=[];
  var cantHandleCharset_showMessage=false;
  out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="'+new_phonebook_name+'">\n';
  var contacts = text.split('BEGIN:VCARD');
@@ -844,8 +844,8 @@ function convert_vcf_to_xml(){
                 }
             } else type=typeRow;
             typeOut='type="'+type.toLowerCase()+'"';
-        }else{       
-          if( document.getElementById("setting__2xml__phonenumber_edit_detect_mobile__active").checked && is_this_a_mobile_phonenumber(phone))     typeOut='type="mobile"';
+        }else{
+          if( document.getElementById("setting__2xml__phonenumber_edit_detect_mobile__active").checked && is_this_a_mobile_phonenumber(phone))     typeOut='type="mobile"'; //this line have a bug: phone is unset ; and it is never called
         }
         }
         /*else if(str.substr(0,4)=='TEL;'){
@@ -855,7 +855,19 @@ function convert_vcf_to_xml(){
         if(endType>3 && simokolon==0)type=' TYPE="'+str.substr(9,endType-1)+'"';
         }*/
         var start = str.indexOf(':');
-        phoneOut += '<number '+typeOut+' id="'+j+'">'+str.substr(start+1)+'</number>\n';
+        var phone = str.substr(start+1);
+        var phone_sani = sanitize_personname(phone,true);
+        if(phone_sani.length>0)
+        {
+          if(phone_sani.length>2 && phone_sani.search(/[0-9]{3}/)>=0)
+          {
+            phoneOut += '<number '+typeOut+' id="'+j+'">'+phone_sani+'</number>\n';
+          }
+          else
+          {
+            logError.push("Warning: Name: "+personOut+" ; Number ID "+j+": number too short to add / or does not contains 3 numbers: "     +phone_sani);
+          }
+        }
     }
     if(str.substr(0,8)=='VERSION:')v=str.substr(8);
     if(str.substr(0,5)=='NOTE:' && str.indexOf('importantContact(fritzbox)')>0)prio=true;
@@ -876,6 +888,7 @@ function convert_vcf_to_xml(){
  }
  out += '</phonebook>\n</phonebooks>';
  document.getElementById('phonebook_xml').value = out;
+ show_errors(logError);
  return out;
  //download('xml',out);
 }
@@ -903,7 +916,7 @@ function sanitize_personname(person,inkluding_quotes){
 
 function convert_csv_to_xml(){
   var text = document.getElementById('phonebook_csv').value;
-  var out = ''; var person; logError=[];
+  var out = ''; var person; var logError=[];
   out += '<?xml version="1.0" encoding="utf-8"?>\n<phonebooks>\n<phonebook owner="" name="'+new_phonebook_name+'">\n';
   var contacts = CSVToArray(text);
   var hasHeadlineQuickDial=false;
@@ -1003,10 +1016,20 @@ function convert_csv_to_xml(){
       if(type!='')      add+=' type="'+type+'"';
       if(quickDial!='') add+=' quickdial="'+quickDial+'"';
       if(vanity!='')    add+=' vanity="'+vanity+'"';
-      numbersOut += '<number'+add+'>'+phone+'</number>\n'; 
-      numbersOutCounter++;
-          //old:     //'+prio+' //moved to late (in case of merged entrys)
-      
+      var phone_sani = sanitize_personname(phone,true);
+      if(phone_sani.length>0)
+      {
+          if(phone_sani.length>2 && phone_sani.search(/[0-9]{3}/)>=0)
+          {
+              numbersOut += '<number'+add+'>'+phone_sani+'</number>\n'; 
+              numbersOutCounter++;
+              //old:     //'+prio+' //moved to late (in case of merged entrys)
+          }
+          else
+          {
+            logError.push("Warning: Name: "+person+" ; Column Number "+(c+1)+": number too short to add / or does not contains 3 numbers: "     +phone_sani);
+          }
+      }
        if(breakAfter) break;
       }
       
