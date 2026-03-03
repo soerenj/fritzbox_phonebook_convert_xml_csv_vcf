@@ -39,8 +39,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2026-03-02",
-	"softwareVersion": "0.285",
+	"dateModified": "2026-03-03",
+	"softwareVersion": "0.286",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
 	"creativeWorkStatus": "Deprecated"
@@ -102,8 +102,8 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note'); if(
 <body>
 <!--
  /*
- * version: 0.285
- * date: 2026-03-02
+ * version: 0.286
+ * date: 2026-03-03
  *
  * Licence 
  *
@@ -228,7 +228,7 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note'); if(
 <div id="select_file_xml_csv" class="advanced_view">
 <br><br>
 <label for="phonebook_csv">From .CSV File:</label> <input type="button" value="convert: ⇧ csv to xml" onclick="convert_csv_to_xml()" />   &nbsp;  <br>
-<textarea id="phonebook_csv" autocomplete="off">name, phone, type, importantPerson, email, quickdial, vanity
+<textarea id="phonebook_csv" autocomplete="off">name, phone, type, prio, email, quickdial, vanity
 "Person C", "080123456789"
 "Person C", "0801234567890978768"
 "Person C", "01769999999"
@@ -341,10 +341,10 @@ END:VCARD
     <span lang="de" class="de">Jede Tabellen-Zeile darf nur eine einzelene Telefon-Nummer enthalten (je Zeile)</span>
     <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234 <br/ >Person A, +4940-567</div><!--<s><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't merge the contacts to a single entry ( <i>=you will have too much entry in your phonebook</i>).</span></s>--></label></p>
     <p style="margin: 0pt;"><input type="radio" autocomplete="off" id="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type" name="setting__xml2csv__just_one_phonenumer_each_text" value="3" autocomplete="off" onChange="setting__xml2csv__just_one_phonenumer_each=this.value" /> <label for="setting__xml2csv__just_one_phonenumer_each_text__multiple_rows__with_type">
-    <span lang="en" class="en">Each table-row has only a single phone-number (per row ) and has addational data: phone type-categorie (=mobile,privat,work,work_fax), priority (=imported person), email-adress, addational quick-dial and telephone book search-Number("Vanity")</span>
-    <span lang="de" class="de">Jede Tabellen-Zeile darf nur eine einzelne Telefon-Nummer enthalten (je Zeile) und hat zusätzlich: Telefon Type-Kategorie (=mobile,privat,work,work_fax), Priorität (=wichtige Person), Email-adresse, sowie Kurzwahltaste und Telefonbuchsuche-Zahl("Vanity")</span>
+    <span lang="en" class="en">Each table-row has only a single phone-number (per row ) and has addational data: phone type-categorie (=mobile,privat,work,work_fax), priority (=?main number of this person?), email-adress, addational quick-dial and telephone book search-Number("Vanity")</span>
+    <span lang="de" class="de">Jede Tabellen-Zeile darf nur eine einzelne Telefon-Nummer enthalten (je Zeile) und hat zusätzlich: Telefon Type-Kategorie (=mobile,privat,work,work_fax), Priorität (=?Haupt-Rufnummer dieser Person?), Email-adresse, sowie Kurzwahltaste und Telefonbuchsuche-Zahl("Vanity")</span>
     <br /><div style="margin-left:30pt;color:#999">Example output:<br/>Person A, +4940-1234, mobile, 1, mail@example.com <br/ >Person A, +4940-567, home</div>
-    <!--<s><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't restore the addational information ( <i>type (mobile/home) and Priority(=important Person)</i>).</span></s>--></label></p>
+    <!--<s><span style="color:#999">Going back with this Result data (= from xml to csv): Converting backward currently can't restore the addational information ( <i>type (mobile/home) and Priority(=?main number of this person?)</i>).</span></s>--></label></p>
   </fieldset>
   <fieldset ><legend>csv to xml (=import to fritzbox)</legend>
     <span lang="en" class="en">How to handle multiple phone numbers per each Person entry:</span>
@@ -359,9 +359,7 @@ END:VCARD
      <span lang="de" class="de">Telefon-Nummern mit den selben Namen werden zusammengefasst als ein Eintrag.</span>
      <br>
      <span style="color:#999">Example csv input:<br/>
-      <ul style="margin-top:0;margin-bottom:0;"><li>Person A, +4940-1234, +4940-567</li><li>Person A, +4940-1234 <br/ >Person A, +4940-567</li><li><span style="color:#999"><i> (Headline: name ; phone ; mobile/home/work/fax_work ; 1 (=for important contact) ; e-mail-adress ; quickdial ; vanity )</i><br></span>Person A, +4940-1234, mobile, 1 , mail@example.com <br/ >Person A, +4940-567, home<br/></li></ul>
-      <span lang="en" class="en">Note about <em>important person</em> ("<em>prio</em>"): If a single number is <em>prio</em>, all entrys of this person name will be <em>prio</em>.</span>
-      <span lang="de" class="de">Anmerkung zu <em>wichtige Personen</em> ("Prio"): Wenn irgendeiner der Einträge einer Person als <em>wichtige Person</em> markiert ist, wird das auch für alle anderen Einträge diese Person übertragen.</span>
+      <ul style="margin-top:0;margin-bottom:0;"><li>Person A, +4940-1234, +4940-567</li><li>Person A, +4940-1234 <br/ >Person A, +4940-567</li><li><span style="color:#999"><i> (Headline: name ; phone ; mobile/home/work/fax_work ; 1 (=for main number (=called prio)) ; e-mail-adress ; quickdial ; vanity )</i><br></span>Person A, +4940-1234, mobile, 1 , mail@example.com <br/ >Person A, +4940-567, home<br/></li></ul>
      </span> </div></p>
     <p style="margin: 0pt;"> <input type="checkbox" autocomplete="off" id="setting__csv2xml__max_per_entry_checkbox" name="setting__csv2xml__max_per_entry" value="" autocomplete="off" checked onChange="if(this.checked==true)document.getElementById('setting__csv2xml__max_per_entry_input').disabled=false;else document.getElementById('setting__csv2xml__max_per_entry_input').disabled=true;" /><label for="setting__csv2xml__max_per_entry_input">
     <label for="setting__csv2xml__max_per_entry_checkbox">
@@ -426,13 +424,13 @@ END:VCARD
       <span lang="en" class="en">phone-type (mobile,work,...)</span>
       <span lang="de" class="de">Telefon-Type (mobile,work,...)</span>
     </label> &nbsp;
-    <input type="checkbox" id="setting__xml2vcf__also_prio" checked autocomplete="off" />
-    <label for="setting__xml2vcf__also_prio">
-      <span lang="en" class="en">marked Note for important Person (=just a note)</span>
-      <span lang="de" class="de">markierung als wichtige Person(nur eine notiz)</span>
+    <input type="checkbox" id="setting__xml2vcf__also_importantPersonCategorie" checked autocomplete="off" />
+    <label for="setting__xml2vcf__also_importantPersonCategorie">
+      <span lang="en" class="en">marked Note for important Person Categorie (=just a note)</span>
+      <span lang="de" class="de">markierung als wichtige Person Kategorie (nur eine notiz)</span>
     </label> &nbsp;
     <input type="checkbox" id="setting__xml2vcf__also_email" checked autocomplete="off" />
-    <label for="setting__xml2vcf__also_prio">
+    <label for="setting__xml2vcf__also_email">
       <span lang="en" class="en">Email</span>
       <span lang="de" class="de">Email</span>
     </label>
@@ -538,7 +536,7 @@ function convert_to_csv(){
  var out, contacts, contact, person, telephony, telefone_numbers, telefone_numbers_type, telefone_numbers_prio, phone, email;
  if(setting__xml2csv__just_one_phonenumer_each==1) out = 'name, phone, (maybe more phones following...)\n';
  if(setting__xml2csv__just_one_phonenumer_each==2) out = 'name, phone\n';
- if(setting__xml2csv__just_one_phonenumer_each==3) out = 'name, phone, type, importantPerson, email, quickdial, vanity\n';
+ if(setting__xml2csv__just_one_phonenumer_each==3) out = 'name, phone, type, prio, email, quickdial, vanity\n'; //until date 2/2026 importantPerson, instead of prio (was wrong)
  var logError=[];
  var contacts = xmlDoc.getElementsByTagName("contact");
  for(i=0;i<contacts.length;i++)
@@ -592,8 +590,8 @@ function convert_to_csv(){
    if(setting__xml2csv__just_one_phonenumer_each==3){
        if(telephony[j].getAttribute('type')!=undefined && telephony[j].getAttribute('type')!=null)
          out += ', "'+telephony[j].getAttribute('type')+'"'; else out += ', ';
-       if(telephony[0].getAttribute('prio')!=undefined && telephony[0].getAttribute('prio')!=null)
-         out += ', "'+telephony[0].getAttribute('prio')+'"'; else out += ', ';
+       if(telephony[j].getAttribute('prio')!=undefined && telephony[j].getAttribute('prio')!=null && telephony[j].getAttribute('prio')!=0)
+         out += ', "'+telephony[j].getAttribute('prio')+'"'; else out += ', ';
        if(email!='')
          out += ', "'+email+'"';else out += ', ';
        if(telephony[j].getAttribute('quickdial')!=undefined && telephony[j].getAttribute('quickdial')!=null) {
@@ -646,7 +644,7 @@ function convert_to_vcf(multipleDirectDownload=false){ //=vcard
  var add_charset = document.getElementById('setting__xml2vcf__add_charset').checked;
  var export_also_phonetype = document.getElementById('setting__xml2vcf__also_phonetype').checked;
  var export_also_email = document.getElementById('setting__xml2vcf__also_email').checked;
- var export_also_prio = document.getElementById('setting__xml2vcf__also_prio').checked;
+ var export_also_importantPersonCategorie = document.getElementById('setting__xml2vcf__also_importantPersonCategorie').checked;
  var text = document.getElementById('phonebook_xml').value;
  parser = new DOMParser();
  xmlDoc = parser.parseFromString(text, "text/xml");
@@ -721,7 +719,7 @@ function convert_to_vcf(multipleDirectDownload=false){ //=vcard
     out += ":"+phone+'\n';
 
   }
-  if(export_also_prio && telephony.length>0 && telephony[0].getAttribute('prio')!='')out += "NOTE:importantContact(fritzbox)\n";
+  if(export_also_importantPersonCategorie && telephony.length>0 && contact.getElementsByTagName("category")[0].innerHTML!=0){out += "NOTE:importantContact(fritzbox)\r\n"; }
   
   //email
   if(export_also_email){
@@ -768,7 +766,7 @@ function convert_vcf_to_xml(){
   var EmailOut='';
   var typeOut = '';
   var v = '';
-  var prio=false;
+  var importantPersonCategorie=false;
   
   for(j=0;j<elements.length;j++){ //handle utf8 hex code
     if(elements[j].search(/;CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE/)>=0){
@@ -870,16 +868,17 @@ function convert_vcf_to_xml(){
         }
     }
     if(str.substr(0,8)=='VERSION:')v=str.substr(8);
-    if(str.substr(0,5)=='NOTE:' && str.indexOf('importantContact(fritzbox)')>0)prio=true;
+    if(str.substr(0,5)=='NOTE:' && str.indexOf('importantContact(fritzbox)')>0)importantPersonCategorie=true;
     if(str.substr(0,5)=='EMAIL'){
         var startEmail = str.indexOf(':');
         if(startEmail>=0 && str.length>9)EmailOut+='<email>'+str.substr(startEmail+1)+'</email>';
     }
   }
   
-  var catNumber=0;  if(prio) catNumber = 1;
+  var catNumber=0;  if(importantPersonCategorie) catNumber = 1;
   out += '<contact>\n<category>'+catNumber+'</category>\n';
-  if(prio)phoneOut=phoneOut.replace(/(<number[^>]*)(>)/,'$1 prio="1">');
+  phoneOut=phoneOut.replace(/(<number[^>]*)(>)/,'$1 prio="1">');//mark only the first number with prio
+  //how to detect the main-Number? phoneOut=phoneOut.replace(/(<number[^>]*)(>)/,'$1 prio="1">');
   if(v=="2.1")personOut = personOut.replace(/=/g,'%');
   if(v=="2.1")personOut = decodeURI(personOut);
   out += personOut+'<telephony nid="'+i+'">\n' + phoneOut;
@@ -932,14 +931,14 @@ function convert_csv_to_xml(){
   contacts.sort( function(a,b) { 
       if(a.length<=1)return false;   //empty lines
       if(a[0].substring(0)==b[0].substring(0)){
-        if(setting__csv2xml__merge_samename==1 && a.length>3 && b.length>3 && myTrimQuotes(b[3].substring(0))=='1' && a[2].search(/[0-9][0-9]/)==-1 && b[2].search(/[0-9][0-9]/)==-1 )return true; //first numbers with "prio" (otherwise the merge function later, will not take prio for all numbers)
+        if(setting__csv2xml__merge_samename==1 && a.length>3 && b.length>3 && myTrimQuotes(b[3].substring(0))=='1' && a[2].search(/[0-9][0-9]/)==-1 && b[2].search(/[0-9][0-9]/)==-1 )return true; //first numbers with "prio" (maybe is not important?? no tested)
       }
       if(a[0].substring(0)>b[0].substring(0)) return true;
       return false;
       }
       ); //sort, in case of merge entrys later
   var lastPersonName = '';
-  var lastPersonPrio = '';
+  //var lastPersonCategorie = '';
   var lastPersonEmail = '';
   var lastPersonQuickdial = '';
   var lastPersonVanity = '';
@@ -953,17 +952,19 @@ function convert_csv_to_xml(){
     countLoop_detectInfinitLoop++; if(countLoop_detectInfinitLoop>10000){ alert("internal programm Error: Loop"); return; }
     if(numbersOut!=''){
       if( setting__csv2xml__merge_samename==0 || forceSplitAndJumpOverEntrys>0 || row==contacts.length || contacts[row].length<=1 || lastPersonName!=contacts[row][0].substring(0) ){  //write Entrys   //on: change of Name -or- last entry in list
-        out += '<contact>\n<category>0</category>\n';
+        categorie = 0;
+        //if(lastPersonCategorie!='')categorie=1;
+        
+        out += '<contact>\n<category>'+categorie+'</category>\n';
         out += '<person><realName>'+person+'</realName></person>\n';
         out += '<telephony nid="'+(row-1)+'">\n';
         
-        if(lastPersonPrio!='')numbersOut=numbersOut.replace(/<number/g,'<number'+lastPersonPrio);
         out += numbersOut;
         out += '</telephony>\n';
         if(lastPersonEmail!='') out += '<services nid="'+row+'"><email classifier="private" id="0">'+lastPersonEmail+'</email></services>';
         else out += '<services />';
         out += '<setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
-        numbersOut='';lastPersonEmail='';lastPersonPrio=''; numbersOutCounter=0; lastPersonQuickDial=''; lastPersonVanity='';
+        numbersOut='';lastPersonEmail='';/* lastPersonCategorie=''; */ numbersOutCounter=0; lastPersonQuickDial=''; lastPersonVanity='';
       }
     }
     
@@ -1011,8 +1012,8 @@ function convert_csv_to_xml(){
           }
        }
       
-      if(prio!='') prio=' prio="1"';
       var add='';
+      if(prio!='')      add+=' prio="1"';
       if(type!='')      add+=' type="'+type+'"';
       if(quickDial!='') add+=' quickdial="'+quickDial+'"';
       if(vanity!='')    add+=' vanity="'+vanity+'"';
@@ -1023,7 +1024,6 @@ function convert_csv_to_xml(){
           {
               numbersOut += '<number'+add+'>'+phone_sani+'</number>\n'; 
               numbersOutCounter++;
-              //old:     //'+prio+' //moved to late (in case of merged entrys)
           }
           else
           {
@@ -1037,8 +1037,8 @@ function convert_csv_to_xml(){
       if(vanity!='')lastPersonVanity=vanity;
       if(lastPersonName!=person)lastPersonEmail=email;
       else if(lastPersonEmail=='' && email!='')lastPersonEmail=email;
-      if(lastPersonName!=person)lastPersonPrio=prio;
-      else if(lastPersonPrio==''  && prio!='' )lastPersonPrio=prio;
+      //if(lastPersonName!=person)lastPersonCategorie=categorie;
+      //else if(lastPersonCategorie==''  && categorie!='' )lastPersonCategorie=categorie;
       if(lastPersonName!=person) lastPersonName=person;
       
       
