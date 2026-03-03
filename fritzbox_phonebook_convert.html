@@ -141,8 +141,10 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note'); if(
 
 </li></ul><br/>
 <hr>
-<span lang="en" class="en">This Service moved to new URL: splited in May 2025 in two different services. Please select the one you need. <!--This Page her is now deprecated and will be not updated anymore.--> But, you can <a href="#" onClick="closemessage()">close</a> this note and continue anyway (with this outdated Service-Version).</span>
-<span lang="de" class="de">Dieser Dienst umgezogen zu neuer Adresse: im Mai 2025 auf zwei verschiedene Dienst aufgeteilt. <!--Diese Seite hier nun veraltet und wird nicht mehr aktualisiert.--> Sie können diesen Hinwei&szlig; aber auch <a href="#" onClick="closemessage()">schlie&szlig;en</a> und fortfahren (mit dieser veralteten Version).</span>
+<span lang="en" class="en">Please select above, because this Service has moved to new URL ( splited in May 2025 ). <!--This Page her is now deprecated and will be not updated anymore.--> <br />
+<small>But, you can <a href="#" onClick="closemessage()">close</a> this note and continue anyway. This is not recommended. This version here is an outdated Version: It does not get, or not much updates anymore and may contains more bugs.</small></span>
+<span lang="de" class="de">Bitte oben auswählen, da dieser Dienst umgezogen ist zu einer neuen Adresse ( im Mai 2025 aufgeteilt ).
+<small><!--Diese Seite hier nun veraltet und wird nicht mehr aktualisiert.--> <br />Sie können diesen Hinwei&szlig; aber auch <a href="#" onClick="closemessage()">schlie&szlig;en</a> und trotzdem hier fortfahren. Das ist aber nicht empfohlen, da dies die veraltete Version ist: Diese Version hier bekommt kein/fast keine updates mehr und könnte mehr Fehler enthalten kann.</small></span>
 <a href="#" title="close / schlie&szlig;en" onClick="javascript:closemessage();" class="closebuttonmessage maybebutton">🗙</a>
 
 <br> &nbsp; <br>
@@ -987,7 +989,7 @@ function convert_csv_to_xml(){
        
        phone = elements[c];
        var type='';   //is here default type="home" needed?
-       var breakAfter=false;  //incase the 3th column is type (=mobile|privat|work|...), that is a single phone-number Entry. Thats means: no more phone-numbers will follow afterwards
+       var breakAfter=false;  //ends this loop
        if(phone.length==0)continue;
        if(phone.search(/[0-9]/)==-1) logError.push(elements.join(',')); //maybe not a phone number?; Anyway: continue
        phone = myTrimQuotes(phone);
@@ -995,9 +997,10 @@ function convert_csv_to_xml(){
        if( document.getElementById("setting__2xml__phonenumber_edit_detect_mobile__active").checked && is_this_a_mobile_phonenumber(phone))     type="mobile";
        
        if( document.getElementById('setting__csv2xml__max_per_entry_checkbox').checked && setting__csv2xml__max_per_entry!='' && numbersOutCounter==setting__csv2xml__max_per_entry) { forceSplitAndJumpOverEntrys=c; row=row-1;  break; } //create a new Entry (workaround)
-       //input style: name, phone, prio, email   //=no multiple numbers
-       if(elements[2]!=undefined && phonetypes.indexOf(myTrimQuotes(elements[2]))>=0 && elements[2]!='') {
-       //incase the 3th column is type (=mobile|privat|work|...), that is a single phone-number Entry. Thats means: no more phone-numbers will follow afterwards
+       //check for this input style type: name, phone, prio, email   //=> has no multiple numbers
+       // is the 3th column (=2nd arrayElement) the Phone Type? (=mobile|privat|work|...),
+       // is a single phone-number Entry. Thats means: no more phone-numbers will follow afterwards
+       if(elements[2]!=undefined && phonetypes.indexOf(myTrimQuotes(elements[2]))>=0 && elements[2].trim()!='') {
           type=myTrimQuotes(elements[2]);
           breakAfter=true;
           if(elements[3]!=undefined && (myTrimQuotes(elements[3])=='1' || elements[3]==1))  prio=1;
@@ -1010,7 +1013,14 @@ function convert_csv_to_xml(){
             if(vanity!='')      logError.push("Warning:more than one Vanity per contact not allowed (at least at fritzbox 7390): "     +elements[1]);
             vanity=myTrimQuotes(elements[6]);
           }
-       }
+       }else{
+         //has in more numbers following in this row? (muss mindestens drei zahlen haben)
+          hasMoreNumbersFollowing=false;
+          for(m=c+1;m<elements.length;m++){
+            if(elements[m].trim().length>2 && elements[m].trim().search(/[0-9]{3}/)>=0 )hasMoreNumbersFollowing=true;
+          }
+          if(!hasMoreNumbersFollowing) breakAfter= true; //=> mean: do not search for more phone numbers in this line
+        }
       
       var add='';
       if(prio!='')      add+=' prio="1"';
