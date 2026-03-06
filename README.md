@@ -4,18 +4,20 @@ Please choose:
 
 ## Fritzbox *.xml*  ⮂ *.csv* :
 
-Start it here ( Web-App ): **<https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv/>**
+Start it here ( Web-App ): **<https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv/>**
 
-Git: <https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv/>
+Git: <https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_csv/>
 
 -----------------------------------
 
 ## Fritzbox *.xml*  ⮂ *.vcf* / Vcard  :
 
-Start it here ( Web-App ): **<https://soerenj.github.io/fritzbox_phonebook_convert_xml_vcf/>**
+Start it here ( Web-App ): **<https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_vcf/>**
 
-Git: <https://github.com/soerenj/fritzbox_phonebook_convert_xml_vcf/>
+Git: <https://codeberg.org/soerenj/fritzbox_phonebook_convert_xml_vcf/>
 
 -----------------------------------
 
-*This Repository itself was splited in May 2025 in two different services and is now deprecated. Please follow the Links above.*
+*This Repository moved to codeberg.org, and will developed only there. Please follow the Links above.*
+*There you find also links to alternative / other Tools.*
+
