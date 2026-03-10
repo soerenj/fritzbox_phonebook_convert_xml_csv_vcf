@@ -39,8 +39,8 @@
 	"url":"https://soerenj.github.io/fritzbox_phonebook_convert_xml_csv_vcf/",
 	"SoftwareSourceCode": "https://github.com/soerenj/fritzbox_phonebook_convert_xml_csv_vcf",
 	"programmingLanguage": "javascript",
-	"dateModified": "2026-03-03",
-	"softwareVersion": "0.286",
+	"dateModified": "2026-03-10",
+	"softwareVersion": "0.287",
 	"inLanguage": ["en", "de"],
 	"sameAs": "https://soerenj.codeberg.page/fritzbox_phonebook_convert_xml_csv_vcf/fritzbox_phonebook_convert.html",
 	"creativeWorkStatus": "Deprecated"
@@ -102,8 +102,8 @@ function closemessage(){ var e=document.getElementsByClassName('outd_note'); if(
 <body>
 <!--
  /*
- * version: 0.286
- * date: 2026-03-03
+ * version: 0.287
+ * date: 2026-03-10
  *
  * Licence 
  *
@@ -466,7 +466,7 @@ END:VCARD
 <input type="button" id="file-input_reset" style="display:none;margin-top:22pt" value="reset" onclick="reset_to_default()" />
 
 <script language="JavaScript">
-<!--
+//<!--
 var uploaded_file_convert_from = '';
 var uploaded_file_convert_to = '';
 var counter_convert = 0;
@@ -861,7 +861,7 @@ function convert_vcf_to_xml(){
         {
           if(phone_sani.length>2 && phone_sani.search(/[0-9]{3}/)>=0)
           {
-            phoneOut += '<number '+typeOut+' id="'+j+'">'+phone_sani+'</number>\n';
+            phoneOut += '<number '+typeOut+'>'+phone_sani+'</number>\n';
           }
           else
           {
@@ -883,7 +883,7 @@ function convert_vcf_to_xml(){
   //how to detect the main-Number? phoneOut=phoneOut.replace(/(<number[^>]*)(>)/,'$1 prio="1">');
   if(v=="2.1")personOut = personOut.replace(/=/g,'%');
   if(v=="2.1")personOut = decodeURI(personOut);
-  out += personOut+'<telephony nid="'+i+'">\n' + phoneOut;
+  out += personOut+'<telephony>\n' + phoneOut;
   if(EmailOut!='') EmailOut='<services>'+EmailOut+'</services>';
   out += '</telephony>\n'+EmailOut+'<setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
  }
@@ -959,11 +959,11 @@ function convert_csv_to_xml(){
         
         out += '<contact>\n<category>'+categorie+'</category>\n';
         out += '<person><realName>'+person+'</realName></person>\n';
-        out += '<telephony nid="'+(row-1)+'">\n';
+        out += '<telephony>\n';
         
         out += numbersOut;
         out += '</telephony>\n';
-        if(lastPersonEmail!='') out += '<services nid="'+row+'"><email classifier="private" id="0">'+lastPersonEmail+'</email></services>';
+        if(lastPersonEmail!='') out += '<services nid="1"><email classifier="private" id="0">'+lastPersonEmail+'</email></services>';
         else out += '<services />';
         out += '<setup />\n<features doorphone="0" /><mod_time></mod_time><uniqueid></uniqueid>\n</contact>\n';
         numbersOut='';lastPersonEmail='';/* lastPersonCategorie=''; */ numbersOutCounter=0; lastPersonQuickDial=''; lastPersonVanity='';
